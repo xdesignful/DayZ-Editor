@@ -9,6 +9,36 @@ class CfgPatches
 	};
 };
 
+class CfgMods
+{
+	class Namalsk
+	{
+		type = "mod";
+		dependencies[] = {};
+		
+		class defs
+		{
+			class gameScriptModule
+			{
+				value = "";
+				files[] = {"DayZEditor\namalsk\scripts/3_Game"};
+			};
+
+			class worldScriptModule
+			{
+				value = "";
+				files[] = {"DayZEditor\namalsk\scripts/4_World"};
+			};
+
+			class missionScriptModule
+			{
+				value = "";
+				files[] = {"DayZEditor\namalsk\scripts/5_Mission"};
+			};
+		}
+	};
+};
+
 class CfgVehicles
 {
     class Clothing_Base;

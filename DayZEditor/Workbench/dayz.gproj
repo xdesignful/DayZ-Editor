@@ -53,6 +53,7 @@ GameProjectClass {
 						"scripts/3_Game"
 						"JM/CF/scripts/3_Game"
 						"DayZEditor/scripts/3_Game"
+						"DayZEditor/namalsk/scripts/3_Game"
 					}
 					EntryPoint "CreateGame"
 				}
@@ -62,6 +63,7 @@ GameProjectClass {
 						"scripts/4_World"
 						"JM/CF/scripts/4_World"
 						"DayZEditor/scripts/4_World"
+						"DayZEditor/namalsk/scripts/4_World"
 					}
 					EntryPoint ""
 				}
@@ -71,6 +73,7 @@ GameProjectClass {
 						"scripts/5_Mission"
 						"JM/CF/scripts/5_Mission"
 						"DayZEditor/scripts/5_Mission"
+						"DayZEditor/namalsk/scripts/5_Mission"
 					}
 					EntryPoint "CreateMission"
 				}

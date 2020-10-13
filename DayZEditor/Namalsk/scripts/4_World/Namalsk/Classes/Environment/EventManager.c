@@ -144,6 +144,12 @@ class EventManager
 							m_ActiveEvent = new Snowfall();
 							break;
 						}
+						case 4:
+						{
+							// evr storm
+							m_ActiveEvent = new EVRStorm(Vector(7500, 0, 7500));
+							break;
+						}
 						default: {
 							// should not happen!
 						}
@@ -201,7 +207,7 @@ class EventManager
 				m_ActiveEventPhaseLength = -1.0;
 				m_EventRunning = false;
 
-				int throwDice = Math.RandomInt(0, 4);
+				int throwDice = Math.RandomInt(0, 5);
 				int plannedEventType = -1;
 				switch (throwDice)
 				{
@@ -231,6 +237,13 @@ class EventManager
 						// snowfall
 						plannedEventType = 3;
 						m_ActiveEvent = new Snowfall();
+						break;
+					}
+					case 4:
+					{
+						// evr storm
+						plannedEventType = 4;
+						m_ActiveEvent = new EVRStorm(Vector(7500, 0, 7500));
 						break;
 					}
 					default: {
@@ -309,6 +322,11 @@ class EventManager
 			{
 				// snowfall
 				return "event-type-snowfall";
+			}
+			case 4:
+			{
+				// evr storm
+				return "event-type-evrstorm";
 			}
 			default: {
 				// should not happen!

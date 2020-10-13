@@ -30,7 +30,7 @@ class BlowoutLight: ScriptedLightBase
 	}
 }
 
-
+/*
 class BlowoutEvent
 {
 	protected PlayerBase m_Player;

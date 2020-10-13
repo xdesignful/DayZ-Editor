@@ -1,7 +1,6 @@
 
 class APSI: Clothing
 {
-	
 	void SwitchOn()
 	{
 		ComponentEnergyManager em = GetCompEM();
@@ -23,8 +22,6 @@ class APSI: Clothing
 		return GetCompEM().IsSwitchedOn();
 	}
 	
-
-		
 	override void OnWorkStart()
 	{
 		Print("OnWorkStart");

@@ -79,7 +79,7 @@ class Editor
 	bool 										SnappingMode;
 	bool 										CollisionMode;
 	
-	string										Version = "DayZ Editor Beta 1.0.292"; 
+	string										Version = "DayZ Editor Beta 1.0.30"; 
 
 	private void Editor(PlayerBase player) 
 	{
@@ -487,7 +487,15 @@ class Editor
 			
 			case MouseState.RIGHT: {
 				
-				
+				// Create context menu for adding loot positions
+				if (m_LootEditMode) {
+					int x, y;
+					GetMousePos(x, y);
+					EditorLootEditorContextMenu context_menu(x, y);
+					
+					delete EditorUIManager.CurrentMenu;
+					EditorUIManager.CurrentMenu = context_menu;
+				}
 				
 				break;
 			}
@@ -654,6 +662,7 @@ class Editor
 	private bool m_LootEditMode;
 	private vector m_PositionBeforeLootEditMode;
 	private ref EditorMapGroupProto m_EditorMapGroupProto;
+	private string m_LootPositionData;
 	
 	void EditLootSpawns(string name)
 	{
@@ -689,9 +698,25 @@ class Editor
 		MessageBox.Show("Beta!", "Please know that Edit Loot spawns is just a demo and has NO WAY of saving / Exporting your changes (yet)", MessageBoxButtons.OK);
 	}
 	
+	// Kinda very jank i think
+	void InsertLootPosition(vector position)
+	{
+		m_EditorMapGroupProto.InsertLootPoint(new EditorLootPoint(position, 1, 1, 0));
+	}
+	
 	void FinishEditLootSpawns()
 	{
 		EditorLog.Trace("Editor::FinishEditLootSpawns");
+		
+
+		array<EditorObject> loot_spawns = m_EditorMapGroupProto.GetLootSpawns();
+		
+		foreach (EditorObject loot_spawn: loot_spawns) {			
+			m_LootPositionData += loot_spawn.GetPosition().ToString(false) + "\n";
+		}
+		
+		GetGame().CopyToClipboard(m_LootPositionData);
+		
 		delete m_EditorMapGroupProto;
 		
 		GetGame().ObjectDelete(m_LootEditTarget);

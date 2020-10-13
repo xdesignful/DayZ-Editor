@@ -15,9 +15,7 @@ class EVRStorm: EventBase
 	protected ref array<ref AbstractWave> m_AlarmSounds = {};
 	protected BlowoutLight m_BlowoutLight;
 	
-	
-	// 'Bang' count
-	protected int m_WaveCount = 10;
+	protected int m_WaveCount = 10; // 'Bang' count
 	protected float m_TimeBetweenWaves = 1;	
 	
 	protected float m_BlowoutDelay = 30; // Startup delay. deprecate plz

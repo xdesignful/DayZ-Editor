@@ -29,7 +29,6 @@ class EVRStorm: EventBase
 	
 	void ~EVRStorm()
 	{
-		Print("BlowoutEvent");
 	}
 		
 	override void InitPhaseClient() 

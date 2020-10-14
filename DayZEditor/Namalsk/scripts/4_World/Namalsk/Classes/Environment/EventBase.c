@@ -6,8 +6,6 @@ class EventBase
 	protected float m_EndPhaseLength;
 	protected int m_EventState;
 	protected float m_ClientTickRequired;
-	protected Weather m_wObject;
-	protected PlayerBase m_Player;
 	protected float m_NeededOvercast;
 	protected float m_overcastTarget;
 	protected float m_fogTarget;
@@ -17,6 +15,9 @@ class EventBase
 	protected float m_ovFore, m_ovMin, m_ovMax;
 	protected float m_fgFore, m_fgMin, m_fgMax;
 	protected float m_windRelMin, m_windRelMax, m_windChangeSpeed;
+	
+	protected Weather m_wObject;
+	protected PlayerBase m_Player;
 
 	void EventBase()
 	{
@@ -55,12 +56,7 @@ class EventBase
 
 	protected void OnEventEndClient();
 	protected void OnEventEndServer();
-	
-	bool EventActivateCondition()
-	{
-		return true;
-	}
-	
+		
 	float GetCurrentPhaseLength()
 	{
 		switch (m_EventState)
@@ -192,7 +188,12 @@ class EventBase
 			}
 		}
 	}
-		
+	
+	bool EventActivateCondition()
+	{
+		return true;
+	}
+	
 	bool GetEventID()
 	{
 		return m_EventID;

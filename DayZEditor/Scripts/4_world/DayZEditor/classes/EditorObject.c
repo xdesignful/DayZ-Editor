@@ -4,6 +4,24 @@ class EditorWorldObject
 	EntityAI GetWorldObject() {
 		return m_WorldObject;
 	}
+	
+	protected EntityAI CreateObject(string type, vector position = "0 0 0", vector orientation = "0 0 0")
+	{
+		// Set to ECE_SETUP for AI compat. DONT ADD ECE_LOCAL
+		EntityAI obj; 
+		if (!Class.CastTo(obj, GetGame().CreateObjectEx(type, position, ECE_SETUP))) { // ECE_CREATEPHYSICS, ECE_UPDATEPATHGRAPH
+			EditorLog.Error("EditorHologram: Invalid Object %1", type);
+			return null;
+		}
+		
+		obj.SetOrientation(orientation);
+		obj.SetFlags(EntityFlags.STATIC, true);
+		
+		// Needed for AI Placement		
+		obj.DisableSimulation(true);
+		
+		return obj;
+	}
 }
 
 
@@ -66,9 +84,7 @@ class EditorObject: EditorWorldObject
 		m_Data = data;
 		
 		if (!m_Data.WorldObject) {
-			m_WorldObject = GetGame().CreateObjectEx(m_Data.Type, m_Data.Position, ECE_LOCAL | ECE_CREATEPHYSICS | ECE_SETUP | ECE_UPDATEPATHGRAPH);
-			m_WorldObject.SetOrientation(m_Data.Orientation);
-			m_WorldObject.SetFlags(EntityFlags.STATIC, true);
+			m_WorldObject = CreateObject(m_Data.Type, m_Data.Position, m_Data.Orientation);
 			m_Data.WorldObject = m_WorldObject;
 		} else {
 			m_WorldObject = m_Data.WorldObject;
@@ -410,7 +426,7 @@ class EditorObject: EditorWorldObject
 			transform[3] = m_LineCenters[i];
 			
 			for (int j = 0; j < 3; j++) 
-				transform[j][j] = ((position[j] == m_LineCenters[i][j])*size[j]/2) + line_width;						
+				transform[j][j] = ((position[j] == m_LineCenters[i][j]) * size[j]/2) + line_width;						
 			 
 			m_BBoxLines[i] = EntityAI.Cast(GetGame().CreateObjectEx("BoundingBoxBase", m_LineCenters[i], ECE_LOCAL));
 			m_BBoxLines[i].SetTransform(transform);			

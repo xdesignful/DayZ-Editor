@@ -87,4 +87,9 @@ class Snowfall extends EventBase
 	{
 		m_wObject.SetWindFunctionParams(m_windRelMin, m_windRelMax, m_windChangeSpeed);
 	}
+	
+	override string GetEventName() 
+	{
+		return "event-type-snowfall";
+	}
 }

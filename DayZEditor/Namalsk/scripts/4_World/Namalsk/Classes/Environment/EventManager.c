@@ -251,13 +251,13 @@ class EventManager
 					}
 				}
 
-				Print("[Namalsk][EventManager] selected " + ConvertEventIDToString(plannedEventType) + " as next");
+				Print("[Namalsk][EventManager] selected " + m_ActiveEvent.GetEventName() + " as next");
 
 				if (m_ActiveEvent.EventActivateCondition())
 				{
 					m_NextEventType = plannedEventType;
 					m_EventRunning = true;
-					Print("[Namalsk][EventManager] " + ConvertEventIDToString(plannedEventType) + " is now running");
+					Print("[Namalsk][EventManager] " + m_ActiveEvent.GetEventName() + " is now running");
 					SendActiveEventID(m_NextEventType);
 				} else {
 					m_EventRunning = false;
@@ -292,64 +292,28 @@ class EventManager
 				if (m_ActiveEventPhaseLength == -1) {
 					m_ActiveEvent.OnEventEndServer();
 					m_EventRunning = false;
-					Print("[Namalsk][EventManager] end of " + ConvertEventIDToString(m_NextEventType));
+					Print("[Namalsk][EventManager] end of " + m_ActiveEvent.GetEventName());
 					Print("[Namalsk][EventManager] next selection will occur in " + m_NextEventIn + " seconds");
 				}
 			}
 		}
 	}
-
-	protected string ConvertEventIDToString(int eventid)
-	{
-		switch (eventid)
-		{
-			case 0:
-			{
-				// aurora
-				return "event-type-aurora";
-			}
-			case 1:
-			{
-				// blizzard
-				return "event-type-blizzard";
-			}
-			case 2:
-			{
-				// extreme cold
-				return "event-type-extremecold";
-			}
-			case 3:
-			{
-				// snowfall
-				return "event-type-snowfall";
-			}
-			case 4:
-			{
-				// evr storm
-				return "event-type-evrstorm";
-			}
-			default: {
-				// should not happen!
-				return "event-type-none";
-			}
-		}
-		return "event-type-none";
-	}
+	
 	protected void SendActiveEventID(int eventid)
 	{
-		Param1<int> p = new Param1<int>(eventid);
-		GetGame().RPCSingleParam(null, ERPCsNamalsk.NAM_RPC_EVENTID_UPDATE, p, true, null);
+		GetGame().RPCSingleParam(null, ERPCsNamalsk.NAM_RPC_EVENTID_UPDATE, new Param1<int>(eventid), true, null);
 	}
+	
 	protected void SendActiveEventPhase(int phaseid)
 	{
-		Param1<int> p = new Param1<int>(phaseid);
-		GetGame().RPCSingleParam(null, ERPCsNamalsk.NAM_RPC_EVENTPHASE_UPDATE, p, true, null);
+		GetGame().RPCSingleParam(null, ERPCsNamalsk.NAM_RPC_EVENTPHASE_UPDATE, new Param1<int>(phaseid), true, null);
 	}
 
 	bool IsEventActive()
 	{
 		return m_EventRunning;
 	}
+	
 	void SendInProgressEventInfo(PlayerBase pBase)
 	{
 		int eventInfo = (m_ActiveEvent.GetEventID() * 10) + m_ActiveEvent.GetActivePhaseID();

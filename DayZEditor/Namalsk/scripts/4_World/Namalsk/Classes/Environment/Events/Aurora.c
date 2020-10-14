@@ -232,4 +232,9 @@ class Aurora extends EventBase
 			GetGame().ObjectDelete(m_AuroraInstances.Get(i));
 		}
 	}
+	
+	override string GetEventName() 
+	{
+		return "event-type-aurora";
+	}
 }

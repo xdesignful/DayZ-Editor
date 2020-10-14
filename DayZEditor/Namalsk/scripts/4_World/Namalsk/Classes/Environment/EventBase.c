@@ -187,4 +187,9 @@ class EventBase
 	{
 		return m_EventID;
 	}
+	
+	string GetEventName() 
+	{
+		return "event-type-none";
+	}
 };

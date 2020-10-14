@@ -81,13 +81,20 @@ class ExtremeCold extends EventBase
 	{
 		m_wObject.GetOvercast().Set(m_ovFore, m_EndPhaseLength, 0);
 	}
+	
 	override void EndPhaseServerLate()
 	{
 		m_wObject.GetOvercast().SetLimits(m_ovMin, m_ovMax);
 	}
+	
 	override void OnEventEndServer()
 	{	
 		// remove effect from WorldData
 		GetGame().GetMission().GetWorldData().SetTemperatureEvent(0.0);
+	}
+	
+	override string GetEventName() 
+	{
+		return "event-type-extremecold";
 	}
 }

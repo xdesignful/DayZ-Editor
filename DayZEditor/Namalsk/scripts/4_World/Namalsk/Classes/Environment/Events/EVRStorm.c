@@ -30,6 +30,31 @@ class EVRStorm: EventBase
 	void ~EVRStorm()
 	{
 	}
+	
+	override void EventInit()
+	{
+		super.EventInit();
+
+		m_EventID = 4;
+/*
+		if (GetGame().IsServer())
+		{
+			m_InitPhaseLength = 600.0;
+			m_MidPhaseLength = Math.RandomFloat(800, 2100);
+			m_EndPhaseLength = m_InitPhaseLength;
+			m_NeededOvercast = 0.2;
+			m_overcastTarget = 0.75;
+			m_fogTarget = 0.7;
+			m_snowTarget = 0.25;
+			m_windRelMinTarget = 0.0;
+			m_windRelMaxTarget = 0.0;
+		}*/
+
+		/*if (GetGame().IsClient())
+		{
+
+		}*/
+	}
 		
 	override void InitPhaseClient() 
 	{
@@ -316,5 +341,10 @@ class EVRStorm: EventBase
 		}
 		
 		return alarm_positions;
+	}
+	
+	override string GetEventName() 
+	{
+		return "event-type-evr-storm";
 	}
 }

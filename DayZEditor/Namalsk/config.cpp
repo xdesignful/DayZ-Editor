@@ -21,21 +21,21 @@ class CfgMods
 			class gameScriptModule
 			{
 				value = "";
-				files[] = {"DayZEditor\namalsk\scripts/3_Game"};
+				files[] = {"DayZEditor\namalsk\scripts\3_Game"};
 			};
 
 			class worldScriptModule
 			{
 				value = "";
-				files[] = {"DayZEditor\namalsk\scripts/4_World"};
+				files[] = {"DayZEditor\namalsk\scripts\4_World"};
 			};
 
 			class missionScriptModule
 			{
 				value = "";
-				files[] = {"DayZEditor\namalsk\scripts/5_Mission"};
+				files[] = {"DayZEditor\namalsk\scripts\5_Mission"};
 			};
-		}
+		};
 	};
 };
 

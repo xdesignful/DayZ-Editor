@@ -41,20 +41,26 @@ class EventBase
 			m_Player = PlayerBase.Cast(GetGame().GetPlayer());
 		}
 	}
-	protected void InitPhaseClient() {}
-	protected void InitPhaseServer() {}
-	protected void InitPhaseServerLate() {}
-	protected void MidPhaseClient() {}
-	protected void MidPhaseServer() {}
-	protected void MidPhaseServerLate() {}
-	protected void EndPhaseClient() {}
-	protected void EndPhaseServer() {}
-	protected void EndPhaseServerLate() {}
+	
+	// Abstract methods
+	protected void InitPhaseClient();
+	protected void InitPhaseServer();
+	protected void InitPhaseServerLate();
+	protected void MidPhaseClient();
+	protected void MidPhaseServer();
+	protected void MidPhaseServerLate();
+	protected void EndPhaseClient();
+	protected void EndPhaseServer();
+	protected void EndPhaseServerLate();
 
+	protected void OnEventEndClient();
+	protected void OnEventEndServer();
+	
 	bool EventActivateCondition()
 	{
 		return true;
 	}
+	
 	float GetCurrentPhaseLength()
 	{
 		switch (m_EventState)
@@ -78,14 +84,17 @@ class EventBase
 		}
 		return -1;
 	}
+	
 	float GetRequiredClientTickRate()
 	{
 		return m_ClientTickRequired;
 	}
+	
 	int GetActivePhaseID()
 	{
 		return m_EventState;
 	}
+	
 	void SwitchPhase()
 	{
 		m_EventState += 1;
@@ -139,6 +148,7 @@ class EventBase
 			}
 		}
 	}
+	
 	void ContinuousClientEventTick()
 	{
 		switch (m_EventState)
@@ -160,6 +170,7 @@ class EventBase
 			}
 		}
 	}
+	
 	void PhaseLateUpdateServer()
 	{
 		switch (m_EventState)
@@ -181,8 +192,7 @@ class EventBase
 			}
 		}
 	}
-	void OnEventEndClient() {}
-	void OnEventEndServer() {}
+		
 	bool GetEventID()
 	{
 		return m_EventID;

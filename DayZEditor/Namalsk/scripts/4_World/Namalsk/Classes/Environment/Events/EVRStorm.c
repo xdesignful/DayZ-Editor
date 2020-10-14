@@ -3,7 +3,6 @@ class EVRStorm: EventBase
 	protected APSI m_APSI;
 	
 	private bool m_MissionWeatherState;
-	private Weather m_Weather;
 	
 	protected autoptr ref MaterialEffect m_MatGlow;
 	protected autoptr ref MaterialEffect m_MatBlur;
@@ -25,10 +24,14 @@ class EVRStorm: EventBase
 	void EVRStorm(vector position)
 	{
 		m_Position = position;
+		
+		m_MissionWeatherState = m_wObject.GetMissionWeather();
+		m_wObject.MissionWeather(false);
 	}
 	
 	void ~EVRStorm()
 	{
+		m_wObject.MissionWeather(m_MissionWeatherState);
 	}
 	
 	override void EventInit()
@@ -36,7 +39,7 @@ class EVRStorm: EventBase
 		super.EventInit();
 
 		m_EventID = 4;
-/*
+
 		if (GetGame().IsServer())
 		{
 			m_InitPhaseLength = 600.0;
@@ -48,7 +51,7 @@ class EVRStorm: EventBase
 			m_snowTarget = 0.25;
 			m_windRelMinTarget = 0.0;
 			m_windRelMaxTarget = 0.0;
-		}*/
+		}
 
 		/*if (GetGame().IsClient())
 		{
@@ -61,21 +64,38 @@ class EVRStorm: EventBase
 		thread StartBlowoutClient();
 	}
 	
+	override void MidPhaseClient()
+	{
+		thread MidBlowoutClient();
+	}
+	
+	override void EndPhaseClient()
+	{
+		if (m_APSI && m_APSI.IsSwitchedOn()) {
+			m_APSI.SwitchOff();
+		}
+		
+		foreach (AbstractWave alarm: m_AlarmSounds) {
+			if (alarm) {
+				alarm.Stop();
+			}
+		}
+		
+		m_BlowoutLight.Destroy();
+	}
+	
 	private void StartBlowoutClient()
 	{
 		m_Player = GetGame().GetPlayer();
-		m_Weather = GetGame().GetWeather();
-		
+				
 		// Init stuff
 		m_MatBlur = new MaterialEffect("graphics/materials/postprocess/gauss");
 		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
 		m_MatChroma = new MaterialEffect("graphics/materials/postprocess/chromaber");
 		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
-		m_MissionWeatherState = m_Weather.GetMissionWeather();
-		m_Weather.MissionWeather(false);
 		
-		m_Weather.SetStorm(0, 1, 3000);
-		m_Weather.GetFog().Set(0.4, m_BlowoutDelay, m_BlowoutDelay);
+		m_wObject.SetStorm(0, 1, 3000);
+		m_wObject.GetFog().Set(0.4, m_BlowoutDelay, m_BlowoutDelay);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1.5);
 		Sleep(10000);
 		
@@ -91,14 +111,14 @@ class EVRStorm: EventBase
 		}
 		
 		thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_BlowoutDelay);
-		
-		
-		
+				
 		Sleep(10000);
 				
-		m_Weather.GetOvercast().Set(1, m_BlowoutDelay, m_BlowoutDelay);		
-		
-		// Pregame Phases
+		m_wObject.GetOvercast().Set(1, m_BlowoutDelay, m_BlowoutDelay);		
+	}
+	
+	private void MidBlowoutClient()
+	{
 		float timepassed;
 		while (timepassed < m_BlowoutDelay * 1000) {
 			
@@ -141,25 +161,7 @@ class EVRStorm: EventBase
 		}
 		
 		thread CreateFinalBlowout();
-
-		// make longer
-		Sleep(3000);
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			m_APSI.SwitchOff();
-		}
-		
-		m_Weather.MissionWeather(m_MissionWeatherState);
 		thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
-		
-		Sleep(10000);
-		
-		foreach (AbstractWave alarm: m_AlarmSounds) {
-			if (alarm) {
-				alarm.Stop();
-			}
-		}
-		
-		m_BlowoutLight.Destroy();
 	}
 	
 	// add min and max to this

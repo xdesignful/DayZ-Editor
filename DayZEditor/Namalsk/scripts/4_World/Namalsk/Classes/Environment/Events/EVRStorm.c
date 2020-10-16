@@ -12,7 +12,6 @@ class EVRStorm: EventBase
 	protected vector m_Position;
 	
 	protected ref array<ref AbstractWave> m_AlarmSounds = {};
-	protected BlowoutLight m_BlowoutLight;
 	
 	protected int m_WaveCount = 10; // 'Bang' count
 	protected float m_TimeBetweenWaves = 1;	
@@ -42,12 +41,9 @@ class EVRStorm: EventBase
 
 		if (GetGame().IsServer())
 		{
-			m_InitPhaseLength = 600.0;
-			m_MidPhaseLength = Math.RandomFloat(800, 2100);
+			m_InitPhaseLength = 60.0;
+			m_MidPhaseLength = 30.0;
 			m_EndPhaseLength = m_InitPhaseLength;
-			m_NeededOvercast = 0.2;
-			m_overcastTarget = 0.75;
-			m_fogTarget = 0.7;
 			m_snowTarget = 0.25;
 			m_windRelMinTarget = 0.0;
 			m_windRelMaxTarget = 0.0;
@@ -80,8 +76,6 @@ class EVRStorm: EventBase
 				alarm.Stop();
 			}
 		}
-		
-		m_BlowoutLight.Destroy();
 	}
 	
 	private void StartBlowoutClient()
@@ -95,11 +89,9 @@ class EVRStorm: EventBase
 		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
 		
 		m_wObject.SetStorm(0, 1, 3000);
-		m_wObject.GetFog().Set(0.4, m_BlowoutDelay, m_BlowoutDelay);
+		m_wObject.GetFog().Set(0.4, m_BlowoutDelay, m_InitPhaseLength);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1.5);
-		Sleep(10000);
 		
-		//m_BlowoutLight = BlowoutLight.Cast(ScriptedLightBase.CreateLight(BlowoutLight, Vector(m_Player.GetPosition()[0], 8000, m_Player.GetPosition()[2])));
 		EntityAI headgear = GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR);
 		if (Class.CastTo(m_APSI, headgear)) {
 			m_APSI.SwitchOn();
@@ -107,14 +99,11 @@ class EVRStorm: EventBase
 
 		ref array<vector> alarm_positions = GetAlarmPositions();
 		foreach (vector pos: alarm_positions) {
-			//m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
+			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}
 		
-		thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_BlowoutDelay);
-				
-		Sleep(10000);
-				
-		m_wObject.GetOvercast().Set(1, m_BlowoutDelay, m_BlowoutDelay);		
+		thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
+		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);		
 	}
 	
 	private void MidBlowoutClient()

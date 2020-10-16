@@ -54,8 +54,8 @@ class EventBase
 	protected void EndPhaseServer();
 	protected void EndPhaseServerLate();
 
-	protected void OnEventEndClient();
-	protected void OnEventEndServer();
+	void OnEventEndClient();
+	void OnEventEndServer();
 		
 	float GetCurrentPhaseLength()
 	{

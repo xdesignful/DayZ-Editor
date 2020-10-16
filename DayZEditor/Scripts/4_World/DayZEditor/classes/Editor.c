@@ -348,9 +348,10 @@ class Editor
 			}
 		}
 		
-		
-		//Debug.DestroyAllShapes();
-		//Debug.DrawSphere(CurrentMousePosition, 0.25, COLOR_GREEN_A);
+		if (m_EditorSettings.DebugMode) {
+			Debug.DestroyAllShapes();
+			Debug.DrawSphere(CurrentMousePosition, 0.25, COLOR_GREEN_A);
+		}
 		
 
 		if (!IsPlacing()) {
@@ -401,9 +402,14 @@ class Editor
 		// Shit code. Theres better ways to do this CanUndo and CanRedo are slow
 		CommandManager.UndoCommand.SetCanExecute(CanUndo());
 		CommandManager.RedoCommand.SetCanExecute(CanRedo());
-		
-		
+				
 		EditorLog.CurrentLogLevel = log_lvl;		
+		
+		// God Mode
+		if (m_Player) {
+			m_Player.SetHealth("", "Health", 100);
+			m_Player.SetHealth("", "Shock", 100);
+		}
 	}
 	
 	
@@ -585,21 +591,19 @@ class Editor
 		m_Mission.GetHud().ShowHudUI(!m_Active);
 		m_Mission.GetHud().SetPermanentCrossHair(!m_Active);
 		
-
-		EditorObjectMap placed_objects = GetEditor().GetPlacedObjects();
-		if (placed_objects) {
-			foreach (EditorObject editor_object: placed_objects) {
-				editor_object.GetMarker().Show(m_Active);
-			}
-		}
-		
 		// we are in 4_world and this game is bad :)
 		Widget hud_root;
 		EnScript.GetClassVar(GetGame().GetMission(), "m_HudRootWidget", 0, hud_root);
 		if (hud_root) {
 			hud_root.Show(!m_Active);
 		}
-	
+
+		EditorObjectMap placed_objects = GetEditor().GetPlacedObjects();
+		if (placed_objects) {
+			foreach (EditorObject editor_object: placed_objects) {
+				editor_object.GetMarker().Show(m_Active);
+			}
+		}	
 		
 		if (!m_Active) {	
 			GetGame().SelectPlayer(m_Player.GetIdentity(), m_Player);

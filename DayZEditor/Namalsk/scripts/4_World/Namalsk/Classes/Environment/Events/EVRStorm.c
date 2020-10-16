@@ -157,15 +157,7 @@ class EVRStorm: EventBase
 		
 	private void MidBlowoutClient()
 	{		
-		
-		// Final Blowout
-		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1000, 0));		
-		
-		thread AnimateLight(m_BlowoutLight, 3000);
-		Sleep(3000); // 3 Seconds delay for sound lol
-		
-		return;
-		
+				
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
 			
 		Sleep(8000);
@@ -236,8 +228,7 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, blowout_light.GetPosition(), 1);
 		
 		blowout_light.SetRadiusTo(5000);
-		
-		Sleep(5000);
+		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, blowout_light.GetPosition());
 		
 		blowout_light.Destroy();
 		

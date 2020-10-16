@@ -5,7 +5,7 @@ class CfgPatches
 		units[] = {};
 		weapons[] = {};
 		requiredVersion = 0.1;
-		requiredAddons[] = {"DZ_Data", "DZ_Characters"};
+		requiredAddons[] = {"DZ_Scripts", "DZ_Data"};
 	};
 };
 
@@ -14,26 +14,29 @@ class CfgMods
 	class Namalsk
 	{
 		type = "mod";
-		dependencies[] = {};
+		dependencies[] =
+		{
+			"Game", "World", "Mission"
+		};
 		
 		class defs
 		{
 			class gameScriptModule
 			{
 				value = "";
-				files[] = {"DayZEditor\namalsk\scripts\3_Game"};
+				files[] = {"DayZEditor/namalsk/scripts/3_Game"};
 			};
 
 			class worldScriptModule
 			{
 				value = "";
-				files[] = {"DayZEditor\namalsk\scripts\4_World"};
+				files[] = {"DayZEditor/namalsk/scripts/4_World"};
 			};
 
 			class missionScriptModule
 			{
 				value = "";
-				files[] = {"DayZEditor\namalsk\scripts\5_Mission"};
+				files[] = {"DayZEditor/namalsk/scripts/5_Mission"};
 			};
 		};
 	};

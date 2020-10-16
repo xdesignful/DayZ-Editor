@@ -7,7 +7,7 @@ class BlowoutLight: ScriptedLightBase
 		SetRadiusTo(1000);
 		SetBrightnessTo(1);
 		SetCastShadow(true);
-		SetDiffuseColor(1.2, 1.0, 0.7);
+		SetDiffuseColor(1.2, 1.0, 0.7);		
 		//SetFlickerSpeed(0.5);
 		//SetFlickerAmplitude(1);
 	}
@@ -33,6 +33,8 @@ class EVRStorm: EventBase
 	
 	protected float m_BlowoutSize = 10000; // Radius in which players can be affected
 	protected int m_BlowoutCount = 3;	
+	
+	protected BlowoutLight m_BlowoutLight;
 	
 	void EVRStorm(vector position)
 	{
@@ -154,7 +156,15 @@ class EVRStorm: EventBase
 	}
 		
 	private void MidBlowoutClient()
-	{
+	{		
+		
+		// Final Blowout
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1000, 0));		
+		
+		thread AnimateLight(m_BlowoutLight, 3000);
+		Sleep(3000); // 3 Seconds delay for sound lol
+		
+		return;
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
 			
@@ -173,14 +183,16 @@ class EVRStorm: EventBase
 			Sleep(3000 * Math.RandomFloat(0.7, 1.2));
 		}
 		
-		
 		// Final Blowout
-		BlowoutLight blowout_light = ScriptedLightBase.CreateLight(BlowoutLight, m_Position);
-		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
-		Sleep(3000); // 3 Seconds delay for sound lol
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1000, 0));		
 		
+		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
+		
+		thread AnimateLight(m_BlowoutLight, 3000);
+		
+				
 		// Delay for distance from camera
-		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
+		//Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
 		CreateCameraShake(0.8);
 		
 		PlaySoundOnPlayer(BlowoutSound.Blowout_NearImpact);
@@ -206,6 +218,33 @@ class EVRStorm: EventBase
 		//thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
 	}
 		
+	private void AnimateLight(BlowoutLight blowout_light, float time)
+	{
+		vector position = blowout_light.GetPosition();
+		float distance = vector.Distance(m_Position, position);		
+		float factor = distance / time;
+		float surface_y = GetGame().SurfaceY(position[0], position[2]);
+		
+		while (time >= 0) {
+	
+			blowout_light.SetPosition(Vector(position[0], surface_y + (time * factor), position[2]));
+			blowout_light.Update();
+			Sleep(10);
+			time -= 10;
+		}
+		
+		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, blowout_light.GetPosition(), 1);
+		
+		blowout_light.SetRadiusTo(5000);
+		
+		Sleep(5000);
+		
+		blowout_light.Destroy();
+		
+		
+		CreateCameraShake(1);
+	}
+	
 	private void StartHitPhase()
 	{
 		for (int i = 0; i < m_WaveCount; i++) {

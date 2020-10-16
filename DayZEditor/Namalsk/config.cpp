@@ -88,9 +88,7 @@ class CfgSoundShaders
 	{
 		volume = 1;
 		frequency = 1;
-		range = 15000;
 		limitation = 0;
-        radius = 15000;
 	};
 
 	class Namalsk_Item_SoundShader
@@ -123,6 +121,7 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_voices_02", 1},
 			{"DayZEditor\namalsk\blowout\blowout_voices_03", 1}
 		};
+		
         volume = 0.1;
 	};
 
@@ -173,6 +172,8 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_bass_01", 1},
 			{"DayZEditor\namalsk\blowout\blowout_bass_02", 1}
 		};
+
+		range = 10000;
 	};
 
 	class Blowout_Contact_SoundShader: Namalsk_Environment_SoundShader

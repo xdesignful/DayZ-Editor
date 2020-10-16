@@ -16,7 +16,6 @@ class EVRStorm: EventBase
 	protected int m_WaveCount = 10; // 'Bang' count
 	protected float m_TimeBetweenWaves = 1;	
 	
-	protected float m_BlowoutDelay = 30; // Startup delay. deprecate plz
 	protected float m_BlowoutSize = 10000; // Radius in which players can be affected
 	protected int m_BlowoutCount = 3;	
 	
@@ -109,17 +108,20 @@ class EVRStorm: EventBase
 		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
 		
 		
-		
 		//thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
+		
+		g_Game.SetEVValue(-3);
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
-			float dt = 1000 * Math.RandomFloat(0.5, 15);
+			float dt = 3000;
 			timepassed += dt;
 			float inverse_phase = Math.AbsFloat(pregame_phase - 1);
 			inverse_phase *= 100;
+			
+			PlayEnvironmentSound(BlowoutSound.Blowout_Drone, m_Position, pregame_phase * 0.1);
 			PlayEnvironmentSound(BlowoutSound.Blowout_Voices, RandomizeVector(GetGame().GetPlayer().GetPosition(), inverse_phase, inverse_phase + 50), pregame_phase * 0.2);
 			Sleep(dt);
 		}
@@ -128,35 +130,22 @@ class EVRStorm: EventBase
 	private void MidBlowoutClient()
 	{
 		
-		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
-		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
-		ScreenShakeFromInitialImpact();
-		return;
+		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
 		
 		EntityAI headgear = GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR);
 		if (Class.CastTo(m_APSI, headgear)) {
 			m_APSI.SwitchOn();
 		}
 		
+		Sleep(5000);
 		ref array<vector> alarm_positions = GetAlarmPositions();
 		foreach (vector pos: alarm_positions) {
-			//m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
+			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}
 		
-		// Wave phases
-		// This is the blowout actually happening
-		for (int i = 0; i < m_WaveCount; i++) {
-			thread CreateHit(1 / m_WaveCount * i);
-			Sleep(m_TimeBetweenWaves * 1000 * Math.RandomFloat(0.7, 1.2));
-		}
-
+	
+		thread StartHitPhase();		
 		
-		// Actual Event
-		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 1.5);
-		//Sleep(vector.Distance(m_Player.GetPosition(), m_Position) * 0.343);
-		thread CreateBlowout(0.2);
-		
-		Sleep(8000);
 		for (int j = 0; j < m_BlowoutCount; j++) {
 			
 			float phase = (1 / m_BlowoutCount) * j;
@@ -168,38 +157,43 @@ class EVRStorm: EventBase
 			Sleep(3000 * Math.RandomFloat(0.7, 1.2));
 		}
 		
-		thread CreateFinalBlowout();
-		thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
-	}
-	
-	// add min and max to this
-	private vector RandomizeVector(vector in, float rand)
-	{
-		for (int i = 0; i < 3; i++)
-			in[i] = Math.RandomFloat(in[i] - rand, in[i] + rand);
 		
-		return in;
-	}
-	
-	private vector RandomizeVector(vector in, float min, float max)
-	{
-		for (int i = 0; i < 3; i++) {
-			in[i] = Math.RandomFloat(in[i] + Math.RandomFloat(-min, min), in[i] + Math.RandomFloat(-max, max));
+		// Final Blowout
+		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
+		Sleep(3000); // 3 Seconds delay for sound lol
+		
+		// Delay for distance from camera
+		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
+		CreateCameraShake(0.8);
+		
+		PlaySoundOnPlayer(BlowoutSound.Blowout_NearImpact);
+		Sleep(1700);
+		m_Player.AddHealth("", "Shock", -15); // 15 shock damage
+		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
+		Sleep(100);
+		
+		thread CreateBlowout(1);
+		
+		if (m_APSI && m_APSI.IsSwitchedOn()) {
+			
+		} else {
+			if (m_Player.m_Environment.IsSafeFromEVR()) {		
+				return;
+			}
+			
+			PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.25);
+			m_Player.StartCommand_Unconscious(0);
+			PPEffects.SetUnconsciousnessVignette(true);
 		}
 		
-		return in;
+		//thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
 	}
-	
-	private void ScreenShakeFromInitialImpact()
-	{
-		Sleep(20000); // Sleep for 20 seconds (Check waveform of Bass)
 		
-		float timer = 10000;
-		while (timer > 0) {
-			
-			CreateCameraShake((1 / 10000) * timer);
-			Sleep(100);
-			timer -= 100;
+	private void StartHitPhase()
+	{
+		for (int i = 0; i < m_WaveCount; i++) {
+			thread CreateHit(1 / m_WaveCount * i);
+			Sleep(m_TimeBetweenWaves * 1000 * Math.RandomFloat(0.7, 1.2));
 		}
 	}
 	
@@ -241,29 +235,6 @@ class EVRStorm: EventBase
 			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatBlur.GetParamValue("Vignette") + 0.25, 0.75);
 			m_MatChroma.LerpParam("PowerX", 0.3 * intensity, 0, 2.5);
 			m_MatGlow.LerpParam("Saturation", 0.2, 1, 1);
-		}
-	}
-	
-	private void CreateFinalBlowout()
-	{
-		PlaySoundOnPlayer(BlowoutSound.Blowout_NearImpact);
-		Sleep(1700);
-		m_Player.AddHealth("", "Shock", -15); // 15 shock damage
-		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
-		Sleep(100);
-		
-		thread CreateBlowout(1);
-		
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			
-		} else {
-			if (m_Player.m_Environment.IsSafeFromEVR()) {		
-				return;
-			}
-			
-			PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.25);
-			m_Player.StartCommand_Unconscious(0);
-			PPEffects.SetUnconsciousnessVignette(true);
 		}
 	}
 	
@@ -362,6 +333,24 @@ class EVRStorm: EventBase
 		}
 		
 		return alarm_positions;
+	}
+	
+	// add min and max to this
+	private vector RandomizeVector(vector in, float rand)
+	{
+		for (int i = 0; i < 3; i++)
+			in[i] = Math.RandomFloat(in[i] - rand, in[i] + rand);
+		
+		return in;
+	}
+	
+	private vector RandomizeVector(vector in, float min, float max)
+	{
+		for (int i = 0; i < 3; i++) {
+			in[i] = Math.RandomFloat(in[i] + Math.RandomFloat(-min, min), in[i] + Math.RandomFloat(-max, max));
+		}
+		
+		return in;
 	}
 	
 	override string GetEventName() 

@@ -6,7 +6,7 @@ class BlowoutLight: ScriptedLightBase
 		SetVisibleDuringDaylight(true);
 		SetRadiusTo(1000);
 		SetBrightnessTo(1);
-		SetCastShadow(true);
+		SetCastShadow(false);
 		SetDiffuseColor(1.2, 1.0, 0.7);		
 		//SetFlickerSpeed(0.5);
 		//SetFlickerAmplitude(1);
@@ -229,12 +229,9 @@ class EVRStorm: EventBase
 		}
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, blowout_light.GetPosition(), 1);
-		
-		blowout_light.SetRadiusTo(5000);
 		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, blowout_light.GetPosition());
 		
 		blowout_light.Destroy();
-		
 		
 		CreateCameraShake(1);
 	}

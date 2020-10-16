@@ -89,6 +89,7 @@ class CfgSoundShaders
 		volume = 1;
 		frequency = 1;
 		limitation = 0;
+		range = 500;
 	};
 
 	class Namalsk_Item_SoundShader
@@ -121,7 +122,7 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_voices_02", 1},
 			{"DayZEditor\namalsk\blowout\blowout_voices_03", 1}
 		};
-		
+
         volume = 0.1;
 	};
 

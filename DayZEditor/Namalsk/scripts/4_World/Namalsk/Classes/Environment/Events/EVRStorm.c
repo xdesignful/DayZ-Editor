@@ -1,3 +1,18 @@
+class BlowoutLight: ScriptedLightBase
+{
+	void BlowoutLight()
+	{
+		SetLightType(LightSourceType.PointLight);
+		SetVisibleDuringDaylight(true);
+		SetRadiusTo(1000);
+		SetBrightnessTo(1);
+		SetCastShadow(true);
+		SetDiffuseColor(1.2, 1.0, 0.7);
+		//SetFlickerSpeed(0.5);
+		//SetFlickerAmplitude(1);
+	}
+}
+
 class EVRStorm: EventBase
 {
 	protected APSI m_APSI;
@@ -116,7 +131,7 @@ class EVRStorm: EventBase
 		while (timepassed < m_InitPhaseLength * 1000) {
 			
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
-			float dt = 3000;
+			float dt = 10000;
 			timepassed += dt;
 			float inverse_phase = Math.AbsFloat(pregame_phase - 1);
 			inverse_phase *= 100;
@@ -125,24 +140,25 @@ class EVRStorm: EventBase
 			PlayEnvironmentSound(BlowoutSound.Blowout_Voices, RandomizeVector(GetGame().GetPlayer().GetPosition(), inverse_phase, inverse_phase + 50), pregame_phase * 0.2);
 			Sleep(dt);
 		}
-	}
 		
-	private void MidBlowoutClient()
-	{
-		
-		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
-		
-		EntityAI headgear = GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR);
-		if (Class.CastTo(m_APSI, headgear)) {
-			m_APSI.SwitchOn();
-		}
 		
 		Sleep(5000);
 		ref array<vector> alarm_positions = GetAlarmPositions();
 		foreach (vector pos: alarm_positions) {
 			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}
+	
+		if (Class.CastTo(m_APSI, GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR))) {
+			m_APSI.SwitchOn();
+		}
+	}
 		
+	private void MidBlowoutClient()
+	{
+		
+		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
+			
+		Sleep(8000);
 	
 		thread StartHitPhase();		
 		
@@ -159,6 +175,7 @@ class EVRStorm: EventBase
 		
 		
 		// Final Blowout
+		BlowoutLight blowout_light = ScriptedLightBase.CreateLight(BlowoutLight, m_Position);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Sleep(3000); // 3 Seconds delay for sound lol
 		

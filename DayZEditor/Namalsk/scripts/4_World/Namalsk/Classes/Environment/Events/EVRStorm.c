@@ -80,8 +80,6 @@ class EVRStorm: EventBase
 	
 	private void StartBlowoutClient()
 	{
-		m_Player = GetGame().GetPlayer();
-				
 		// Init stuff
 		m_MatBlur = new MaterialEffect("graphics/materials/postprocess/gauss");
 		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
@@ -95,14 +93,15 @@ class EVRStorm: EventBase
 		EntityAI headgear = GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR);
 		if (Class.CastTo(m_APSI, headgear)) {
 			m_APSI.SwitchOn();
-		}
-
+		}		
+		
 		ref array<vector> alarm_positions = GetAlarmPositions();
 		foreach (vector pos: alarm_positions) {
-			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
+			//m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}
 		
-		thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
+		
+		//thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
 		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);		
 	}
 	

@@ -22,7 +22,7 @@ class CfgMods
 		class defs
 		{
 			class gameScriptModule
-			{
+			{	
 				value = "";
 				files[] = {"DayZEditor/namalsk/scripts/3_Game"};
 			};
@@ -104,7 +104,7 @@ class CfgSoundShaders
 	class Blowout_Begin_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {
-			{"DayZEditor\namalsk\blowout\blowout_begin", 1},
+			{"DayZEditor\namalsk\blowout\blowout_begin_01", 1},
 			{"DayZEditor\namalsk\blowout\blowout_begin_02", 1}
 		};
 	};
@@ -119,8 +119,9 @@ class CfgSoundShaders
 	{
 		samples[] = 
 		{
-			{"DayZEditor\namalsk\blowout\blowout_psy_voices", 1},
-			{"DayZEditor\namalsk\blowout\sabaoth_psi", 1}
+			{"DayZEditor\namalsk\blowout\blowout_voices_01", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_02", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_03", 1}
 		};
         volume = 0.1;
 	};
@@ -165,13 +166,13 @@ class CfgSoundShaders
         range = 10000;
     };
 
-	class Blowout_Impact_SoundShader: Namalsk_Environment_SoundShader
+	class Blowout_Bass_Soundshader: Namalsk_Environment_SoundShader
 	{
-		samples[] = {
-			{"DayZEditor\namalsk\blowout\blowout_wave_01", 1},
-			{"DayZEditor\namalsk\blowout\blowout_wave_02", 1},
-			{"DayZEditor\namalsk\blowout\blowout_impact", 1},
-			{"DayZEditor\namalsk\blowout\blowout_impact_02", 1}};
+		samples[] = 
+		{
+			{"DayZEditor\namalsk\blowout\blowout_bass_01", 1},
+			{"DayZEditor\namalsk\blowout\blowout_bass_02", 1}
+		};
 	};
 
 	class Blowout_Contact_SoundShader: Namalsk_Environment_SoundShader
@@ -266,14 +267,14 @@ class CfgSoundSets
 	{
 		soundShaders[] = {"Blowout_NearImpact_SoundShader"};
 	};
-
-	class Blowout_Impact: Namalsk_Soundset
-	{
-		soundShaders[] = {"Blowout_Impact_SoundShader"};
-	};
 	
 	class Blowout_Contact: Namalsk_Soundset
 	{
 		soundShaders[] = {"Blowout_Contact_SoundShader"};
+	};
+
+	class Blowout_Base: Namalsk_Soundset
+	{
+		soundShaders[] = {"Blowout_Bass_Soundshader"};
 	};
 };

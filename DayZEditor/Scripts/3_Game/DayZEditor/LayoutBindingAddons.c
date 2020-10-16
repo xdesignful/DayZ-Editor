@@ -69,6 +69,21 @@ class TypeConversionBrushObject: TypeConversionTemplate<EditorBrushObject>
 	}
 }
 
+class TypeConversionEditorFile: TypeConversionTemplate<EditorFile>
+{
+	override void SetString(string value) {
+		if (m_Value)
+			m_Value.FileName = value;
+	}
+	
+	override string GetString() {
+		if (m_Value)
+			return m_Value.FileName;
+		
+		return string.Empty;
+	}
+}
+
 class DropdownListPrefabItemConverter: TypeConversionTemplate<DropdownListPrefabItem>
 {
 	override string GetString() {
@@ -103,6 +118,7 @@ modded class LayoutBindingManager
 		type_conversions.Insert(EditorBrushData, TypeConversionBrush);
 		type_conversions.Insert(EditorBrushObject, TypeConversionBrushObject);
 		type_conversions.Insert(DropdownListPrefabItem, DropdownListPrefabItemConverter);
+		type_conversions.Insert(EditorFile, TypeConversionEditorFile);
 	}
 }
 

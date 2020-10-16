@@ -197,7 +197,7 @@ class CfgSoundShaders
 		samples[] = {{"DayZEditor\namalsk\blowout\apsi_disable", 1}};
 	};
 
-	class Blowout_NearImpact_SoundShader: Namalsk_Item_SoundShader
+	class Blowout_NearImpact_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {{"DayZEditor\namalsk\blowout\pux_blast", 1}};
 	};

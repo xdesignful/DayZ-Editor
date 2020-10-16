@@ -177,17 +177,13 @@ class EVRStorm: EventBase
 		
 		// Final Blowout
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1000, 0));		
+		AnimateLight(m_BlowoutLight, 3000);
 		
-		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
-		
-		thread AnimateLight(m_BlowoutLight, 3000);
-		
-				
+	
 		// Delay for distance from camera
-		//Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
+		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
 		CreateCameraShake(0.8);
 		
-		PlaySoundOnPlayer(BlowoutSound.Blowout_NearImpact);
 		Sleep(1700);
 		m_Player.AddHealth("", "Shock", -15); // 15 shock damage
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
@@ -217,12 +213,19 @@ class EVRStorm: EventBase
 		float factor = distance / time;
 		float surface_y = GetGame().SurfaceY(position[0], position[2]);
 		
+		
+		bool near_impact_played;
 		while (time >= 0) {
 	
 			blowout_light.SetPosition(Vector(position[0], surface_y + (time * factor), position[2]));
 			blowout_light.Update();
 			Sleep(10);
 			time -= 10;
+			
+			if (!near_impact_played && time < 1000) {
+				near_impact_played = true;
+				PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
+			}
 		}
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, blowout_light.GetPosition(), 1);
@@ -350,7 +353,7 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_Hit, position, 0.35);
 		//position[1] = GetGame().SurfaceY(position[0], position[2]);
 		Object bolt = GetGame().CreateObject(BOLT_TYPES[Math.RandomInt(0, 1)], position);
-		bolt.SetOrientation(Vector(0, Math.RandomFloat(0, 360), 0));
+		bolt.SetOrientation(Vector(0, Math.RandomFloat(0, 180), 0));
 		
 		position[1] = position[1] + 50;
 		InclementDabLightning m_Light = InclementDabLightning.Cast(ScriptedLightBase.CreateLight(InclementDabLightning, position));
@@ -362,7 +365,6 @@ class EVRStorm: EventBase
 	
 	static ref array<vector> GetAlarmPositions()
 	{
-		
 		ref array<vector> alarm_positions = {};
 		string world_name;
 		GetGame().GetWorldName(world_name);

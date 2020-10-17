@@ -174,6 +174,7 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_bass_02", 1}
 		};
 
+		radius = 10000;
 		range = 10000;
 	};
 

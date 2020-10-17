@@ -7,9 +7,9 @@ class BlowoutLight: ScriptedLightBase
 		SetRadiusTo(1000);
 		SetBrightnessTo(1);
 		SetCastShadow(false);
-		SetDiffuseColor(1.2, 1.0, 0.7);		
-		//SetFlickerSpeed(0.5);
-		//SetFlickerAmplitude(1);
+		SetDiffuseColor(0.5, 1.0, 0.5);		
+		SetFlickerSpeed(0.5);
+		SetFlickerAmplitude(0.5);
 	}
 }
 
@@ -124,6 +124,8 @@ class EVRStorm: EventBase
 		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
 		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
 		
+		// Starts Lighting at site
+		thread StartHitPhase(m_InitPhaseLength + m_MidPhaseLength);
 		
 		//thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
 		
@@ -131,7 +133,6 @@ class EVRStorm: EventBase
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
-			
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
 			float dt = 10000;
 			timepassed += dt;
@@ -160,10 +161,8 @@ class EVRStorm: EventBase
 				
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
 			
-		Sleep(8000);
-	
-		thread StartHitPhase();		
-		
+		Sleep(m_MidPhaseLength * 1000);
+			
 		for (int j = 0; j < m_BlowoutCount; j++) {
 			
 			float phase = (1 / m_BlowoutCount) * j;
@@ -213,7 +212,6 @@ class EVRStorm: EventBase
 		float factor = distance / time;
 		float surface_y = GetGame().SurfaceY(position[0], position[2]);
 		
-		
 		bool near_impact_played;
 		while (time >= 0) {
 	
@@ -236,8 +234,21 @@ class EVRStorm: EventBase
 		CreateCameraShake(1);
 	}
 	
-	private void StartHitPhase()
+	private void StartHitPhase(float time)
 	{
+		// Need milliseconds
+		time *= 1000;
+		
+		while (time >= 0) {
+			
+			Print(time);
+			
+			time -= 10;
+			Sleep(10);
+		}
+		
+		return;
+		
 		for (int i = 0; i < m_WaveCount; i++) {
 			thread CreateHit(1 / m_WaveCount * i);
 			Sleep(m_TimeBetweenWaves * 1000 * Math.RandomFloat(0.7, 1.2));
@@ -294,36 +305,7 @@ class EVRStorm: EventBase
 	private void CreateCameraShake(float intensity)
 	{
 		GetGame().GetPlayer().GetCurrentCamera().SpawnCameraShake(Math.Clamp(intensity, 0.2, 1), 2, 5, 3.5);
-	}
-		
-
-	private AbstractWave PlaySoundOnPlayer(BlowoutSound sound, float volume = 1)
-	{
-		SoundObjectBuilder builder = new SoundObjectBuilder(new SoundParams(typename.EnumToString(BlowoutSound, sound)));
-		SoundObject sound_object = builder.BuildSoundObject();
-	
-		sound_object.SetKind(WaveKind.WAVEENVIRONMENTEX);
-		sound_object.SetPosition(GetGame().GetPlayer().GetPosition());
-		AbstractWave wave = GetGame().GetSoundScene().Play2D(sound_object, builder);
-		wave.SetVolume(volume);
-		wave.Play();
-		return wave;
-	}
-	
-	private AbstractWave PlayEnvironmentSound(BlowoutSound sound, vector position, float volume = 1, float frequency_random = 0)
-	{
-		SoundObjectBuilder builder = new SoundObjectBuilder(new SoundParams(typename.EnumToString(BlowoutSound, sound)));
-		SoundObject sound_object = builder.BuildSoundObject();
-		sound_object.SetKind(WaveKind.WAVEENVIRONMENTEX);
-		sound_object.SetPosition(position);
-		
-		AbstractWave wave = GetGame().GetSoundScene().Play3D(sound_object, builder);
-		wave.SetFrequency(wave.GetFrequency() * Math.RandomFloat(1 - frequency_random, 1 + frequency_random));
-		wave.SetVolume(volume);
-		wave.Play();
-		return wave;
-	}
-	
+	}	
 	
 	void LerpFunction(Class inst, string function, float start, float finish, float duration)
 	{		
@@ -334,7 +316,6 @@ class EVRStorm: EventBase
 			i += 10;
 		}
 	}
-	
 
 	void CreateLightning(vector position, int intensity)
 	{
@@ -397,6 +378,33 @@ class EVRStorm: EventBase
 		}
 		
 		return in;
+	}
+	
+	private AbstractWave PlaySoundOnPlayer(BlowoutSound sound, float volume = 1)
+	{
+		SoundObjectBuilder builder = new SoundObjectBuilder(new SoundParams(typename.EnumToString(BlowoutSound, sound)));
+		SoundObject sound_object = builder.BuildSoundObject();
+	
+		sound_object.SetKind(WaveKind.WAVEENVIRONMENTEX);
+		sound_object.SetPosition(GetGame().GetPlayer().GetPosition());
+		AbstractWave wave = GetGame().GetSoundScene().Play2D(sound_object, builder);
+		wave.SetVolume(volume);
+		wave.Play();
+		return wave;
+	}
+	
+	private AbstractWave PlayEnvironmentSound(BlowoutSound sound, vector position, float volume = 1, float frequency_random = 0)
+	{
+		SoundObjectBuilder builder = new SoundObjectBuilder(new SoundParams(typename.EnumToString(BlowoutSound, sound)));
+		SoundObject sound_object = builder.BuildSoundObject();
+		sound_object.SetKind(WaveKind.WAVEENVIRONMENTEX);
+		sound_object.SetPosition(position);
+		
+		AbstractWave wave = GetGame().GetSoundScene().Play3D(sound_object, builder);
+		wave.SetFrequency(wave.GetFrequency() * Math.RandomFloat(1 - frequency_random, 1 + frequency_random));
+		wave.SetVolume(volume);
+		wave.Play();
+		return wave;
 	}
 	
 	override string GetEventName() 

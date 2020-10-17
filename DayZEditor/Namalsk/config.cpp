@@ -120,7 +120,8 @@ class CfgSoundShaders
 		{
 			{"DayZEditor\namalsk\blowout\blowout_voices_01", 1},
 			{"DayZEditor\namalsk\blowout\blowout_voices_02", 1},
-			{"DayZEditor\namalsk\blowout\blowout_voices_03", 1}
+			{"DayZEditor\namalsk\blowout\blowout_voices_03", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_04", 1}
 		};
 
         volume = 0.1;
@@ -135,6 +136,14 @@ class CfgSoundShaders
 		};
 	};
 
+	class Blowout_Wind_SoundShader: Namalsk_Environment_SoundShader
+	{
+		samples[] = {
+			{"DayZEditor\namalsk\blowout\blowout_wind_01", 1}, 
+			{"DayZEditor\namalsk\blowout\blowout_wind_02", 1}, 
+			{"DayZEditor\namalsk\blowout\blowout_wind_03", 1}
+		};
+	};
 	class Blowout_Wave_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {
@@ -170,8 +179,7 @@ class CfgSoundShaders
 	{
 		samples[] = 
 		{
-			{"DayZEditor\namalsk\blowout\blowout_bass_01", 1},
-			{"DayZEditor\namalsk\blowout\blowout_bass_02", 1}
+			{"DayZEditor\namalsk\blowout\blowout_bass_01", 1}
 		};
 
 		radius = 10000;
@@ -279,5 +287,10 @@ class CfgSoundSets
 	class Blowout_Base: Namalsk_Soundset
 	{
 		soundShaders[] = {"Blowout_Bass_Soundshader"};
+	};
+
+	class Blowout_Wind: Namalsk_Soundset
+	{
+		soundShaders[] = {"Blowout_Wind_SoundShader"};
 	};
 };

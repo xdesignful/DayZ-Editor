@@ -12,5 +12,6 @@ enum BlowoutSound
 	APSI_Disable,
 	Blowout_NearImpact,
 	Blowout_Contact,
-	Blowout_Bass
+	Blowout_Bass,
+	Blowout_Wind
 };

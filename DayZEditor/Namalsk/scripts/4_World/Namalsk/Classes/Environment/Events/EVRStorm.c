@@ -162,17 +162,10 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
 			
 		Sleep(m_MidPhaseLength * 1000);
-			
-		for (int j = 0; j < m_BlowoutCount; j++) {
-			
-			float phase = (1 / m_BlowoutCount) * j;
-			phase = Math.Clamp(phase, 0.25, FLT_MAX);
-			
-			PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, phase);
-			//Sleep(vector.Distance(m_Player.GetPosition(), m_Position) * 0.343);
-			thread CreateBlowout(phase);
-			Sleep(3000 * Math.RandomFloat(0.7, 1.2));
-		}
+		
+		// Actual Blowout Event			
+		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
+		thread CreateBlowout(0.5);
 		
 		// Final Blowout
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1000, 0));		

@@ -1,69 +1,119 @@
 class EditorDZEFile: EditorFileType
 {
-	
+	protected ref FileSerializer _serializer;
+	protected ref EditorSaveData _data;
+
+	void EditorDZEFile()
+	{
+		_serializer = new FileSerializer();
+		_data = new EditorSaveData();
+	}
+
+	protected bool OnRead(ParamsReadContext ctx, int version)
+	{
+		if (!ctx.Read(_data.MapName))
+			return false;
+
+		if (!ctx.Read(_data.CameraPosition))
+			return false;
+
+		if (!ctx.Read(_data.EditorObjects))
+			return false;
+
+		return true;
+	}
+
+	protected void OnWrite(ParamsReadContext ctx, int version)
+	{
+		ctx.Write(_data.MapName);
+		ctx.Write(_data.CameraPosition);
+		ctx.Write(_data.EditorObjects);
+	}
+
 	override EditorSaveData Import(string file, ImportSettings settings)
 	{
-		EditorSaveData save_data = new EditorSaveData();
-		
-		if (!FileExist(file)) {
+		int version;
+
+		if (!FileExist(file))
+		{
 			EditorLog.Error("File not found %1", file);
-			return save_data;
+			return _data;
 		}
 		
-		// Temporary fix, Binarize always = 0
-		JsonFileLoader<EditorSaveData>.JsonLoadFile(file, save_data);
-		
-		// bugfix to fix the id not incrementing
-		EditorSaveData bug_fix_save_data = new EditorSaveData();
-		foreach (EditorObjectData object_data: save_data.EditorObjects) {
-			bug_fix_save_data.EditorObjects.Insert(EditorObjectData.Create(object_data.Type, object_data.Position, object_data.Orientation, object_data.Flags));
-		}
-		
-		bug_fix_save_data.MapName = save_data.MapName;
-		bug_fix_save_data.CameraPosition = save_data.CameraPosition;
-		
-		return bug_fix_save_data;
-		
-		
-		FileSerializer file_serializer = new FileSerializer();
-		if (!file_serializer.Open(file, FileMode.READ)) {
-			EditorLog.Error("File in use %1", file);
-			return save_data;
-		}
-		
-		if (!file_serializer.Read(save_data)) {
-			file_serializer.Close();
-			EditorLog.Error("Unknown File Error %1", file);
-			return save_data;
-		}
-		
-		file_serializer.Close();
-	}
-	
-	override void Export(EditorSaveData data, string file, ExportSettings settings)
-	{
-		if (FileExist(file) && !DeleteFile(file)) {
-			return;
+		if (ConvertFromJson(file, _data)) // test shit
+		{
+			_serializer.Close();
+			return _data;
 		}
 
-		// Temporary fix, Binarize always = 0
-		JsonFileLoader<EditorSaveData>.JsonSaveFile(file, data);
-		return;
-		
-				
-		FileSerializer file_serializer = new FileSerializer();
-		if (!file_serializer.Open(file, FileMode.WRITE)) {
-			return;
+		if (!_serializer.Open(file, FileMode.READ))
+		{
+			_serializer.Close();
+
+			EditorLog.Error("File in use %1", file);
+			return _data;
+		}
+
+		if (!_serializer.Read(version))
+		{
+			EditorLog.Warning("File is unversioned, attempting conversion");
+
+			//if (!ConvertFromJson(file)) // read from 4head json save
+			//	_serializer.Read(_data); // read from old unversioned bin
+
+			_serializer.Close();
+			return _data;
 		}
 		
-		if (!file_serializer.Write(data)) {
-			file_serializer.Close();
-			return;
-		}
 		
-		file_serializer.Close();
+
+		if (!OnRead(_serializer, version))
+		{
+			_serializer.Close();
+
+			EditorLog.Error("Unknown File Error %1", file);
+			return _data;
+		}
+
+		_serializer.Close();
+		return _data;
 	}
-	
+
+	override void Export(EditorSaveData data, string file, ExportSettings settings)
+	{
+		if (_serializer.Open(file, FileMode.WRITE))
+		{
+			_data = data;
+
+			int version = EDITOR_DZE_VERSION_SAVE;
+			_serializer.Write(version);
+
+			OnWrite(_serializer, version);
+
+			_serializer.Close();
+		}
+	}
+
+	private bool ConvertFromJson(string file, out EditorSaveData data)
+	{
+		// Temporary fix, Binarize always = 0
+		JsonFileLoader<EditorSaveData>.JsonLoadFile(file, data);
+
+		if (data.EditorObjects.Count() <= 0)
+			return false;
+
+		// bugfix to fix the id not inclementing
+		EditorSaveData editor_save = new EditorSaveData();
+		foreach (EditorObjectData object_data: data.EditorObjects) {
+			editor_save.EditorObjects.Insert(EditorObjectData.Create(object_data.Type, object_data.Position, object_data.Orientation, object_data.Flags));
+		}
+
+		editor_save.MapName = data.MapName;
+		editor_save.CameraPosition = data.CameraPosition;
+
+		return true;
+	}
+
 	override string GetExtension() {
 		return ".dze";
 	}

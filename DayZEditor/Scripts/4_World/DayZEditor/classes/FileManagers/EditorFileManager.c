@@ -3,11 +3,11 @@ class EditorFileType
 {
 	EditorSaveData Import(string file, ImportSettings settings);
 	void Export(EditorSaveData data, string file, ExportSettings settings);
-	
+
 	string GetExtension();
 }
 
-enum HeightType 
+enum HeightType
 {
 	ABSOLUTE,
 	RELATIVE
@@ -41,37 +41,37 @@ class EditorSaveData
 {
 	string MapName = "ChernarusPlus";
 	vector CameraPosition;
-	
+
 	// Do NOT use a map here. ID is stored in EditorObjectData anyway
 	ref array<ref EditorObjectData> EditorObjects = {};
-		
+
 	void ~EditorSaveData()
 	{
 		delete EditorObjects;
 	}
-	
+
 	static EditorSaveData CreateFromEditor(Editor editor, bool selected_only = false)
 	{
 		EditorSaveData save_data = new EditorSaveData();
-		
+
 		// Save world name
 		save_data.MapName = GetGame().GetWorldName();
-		
+
 		// Save Camera Position
 		save_data.CameraPosition = editor.GetCamera().GetPosition();
-		
+
 		// Save Objects
 		EditorObjectMap placed_objects = editor.GetPlacedObjects();
 		if (selected_only) {
 			placed_objects = editor.GetSelectedObjects();
 		}
-		
+
 		if (placed_objects) {
 			foreach (EditorObject editor_object: placed_objects) {
 				save_data.EditorObjects.Insert(editor_object.GetData());
 			}
 		}
-		
+
 		return save_data;
 	}
 }

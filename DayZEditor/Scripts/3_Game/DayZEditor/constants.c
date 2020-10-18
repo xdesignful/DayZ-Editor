@@ -9,6 +9,5 @@ static const string EDITOR_ICON_FOLDER = EDITOR_GUI_ICONS_FOLDER + "icon_folder_
 static const string EDITOR_ICON_SAVE = EDITOR_GUI_ICONS_FOLDER + "icon_folder_save_128x128.edds";
 static const string EDITOR_ICON_OPEN = EDITOR_GUI_ICONS_FOLDER + "icon_folder_open_128x128.edds";
 
-
-
-
+//! bIN sAVES
+static const int EDITOR_DZE_VERSION_SAVE = 1;

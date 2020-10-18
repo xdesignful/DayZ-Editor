@@ -32,6 +32,9 @@ class EditorWorldObject
 }
 
 
+// temp until i can find a better way to find "First" in a map that doesnt blow the software up
+static int lowest_id;
+
 class EditorObject: EditorWorldObject
 {
 	protected EditorObjectData 				m_Data;
@@ -49,7 +52,7 @@ class EditorObject: EditorWorldObject
 	private vector m_LineCenters[12]; 
 	private vector m_LineVerticies[8];
 	
-	static float line_width = 0.02;
+	int ID;
 	
 	string Name;
 	vector Position;
@@ -102,7 +105,9 @@ class EditorObject: EditorWorldObject
 	void EditorObject(EditorObjectData data)
 	{
 		EditorLog.Trace("EditorObject " + data);
-		m_Data = data;
+		ID = lowest_id;
+		lowest_id++;
+		
 		
 		if (!m_Data.WorldObject) {
 			m_WorldObject = CreateObject(m_Data.Type, m_Data.Position, m_Data.Orientation);
@@ -208,10 +213,6 @@ class EditorObject: EditorWorldObject
 		m_IsSelected = false;
 		HideBoundingBox();
 		OnObjectDeselected.Invoke(this);
-	}
-	
-	EditorObjectData GetData() {
-		return m_Data;
 	}
 	
 	bool OnMouseEnter(int x, int y)	{
@@ -436,7 +437,7 @@ class EditorObject: EditorWorldObject
 			transform[3] = m_LineCenters[i];
 			
 			for (int j = 0; j < 3; j++) 
-				transform[j][j] = ((position[j] == m_LineCenters[i][j]) * size[j]/2) + line_width;						
+				transform[j][j] = ((position[j] == m_LineCenters[i][j]) * size[j]/2) + BOUNDING_BOX_WIDTH;						
 			 
 			m_BBoxLines[i] = EntityAI.Cast(GetGame().CreateObjectEx("BoundingBoxBase", m_LineCenters[i], ECE_LOCAL));
 			m_BBoxLines[i].SetTransform(transform);			
@@ -447,9 +448,9 @@ class EditorObject: EditorWorldObject
 		
 		vector y_axis_mat[4];
 		vector bottom_center = GetBottomCenter() - GetPosition();
-		y_axis_mat[0][0] = line_width;
+		y_axis_mat[0][0] = BOUNDING_BOX_WIDTH;
 		y_axis_mat[1][1] = 1000;
-		y_axis_mat[2][2] = line_width;
+		y_axis_mat[2][2] = BOUNDING_BOX_WIDTH;
 		y_axis_mat[3] = Vector(bottom_center[0], bottom_center[1] - y_axis_mat[1][1], bottom_center[2]);
 		
 		m_CenterLine = EntityAI.Cast(GetGame().CreateObjectEx("BoundingBoxBase", bottom_center, ECE_LOCAL));

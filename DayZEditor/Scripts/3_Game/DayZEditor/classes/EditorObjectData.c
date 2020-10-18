@@ -8,8 +8,7 @@ enum EditorObjectFlags {
 	ALL = 30 // 2 | 4 | 8 | 16
 };
 
-// temp until i can find a better way to find "First" in a map that doesnt blow the software up
-static int lowest_id;
+
 class EditorObjectData
 {	
 	private int m_Id;
@@ -34,8 +33,7 @@ class EditorObjectData
 	
 	void EditorObjectData() 
 	{
-		lowest_id++;
-		m_Id = lowest_id;
+
 	}
 	
 	static ref EditorObjectData Create(string type, vector transform[4], EditorObjectFlags flags = EditorObjectFlags.ALL)

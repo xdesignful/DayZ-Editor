@@ -267,6 +267,10 @@ class EditorObject: EditorWorldObject
 		return 1;
 	}
 	
+	EditorObjectData GetData() {
+		return m_Data;
+	}
+	
 	void Update() 
 	{ 
 		GetWorldObject().Update(); 

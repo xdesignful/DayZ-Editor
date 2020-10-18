@@ -8,7 +8,7 @@ enum EditorObjectFlags {
 	ALL = 30 // 2 | 4 | 8 | 16
 };
 
-
+/*
 class EditorObjectData
 {	
 	private int m_Id;
@@ -98,4 +98,4 @@ class EditorObjectData
 		serializer.Read(Orientation);
 		serializer.Read(Flags);
 	}
-}
+}*/

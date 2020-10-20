@@ -1,38 +1,72 @@
-class EditorSettings
+class EditorSettings: Controller
 {	
-	// shit thats gotta be changed
-	float ViewDistance = 12000;
-	float ObjectViewDistance = 5000;
-	float MarkerViewDistance = 1500;
+	float ViewDistance = 8000;
+	float ObjectViewDistance = 1500;
 		
-	// Autosave timer in seconds
 	int AutoSaveTimer = 240;
 
 	bool LockCameraDuringDialogs = true;
-	
+	bool ShowBoundingBoxes = true;
 	bool DebugMode;
 	
-	void EditorSettings() 
-	{
-		EditorLog.Trace("EditorSettings");
-		Reload();
-	}
+	string EditorProtoFile = "$profile:/Editor/MapGroupProto.xml";
+	string EditorBrushFile = "$profile:/Editor/EditorBrushes.xml";
 	
+	[NonSerialized()]
+	ref DropdownListPrefabItem SelectedLogLevel;
+		
 	static EditorSettings Load(string filename)
 	{
-		// todo load settings from ini or something
-		return new EditorSettings();
+		EditorLog.Trace("EditorSettings::Load");
+		
+		EditorSettings settings = new EditorSettings();
+		
+		// Generate Initial File
+		if (!FileExist(filename)) {
+			Save(settings, filename);
+			return settings;
+		}
+		
+		EditorLog.Info("Loading EditorSettings from %1", filename);
+		// Why the fuck doesnt this load when i RELOAD the editor?!?!?!??!?!?!?!?!!
+		// B R U H
+		JsonFileLoader<EditorSettings>.JsonLoadFile(filename, settings);
+		return settings;
 	}
 	
 	
 	static void Save(EditorSettings settings, string filename)
 	{
-		// todo save settings to ini or something
+		EditorLog.Trace("EditorSettings::Save");
+		
+		EditorLog.Info("Saving EditorSettings to %1", filename);
+		JsonFileLoader<EditorSettings>.JsonSaveFile(filename, settings);
 	}
-
-	void Reload()
+	
+	override void PropertyChanged(string property_name)
 	{
-		GetGame().GetWorld().SetViewDistance(ViewDistance);
-		GetGame().GetWorld().SetObjectViewDistance(ObjectViewDistance);
-	}
+		switch (property_name) {
+						
+			case "SelectedLogLevel": {
+				
+				if (SelectedLogLevel && SelectedLogLevel.GetTemplateController() && SelectedLogLevel.GetTemplateController().UserData) {
+					Param1<LogLevel> p = Param1<LogLevel>.Cast(SelectedLogLevel.GetTemplateController().UserData);
+					if (p) {
+						EditorLog.CurrentLogLevel = p.param1;
+					}
+				}
+				break;
+			}
+			
+			case "ViewDistance": {
+				GetGame().GetWorld().SetViewDistance(ViewDistance);
+				break;
+			}
+			
+			case "ObjectViewDistance": {
+				GetGame().GetWorld().SetObjectViewDistance(ObjectViewDistance);
+				break;
+			}
+		}
+	}	
 }

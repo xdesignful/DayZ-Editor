@@ -12,7 +12,7 @@ class EditorWorldObject
 		}
 	}
 	
-	protected EntityAI CreateObject(string type, vector position = "0 0 0", vector orientation = "0 0 0")
+	static EntityAI CreateObject(string type, vector position = "0 0 0", vector orientation = "0 0 0")
 	{
 		// Set to ECE_SETUP for AI compat. DONT ADD ECE_LOCAL
 		EntityAI obj; 
@@ -155,19 +155,22 @@ class EditorObject: EditorWorldObject
 		
 		// Bounding Box
 		BoundingBoxEnabled = ((m_Data.Flags & EditorObjectFlags.BBOX) == EditorObjectFlags.BBOX);
-		EnableBoundingBox(BoundingBoxEnabled);
+		thread EnableBoundingBox(BoundingBoxEnabled);
 		
 		// Map marker
 		MapMarkerEnabled = ((m_Data.Flags & EditorObjectFlags.MAPMARKER) == EditorObjectFlags.MAPMARKER);
-		EnableMapMarker(MapMarkerEnabled);
+		thread EnableMapMarker(MapMarkerEnabled);
 		
 		// World marker
 		WorldMarkerEnabled = ((m_Data.Flags & EditorObjectFlags.OBJECTMARKER) == EditorObjectFlags.OBJECTMARKER);
-		EnableObjectMarker(WorldMarkerEnabled);
+		thread EnableObjectMarker(WorldMarkerEnabled);
 		
 		// Browser item
 		ListItemEnabled = ((m_Data.Flags & EditorObjectFlags.LISTITEM) == EditorObjectFlags.LISTITEM);
-		EnableListItem(ListItemEnabled);
+		thread EnableListItem(ListItemEnabled);
+		
+
+		m_SnapPoints.Insert(new EditorSnapPoint(this, Vector(0, -GetYDistance(), 5)));
 	}
 	
 		
@@ -279,6 +282,15 @@ class EditorObject: EditorWorldObject
 			Name = GetDisplayName();
 			Position = GetPosition();
 			Orientation = GetOrientation();
+		}
+		
+		
+		Debug.DestroyAllShapes();
+		
+		if (GetEditor().Settings.DebugMode) {
+			foreach (EditorSnapPoint point: m_SnapPoints) {
+				Debug.DrawSphere(point.GetWorldObject().GetWorldPosition());
+			}
 		}
 	}
 	
@@ -456,6 +468,8 @@ class EditorObject: EditorWorldObject
 		m_CenterLine.SetTransform(y_axis_mat);
 		AddChild(m_CenterLine, -1);
 		Update();
+		
+		HideBoundingBox();
 	}
 	
 	void DestroyBoundingBox()
@@ -541,45 +555,15 @@ class EditorObject: EditorWorldObject
 		result[2] = Math.AbsFloat(clip_info[0][2]) + Math.AbsFloat(clip_info[1][2]);
 		
 		return result;
-	}
-
-	void SetTransformWithSnapping(vector transform[4])
-	{	
-		SetTransform(transform);
-		// I cant wait to delete this... but not yet
-		if (GetEditor().SnappingMode) {
-			vector current_size = GetSize();
-			vector current_pos = GetPosition();
-			float snap_radius = 5;
-
-			foreach (EditorObject editor_object: GetEditor().GetPlacedObjects()) {
-				if (editor_object == this) continue;
-				
-				vector size = editor_object.GetSize();
-				vector position = editor_object.GetPosition();
-				
-				if (vector.Distance(current_pos, position) < 100) {
-					
-					for (int i = 0; i < 12; i++) {
-						vector pos = editor_object.m_BBoxLines[i].GetPosition();
-						if (vector.Distance(pos, current_pos) < snap_radius) {
-							SetPosition(pos);
-							Update();
-							return;
-						}						
-					}
-				}
-			}		
-		}
-		
-		Update();
-	}
-		
+	}	
 
 	void ShowBoundingBox()
 	{
 		EditorLog.Trace("EditorObject::ShowBoundingBox");
-
+		
+		// Global Settings Check
+		if (!GetEditor().Settings.ShowBoundingBoxes) return;
+		
 		for (int i = 0; i < 12; i++) {
 			if (m_BBoxLines[i]) {
 				m_BBoxLines[i].SetFlags(EntityFlags.VISIBLE, false);

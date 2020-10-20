@@ -30,36 +30,6 @@
 // if today is that day. fix it.
 // and message me your feedback on discord :)
 
-class GizmoTest: ScriptedEntity
-{
-	void GizmoTest()
-	{
-		SetFlags(EntityFlags.VISIBLE, true);
-		SetEventMask(EntityEvent.INIT);
-		SetEventMask(EntityEvent.FRAME);
-	}
-	
-	Object m_ParticleSource;
-	
-	vobject src_obj = null;
-	
-	void CreateGizmo()
-	{
-		m_ParticleSource = GetGame().CreateObject("#particlesourceenf", Vector(0, 0, 0), true);
-		
-		AddChild(m_ParticleSource, -1, true);
-		src_obj = GetObject("system\\wbdata\\Gizmo3D\\axisX.xob");
-		
-		Print("Loading object " + vtoa(src_obj));
-		
-		m_ParticleSource.SetObject(src_obj, "");
-		ReleaseObject(src_obj);
-
-	}
-}
-
-ref GizmoTest m_GizmoTest;
-
 ref Editor g_Editor;
 Editor GetEditor() {
 	return g_Editor;
@@ -78,9 +48,9 @@ class Editor
 	// public properties
 	ref EditorWorldObject 						ObjectInHand;
 	ref EditorCommandManager 					CommandManager;
+	ref EditorSettings 							Settings;
 	
 	// private Editor Members
-	private ref EditorSettings 					m_EditorSettings;
 	private ref EditorHud						m_EditorHud;
 	private ref EditorBrush						m_EditorBrush;
 	private ref EditorObjectDataMap			 	m_SessionCache;
@@ -94,12 +64,9 @@ class Editor
 	private EditorObjectManagerModule 			m_ObjectManager;	
 	
 	private bool 								m_Active;
-	private string 								m_EditorSettingsFile = "$profile:Editor/Settings.ini";
+	string 										EditorSettingsFile = "$profile:/Editor/Settings.json";
 	string										EditorSaveFile;
-	// todo move to settings
-	string										EditorProtoFile = "$profile:Editor/MapGroupProto.xml";
-	string										EditorBrushFile = "$profile:Editor/EditorBrushes.xml";
-	string										EditorDirectory = "$profile:Editor/";
+	string										EditorDirectory = "$profile:/Editor/";
 	
 	// modes
 	bool 										MagnetMode;
@@ -107,7 +74,7 @@ class Editor
 	bool 										SnappingMode;
 	bool 										CollisionMode;
 	
-	string										Version = "DayZ Editor Beta 1.0.35"; 
+	string										Version = "DayZ Editor Beta 1.0.36"; 
 
 	private void Editor(PlayerBase player) 
 	{
@@ -118,6 +85,11 @@ class Editor
 		// Initialize the profiles/editor directory;		
 		MakeDirectory(EditorDirectory);
 		
+		// Init Settings
+		//Settings 			= EditorSettings.Load(EditorSettingsFile);
+		// temp until cf test updates
+		Settings 			= new EditorSettings();
+		
 		// Object Manager
 		m_ObjectManager 	= EditorObjectManagerModule.Cast(GetModuleManager().GetModule(EditorObjectManagerModule));
 		
@@ -127,10 +99,6 @@ class Editor
 		// Needs to exist on clients for Undo / Redo syncing
 		m_SessionCache 		= new EditorObjectDataMap();
 		m_ActionStack 		= new EditorActionStack();
-		
-		// Init Settings
-		m_EditorSettings 	= EditorSettings.Load(m_EditorSettingsFile);
-		m_EditorSettings.Reload();
 		
 		// Init Hud
 		m_EditorHud 		= new EditorHud();
@@ -153,11 +121,13 @@ class Editor
 		EditorLog.Trace("~Editor");
 		if (!IsMissionOffline()) {
 			ScriptRPC rpc = new ScriptRPC();
-			rpc.Send(null, EditorServerModuleRPC.EDITOR_CLIENT_DESTROYED, true);
+			rpc.Send(null, EditorServerModuleRPC.EDITOR_CLIENT_DESTROYED, true); 
 		}
 		
+		//EditorSettings.Save(Settings, EditorSettingsFile);
+		
+		//delete Settings;
 		delete m_EditorHud;
-		delete m_EditorSettings;
 		delete m_EditorBrush;
 		delete m_SessionCache;
 		delete ObjectInHand;
@@ -184,7 +154,6 @@ class Editor
 		// Dont think its needed anymore
 		//m_EditorHud.Update(timeslice);
 		
-
 		set<Object> obj = new set<Object>();
 		int x, y;
 		GetMousePos(x, y);
@@ -199,20 +168,20 @@ class Editor
 			}
 			
 			if (CollisionMode) {
-				CurrentMousePosition = MousePosToRay(obj, collision_ignore, m_EditorSettings.ViewDistance);
+				CurrentMousePosition = MousePosToRay(obj, collision_ignore, Settings.ViewDistance);
 			} else {
-				CurrentMousePosition = MousePosToRay(obj, collision_ignore, m_EditorSettings.ViewDistance, 0, true);
+				CurrentMousePosition = MousePosToRay(obj, collision_ignore, Settings.ViewDistance, 0, true);
 			}
 		}
 		
-		if (m_EditorSettings.DebugMode) {
-			Debug.DestroyAllShapes();
-			Debug.DrawSphere(CurrentMousePosition, 0.25, COLOR_GREEN_A);
+		if (Settings.DebugMode) {
+			//Debug.DestroyAllShapes();
+			//Debug.DrawSphere(CurrentMousePosition, 0.25, COLOR_GREEN_A);
 		}
 		
 
 		if (!IsPlacing()) {
-			Object target = GetObjectUnderCursor(m_EditorSettings.ViewDistance);
+			Object target = GetObjectUnderCursor(Settings.ViewDistance);
 			if (target) {
 				if (target != ObjectUnderCursor) {
 					if (ObjectUnderCursor) { 
@@ -269,6 +238,28 @@ class Editor
 		}
 	}
 	
+	
+	
+	
+	bool OnDoubleClick(int button)
+	{
+		EditorLog.Trace("Editor::OnDoubleClick");
+		Widget target = GetWidgetUnderCursor();
+		switch (button) {
+			
+			case MouseState.LEFT: {
+				
+				if (m_LootEditMode && !target) {
+					InsertLootPosition(CurrentMousePosition);
+				}
+				
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
 	
 	bool OnMouseDown(int button)
 	{
@@ -352,17 +343,7 @@ class Editor
 			}
 			
 			case MouseState.RIGHT: {
-				
-				// Create context menu for adding loot positions
-				if (m_LootEditMode) {
-					int x, y;
-					GetMousePos(x, y);
-					EditorLootEditorContextMenu context_menu(x, y);
-					
-					delete EditorUIManager.CurrentMenu;
-					EditorUIManager.CurrentMenu = context_menu;
-				}
-				
+								
 				break;
 			}
 		}
@@ -385,7 +366,6 @@ class Editor
 		m_CurrentKeys.Insert(key);
 		EditorCommand command = CommandManager.CommandShortcutMap[m_CurrentKeys.GetMask()];
 		if (command) {
-						
 			EditorLog.Debug("Hotkeys Pressed for %1", command.ToString());
 			CommandArgs args = new CommandArgs();
 			args.Context = m_EditorHud;
@@ -419,7 +399,7 @@ class Editor
 			
 			// Camera Init
 			// todo if singleplayer spawn on center of map, otherwise spawn on character in MP
-			vector pos = m_Player.GetPosition();
+			vector pos = m_Player.GetPosition() + Vector(0, 5, 0);
 			m_EditorCamera = EditorCamera.Cast(GetGame().CreateObjectEx("EditorCamera", pos, ECE_LOCAL));
 			
 			
@@ -473,7 +453,7 @@ class Editor
 	
 	bool OnMouseEnterObject(IEntity target, int x, int y)
 	{
-
+		
 	}
 	
 	bool OnMouseExitObject(IEntity target, int x, int y)
@@ -497,6 +477,7 @@ class Editor
 	
 	EditorObject PlaceObject()
 	{
+		EditorLog.Trace("Editor::PlaceObject");
 		if (!ObjectInHand) return null;	
 		
 		EditorHologram editor_hologram;
@@ -541,12 +522,13 @@ class Editor
 		m_EditorCamera.SetPosition(Vector(10, 10, 10));
 		m_EditorCamera.LookAt(Vector(0, 0, 0));	
 		
-		if (!FileExist(EditorProtoFile)) {
-			CopyFile("DayZEditor/scripts/data/Defaults/MapGroupProto.xml", EditorProtoFile);
+		if (!FileExist(Settings.EditorProtoFile)) {
+			EditorLog.Info("EditorProtoFile not found! Copying...");
+			CopyFile("DayZEditor/scripts/data/Defaults/MapGroupProto.xml", Settings.EditorProtoFile);
 		}
 		
 		m_EditorMapGroupProto = new EditorMapGroupProto(m_LootEditTarget); 
-		EditorXMLManager.LoadMapGroupProto(m_EditorMapGroupProto, EditorProtoFile);
+		EditorXMLManager.LoadMapGroupProto(m_EditorMapGroupProto, Settings.EditorProtoFile);
 		
 		m_LootEditMode = true;
 		CollisionMode = true;
@@ -556,7 +538,7 @@ class Editor
 	
 	private void EditLootSpawnsDialog()
 	{
-		MessageBox.Show("Beta!", "Please know that Edit Loot spawns is just a demo and has NO WAY of saving / Exporting your changes (yet)", MessageBoxButtons.OK);
+		MessageBox.Show("Beta!", "Please know that Edit Loot spawns is just a demo and has NO WAY of saving / Exporting your changes (yet)\n\nDouble Click: Add new Loot Position\nEscape: Exit Loot Editor (Copies loot positions to clipboard)", MessageBoxButtons.OK);
 	}
 	
 	// Kinda very jank i think
@@ -594,8 +576,8 @@ class Editor
 
 	EditorHud ReloadHud() 
 	{
-		if (m_EditorHud)
-			delete m_EditorHud;
+		EditorLog.Trace("Editor::ReloadHud");
+		delete m_EditorHud;
 		
 		m_EditorHud = new EditorHud();
 		m_EditorHudController = m_EditorHud.GetTemplateController();
@@ -655,13 +637,13 @@ class Editor
 		vector pos = CurrentMousePosition;
 		pos[1] = GetGame().SurfaceY(pos[0], pos[2]);
 		m_Player.SetPosition(pos);
-		
 	}
 	
 	private void AutoSaveThread()
 	{
 		while (g_Editor) {
-			Sleep(m_EditorSettings.AutoSaveTimer * 1000);
+			Settings.AutoSaveTimer = Math.Clamp(Settings.AutoSaveTimer, 10, FLT_MAX);
+			Sleep(Settings.AutoSaveTimer * 1000);
 			if (EditorSaveFile != string.Empty) {
 				CommandManager.SaveCommand.Execute(this, null);
 			}
@@ -678,15 +660,6 @@ class Editor
 	
 	EditorCamera GetCamera() 
 		return m_EditorCamera;
-	
-	EditorSettings GetSettings()
-		return m_EditorSettings;
-	
-	void SetSettings(EditorSettings settings) {
-		m_EditorSettings = settings;
-		EditorSettings.Save(m_EditorSettings, m_EditorSettingsFile);
-		m_EditorSettings.Reload();
-	}
 	
 	EditorObjectManagerModule GetObjectManager() {
 		return m_ObjectManager;

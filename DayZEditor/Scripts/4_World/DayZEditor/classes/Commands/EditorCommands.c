@@ -4,7 +4,6 @@ class EditorCommand: RelayCommand
 	protected Editor m_Editor;	
 	string Text;
 
-	
 	override bool Execute(Class sender, CommandArgs args) 
 	{
 		EditorLog.Trace("EditorCommand::Execute");
@@ -271,6 +270,13 @@ class EditorPreferencesCommand: EditorCommand
 	{
 		EditorPreferencesDialog dialog = new EditorPreferencesDialog("Editor Preferences");
 		DialogResult result = dialog.ShowDialog();
+		
+		if (result != DialogResult.OK) {
+			return;
+		}
+		
+		// cf test
+		//EditorSettings.Save(m_Editor.Settings, m_Editor.EditorSettingsFile);
 	}
 
 	override string GetName() {
@@ -398,7 +404,7 @@ class EditorReloadBrushesCommand: EditorCommand
 	protected override void Call(Class sender, CommandArgs args)
 	{
 		m_Editor.GetEditorHud().GetTemplateController().GetToolbarController().BrushTypeBoxData.Clear();
-		m_Editor.GetEditorHud().GetTemplateController().GetToolbarController().ReloadBrushes(m_Editor.EditorBrushFile);
+		m_Editor.GetEditorHud().GetTemplateController().GetToolbarController().ReloadBrushes(m_Editor.Settings.EditorBrushFile);
 	}
 	
 	override string GetName() {
@@ -746,17 +752,3 @@ class EditorDonateCommand: EditorCommand
 		return "Donate";
 	}
 }
-
-class EditorInsertLootPositionCommand: EditorCommand
-{
-	
-	override void Call(Class sender, CommandArgs args)
-	{
-		GetEditor().InsertLootPosition(Editor.CurrentMousePosition);
-	}
-	
-	override string GetName() {
-		return "Insert Loot Position";
-	}
-}
-

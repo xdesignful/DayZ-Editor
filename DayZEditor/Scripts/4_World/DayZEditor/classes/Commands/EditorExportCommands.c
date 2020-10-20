@@ -3,22 +3,23 @@ class EditorExportCommandBase: EditorCommand
 {
 	override void Call(Class sender, CommandArgs args)
 	{
-		EditorFileDialog file_dialog(GetName(), "File", "", GetDialogButtonName());
+		EditorExportDialog file_dialog(GetName(), "File", "", GetDialogButtonName());
 		
 		string file_name;
-		if (file_dialog.ShowDialog(file_name) != DialogResult.OK) {
+		ExportSettings export_settings = new ExportSettings();
+		if (file_dialog.ShowDialog(file_name, export_settings) != DialogResult.OK) {
 			return;
 		}
-		
+				
 		if (file_name == string.Empty) {
 			MessageBox.Show("Error", "No file name specified!", MessageBoxButtons.OK);
 			return;
 		}
 
-		ExportFile(file_name);
+		ExportFile(file_name, export_settings);
 	}
 	
-	protected void ExportFile(string file_name)
+	protected void ExportFile(string file_name, ExportSettings export_settings)
 	{
 		EditorFileType file_type = GetFileType().Spawn();
 		if (!file_type) {
@@ -29,9 +30,9 @@ class EditorExportCommandBase: EditorCommand
 		file_name = "$profile:Editor/" + file_name;
 		EditorFileManager.GetSafeFileName(file_name, file_type.GetExtension());
 		
-		EditorSaveData save_data = EditorSaveData.CreateFromEditor(m_Editor);
-		ExportSettings settings = new ExportSettings(); // todo
-		file_type.Export(save_data, file_name, settings);		
+		EditorSaveData save_data = EditorSaveData.CreateFromEditor(m_Editor, export_settings.ExportSelectedOnly);
+		
+		file_type.Export(save_data, file_name, export_settings);		
 		
 		string message = string.Format("Saved %1 objects!", save_data.EditorObjects.Count().ToString());
 		m_Editor.GetEditorHud().CreateNotification(message, COLOR_GREEN);
@@ -52,7 +53,7 @@ class EditorSaveCommand: EditorExportCommandBase
 		EditorLog.Trace("EditorSaveCommand");
 		
 		if (m_Editor.EditorSaveFile == string.Empty) {
-			EditorFileDialog file_dialog(GetName(), "File", "", GetDialogButtonName());
+			EditorFileDialog file_dialog(GetName(), "File", "*", GetDialogButtonName());
 			string file_name;
 			if (file_dialog.ShowDialog(file_name) != DialogResult.OK) {
 				return;
@@ -61,7 +62,7 @@ class EditorSaveCommand: EditorExportCommandBase
 			m_Editor.EditorSaveFile = file_name;
 		}
 		
-		ExportFile(m_Editor.EditorSaveFile);
+		ExportFile(m_Editor.EditorSaveFile, new ExportSettings());
 	}
 	
 	override string GetName() {

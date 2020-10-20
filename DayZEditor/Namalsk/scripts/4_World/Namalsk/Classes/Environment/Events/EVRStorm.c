@@ -146,6 +146,7 @@ class EVRStorm: EventBase
 			Sleep(dt);
 		}
 		
+		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
 		
 		Sleep(5000);
 		ref array<vector> alarm_positions = GetAlarmPositions();
@@ -159,10 +160,7 @@ class EVRStorm: EventBase
 	}
 		
 	private void MidBlowoutClient()
-	{		
-				
-		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1.5);
-			
+	{					
 		Sleep(m_MidPhaseLength * 1000);
 		
 		// Actual Blowout Event			
@@ -236,7 +234,7 @@ class EVRStorm: EventBase
 		
 		while (time >= 0) {
 			
-			Print(time);
+			//Print(time);
 			
 			time -= 10;
 			Sleep(10);

@@ -284,7 +284,7 @@ class CfgSoundSets
 		soundShaders[] = {"Blowout_Contact_SoundShader"};
 	};
 
-	class Blowout_Base: Namalsk_Soundset
+	class Blowout_Bass: Namalsk_Soundset
 	{
 		soundShaders[] = {"Blowout_Bass_Soundshader"};
 	};

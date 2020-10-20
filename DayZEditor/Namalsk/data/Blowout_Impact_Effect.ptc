@@ -10,20 +10,21 @@ EffectDef {
    Material "{1D82EC18896B8416}DayZEditor/Namalsk/data/Blowout_Impact_Shockwave.emat"
    CenterX 0
    CenterY 0
-   SizeMultiplier 500
+   SizeMultiplier 1000
    RandomRotDir 0
    StreakFullUV 0
    VelAngle 0
    RandomAngle 0
    BillboardingType None
    Velocity 0
-   LifeTime 5
+   LifeTime 10
    Alpha {
     0 0 0.25744 1 1 0.02532
    }
    Size {
     0 0 1 1
    }
+   Repeat 0
   }
  }
 }

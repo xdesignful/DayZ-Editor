@@ -60,7 +60,7 @@ class EVRStorm: EventBase
 		if (GetGame().IsServer())
 		{
 			m_InitPhaseLength = 60.0;
-			m_MidPhaseLength = 30.0;
+			m_MidPhaseLength = 60.0;
 			m_EndPhaseLength = m_InitPhaseLength;
 			m_snowTarget = 0.25;
 			m_windRelMinTarget = 0.0;
@@ -121,6 +121,8 @@ class EVRStorm: EventBase
 		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
 		
 		m_wObject.SetStorm(0, 1, 3000);
+		m_wObject.GetFog().SetLimits(0, 100);
+		m_wObject.GetOvercast().SetLimits(0, 100);
 		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
 		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
 		

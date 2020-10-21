@@ -79,7 +79,9 @@ class EVRStorm: EventBase
 	
 	private void _DebugInit()
 	{	
+		StartBlowoutClient();
 		
+		return;
 		InitPhaseClient();		
 		if (GetGame().IsServer()) {
 			InitPhaseServer();
@@ -182,12 +184,11 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
 		
-		LerpFunction(m_BlowoutLight, "SetPosition", m_BlowoutLight.GetPosition(), m_Position, 15);
+		LerpFunction(m_BlowoutLight, "SetPosition", m_BlowoutLight.GetPosition(), m_Position, 10);
 		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
 		// Delay for sound effect
 		Sleep(2000);
-		
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position, m_Position + Vector(0, 1500, 0), 1);
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position, m_Position + Vector(0, 1500, 0), 2);
 	}
 		
 	private void MidBlowoutClient()

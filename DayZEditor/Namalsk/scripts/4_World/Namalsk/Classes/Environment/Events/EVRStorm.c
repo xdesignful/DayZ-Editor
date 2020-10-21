@@ -171,6 +171,7 @@ class EVRStorm: EventBase
 		}	
 		
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
+		thread HandleBlowoutLight(m_BlowoutLight);
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
@@ -217,10 +218,10 @@ class EVRStorm: EventBase
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
 		thread CreateBlowout(0.5);
 		
-		// Final BlowoutLight
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 500, 0), 2);
-		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 500, 0), m_Position, 1);
+		// Final BlowoutLight		
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 1000, 0), 2);
+		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 2);
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1000, 0), m_Position, 1);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
@@ -315,6 +316,19 @@ class EVRStorm: EventBase
 			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatBlur.GetParamValue("Vignette") + 0.25, 0.75);
 			m_MatChroma.LerpParam("PowerX", 0.3 * intensity, 0, 2.5);
 			m_MatGlow.LerpParam("Saturation", 0.2, 1, 1);
+		}
+	}
+	
+	private void HandleBlowoutLight(BlowoutLight blowout_light)
+	{
+		while (blowout_light) {
+			vector position = blowout_light.GetPosition();
+			if (position[1] < GetGame().SurfaceY(position[0], position[2])) {
+				blowout_light.SetBrightnessTo(0);
+			} else {
+				blowout_light.SetBrightnessTo(1);
+			}
+			
 		}
 	}
 	

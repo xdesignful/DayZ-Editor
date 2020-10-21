@@ -14,9 +14,7 @@ class BlowoutLight: ScriptedLightBase
 }
 
 class EVRStorm: EventBase
-{
-	protected APSI m_APSI;
-	
+{	
 	private bool m_MissionWeatherState;
 	
 	protected autoptr ref MaterialEffect m_MatGlow;
@@ -81,30 +79,22 @@ class EVRStorm: EventBase
 	}
 	
 	private void _DebugInit()
-	{
-		if (GetGame().IsClient()) {
-			InitPhaseClient();
-		}
-		
+	{		
+		InitPhaseClient();		
 		if (GetGame().IsServer()) {
 			InitPhaseServer();
 		}
 		
 		Sleep(m_InitPhaseLength * 1000);
 		
-		if (GetGame().IsClient()) {
-			MidPhaseClient();
-		}
-		
+		MidPhaseClient();		
 		if (GetGame().IsServer()) {
 			MidPhaseServer();
 		}
 		
 		Sleep(m_MidPhaseLength * 1000);
 		
-		if (GetGame().IsClient()) {
-			EndPhaseClient();
-		}
+		EndPhaseClient();	
 		
 		if (GetGame().IsServer()) {
 			EndPhaseServer();
@@ -180,9 +170,9 @@ class EVRStorm: EventBase
 			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}
 	
-		if (Class.CastTo(m_APSI, GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR))) {
-			m_APSI.SwitchOn();
-		}		
+		if (GetAPSI()) {
+			GetAPSI().SwitchOn();
+		}
 	}
 		
 	private void MidBlowoutClient()
@@ -207,17 +197,23 @@ class EVRStorm: EventBase
 		
 		thread CreateBlowout(1);
 		
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			
-		} else {
-			if (m_Player.m_Environment.IsSafeFromEVR()) {		
-				return;
-			}
-			
-			PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.25);
-			m_Player.StartCommand_Unconscious(0);
-			PPEffects.SetUnconsciousnessVignette(true);
+		if (GetAPSI() && GetAPSI().IsSwitchedOn()) {
+			return;
+		} 
+		
+		if (m_Player.m_Environment.IsSafeFromEVR()) {		
+			return;
 		}
+		
+		PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.25);
+		m_Player.StartCommand_Unconscious(0);
+		PPEffects.SetUnconsciousnessVignette(true);
+		
+		// Welp son. you fucked up
+		if (DistanceFromCenter() < 200) {
+			m_Player.SetHealth("", "", 0);
+		}
+		
 		
 		
 		m_Rumble = false;
@@ -226,9 +222,14 @@ class EVRStorm: EventBase
 	
 	private void EndBlowoutClient()
 	{
+		
+		// Cleaning up Mat Effects
+		m_MatBlur.LerpParamTo("Intensity", m_EndPhaseLength, 0);
+		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
+		
 		Sleep(m_EndPhaseLength * 1000);
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			m_APSI.SwitchOff();
+		if (GetAPSI() && GetAPSI().IsSwitchedOn()) {
+			GetAPSI().SwitchOff();
 		}
 		
 		foreach (AbstractWave alarm: m_AlarmSounds) {
@@ -290,7 +291,7 @@ class EVRStorm: EventBase
 				CreateLightning(m_Position, factor);
 				
 				// If player is within the "Danger Zone".... fuck em up
-				if (vector.Distance(GetGame().GetPlayer().GetPosition(), m_Position) < 200 && !(m_APSI && m_APSI.IsSwitchedOn())) {
+				if (DistanceFromCenter() < 200 && !(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 					float intensity = Math.Clamp(factor, 0.3, 1);
 					m_MatBlur.LerpParam("Intensity", 0.4 * intensity, 0.1, 0.75);
 					m_MatGlow.LerpParam("Vignette", 0.4 * intensity, 0, 0.75);
@@ -326,7 +327,7 @@ class EVRStorm: EventBase
 		m_Player.GetStaminaHandler().DepleteStamina(EStaminaModifiers.JUMP);		
 		CreateCameraShake(intensity * 2);
 		
-		if (!(m_APSI && m_APSI.IsSwitchedOn())) {
+		if (!(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 			m_MatBlur.LerpParam("Intensity", 0.8 * intensity, m_MatBlur.GetParamValue("Intensity") + 0.04, 0.75);
 			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatBlur.GetParamValue("Vignette") + 0.25, 0.75);
 			m_MatChroma.LerpParam("PowerX", 0.3 * intensity, 0, 2.5);
@@ -443,6 +444,18 @@ class EVRStorm: EventBase
 		wave.SetVolume(volume);
 		wave.Play();
 		return wave;
+	}
+	
+	private float DistanceFromCenter()
+	{
+		return (vector.Distance(m_Player.GetPosition(), m_Position));
+	}
+	
+	private APSI GetAPSI()
+	{
+		APSI apsi;
+		Class.CastTo(apsi, GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR));		
+		return apsi;
 	}
 	
 	override string GetEventName() 

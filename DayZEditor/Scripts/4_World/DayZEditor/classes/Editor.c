@@ -233,8 +233,8 @@ class Editor
 		
 		// God Mode
 		if (m_Player) {
-			m_Player.SetHealth("", "Health", 100);
-			m_Player.SetHealth("", "Shock", 100);
+			//m_Player.SetHealth("", "Health", 100);
+			//m_Player.SetHealth("", "Shock", 100);
 		}
 	}
 	

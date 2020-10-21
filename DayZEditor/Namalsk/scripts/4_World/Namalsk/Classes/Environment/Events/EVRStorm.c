@@ -161,17 +161,18 @@ class EVRStorm: EventBase
 	
 	private void StartBlowoutClient()
 	{
+		Print("EVRStorm StartBlowoutClient");
 		if (GetAPSI()) {
 			GetAPSI().SwitchOn();
 		}
 		
 		ref array<vector> alarm_positions = GetAlarmPositions();
 		foreach (vector pos: alarm_positions) {
-			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
+			//m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
-		thread HandleBlowoutLight(m_BlowoutLight);
+		//thread HandleBlowoutLight(m_BlowoutLight);
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
@@ -202,9 +203,9 @@ class EVRStorm: EventBase
 		}
 		
 		*/
-		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
 		// Delay for sound effect
-		Sleep(11000);
+		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
+		Sleep(1000);
 		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 1500, 0), 2);
 		//Sleep(25000);
 	}
@@ -218,10 +219,10 @@ class EVRStorm: EventBase
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
 		thread CreateBlowout(0.5);
 		
-		// Final BlowoutLight		
+		// Final BlowoutLight
 		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 1000, 0), 2);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 2);
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1000, 0), m_Position, 1);
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1000, 0), m_Position, 1.5);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
@@ -284,7 +285,6 @@ class EVRStorm: EventBase
 		time *= 1000;
 		float start_time = time;
 		while (time > 0) {
-			Print(time);
 			int factor = Math.Clamp(start_time / time, 0, 100);
 			int rand = Math.RandomInt(0, 200);
 			
@@ -313,7 +313,7 @@ class EVRStorm: EventBase
 		
 		if (!(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 			m_MatBlur.LerpParam("Intensity", 0.8 * intensity, m_MatBlur.GetParamValue("Intensity") + 0.04, 0.75);
-			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatBlur.GetParamValue("Vignette") + 0.25, 0.75);
+			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatGlow.GetParamValue("Vignette") + 0.25, 0.75);
 			m_MatChroma.LerpParam("PowerX", 0.3 * intensity, 0, 2.5);
 			m_MatGlow.LerpParam("Saturation", 0.2, 1, 1);
 		}

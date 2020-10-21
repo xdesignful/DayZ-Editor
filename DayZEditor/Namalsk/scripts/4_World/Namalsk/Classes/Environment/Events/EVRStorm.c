@@ -33,6 +33,7 @@ class EVRStorm: EventBase
 	protected int m_BlowoutCount = 3;	
 	
 	protected BlowoutLight m_BlowoutLight;	
+		
 	private bool m_Rumble = true;
 	
 	void EVRStorm(vector position)
@@ -167,7 +168,7 @@ class EVRStorm: EventBase
 			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
-		float timepassed;
+		/*float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
 			float dt = 10000;
@@ -178,16 +179,31 @@ class EVRStorm: EventBase
 			PlayEnvironmentSound(BlowoutSound.Blowout_Drone, m_Position, pregame_phase * 0.1);
 			PlayEnvironmentSound(BlowoutSound.Blowout_Voices, RandomizeVector(GetGame().GetPlayer().GetPosition(), inverse_phase, inverse_phase + 50), pregame_phase * 0.2);
 			Sleep(dt);
-		}
+		}*/
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
+		//thread LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 10);
 		
-		LerpFunction(m_BlowoutLight, "SetPosition", m_BlowoutLight.GetPosition(), m_Position, 10);
+		ref array<Object> m_ZeroGravityBuildings = {};
+		ref array<CargoBase> proxy_data = {};
+		GetGame().GetObjectsAtPosition(m_Position, 10, m_ZeroGravityBuildings, proxy_data);
+		
+		// omfg floating objects
+		foreach (Object zero_g_object: m_ZeroGravityBuildings) {
+			Print(zero_g_object);
+			if (zero_g_object && zero_g_object != m_BlowoutLight) {	
+				thread LerpPosition(zero_g_object, zero_g_object.GetPosition(), zero_g_object.GetPosition() + Vector(0, 5, 0), 10);
+				//thread LerpOrientation(zero_g_object, zero_g_object.GetOrientation(), Math3D.GetRandomDir(), 10);
+			}
+		}
+		
+		
 		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
 		// Delay for sound effect
 		Sleep(2000);
 		LerpFunction(m_BlowoutLight, "SetPosition", m_Position, m_Position + Vector(0, 1500, 0), 2);
+		//Sleep(25000);
 	}
 		
 	private void MidBlowoutClient()
@@ -327,6 +343,30 @@ class EVRStorm: EventBase
 		while (i < duration * 1000) {
 			g_Script.CallFunction(inst, function, null, Vector(Math.Lerp(start[0], finish[0], (1 / duration) * i / 1000), Math.Lerp(start[1], finish[1], (1 / duration) * i / 1000), Math.Lerp(start[2], finish[2], (1 / duration) * i / 1000)));
 			g_Script.Call(inst, "Update", null);
+			Sleep(10);
+			i += 10;
+		}
+	}
+	
+	void LerpPosition(Object obj, vector start, vector finish, float duration)
+	{
+		Object obj_ref = obj;
+		int i = 0;
+		while (i < duration * 1000) {
+			obj_ref.SetPosition(Vector(Math.Lerp(start[0], finish[0], (1 / duration) * i / 1000), Math.Lerp(start[1], finish[1], (1 / duration) * i / 1000), Math.Lerp(start[2], finish[2], (1 / duration) * i / 1000)));
+			obj_ref.Update();
+			Sleep(10);
+			i += 10;
+		}
+	}
+	
+	void LerpOrientation(Object obj, vector start, vector finish, float duration)
+	{
+		Object obj_ref = obj;
+		int i = 0;
+		while (i < duration * 1000) {
+			obj_ref.SetOrientation(Vector(Math.Lerp(start[0], finish[0], (1 / duration) * i / 1000), Math.Lerp(start[1], finish[1], (1 / duration) * i / 1000), Math.Lerp(start[2], finish[2], (1 / duration) * i / 1000)));
+			obj_ref.Update();
 			Sleep(10);
 			i += 10;
 		}

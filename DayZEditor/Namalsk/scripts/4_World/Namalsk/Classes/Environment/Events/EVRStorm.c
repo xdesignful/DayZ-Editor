@@ -154,7 +154,7 @@ class EVRStorm: EventBase
 		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
 		
 		// Makes shit brighter
-		thread LerpFunction(g_Game, "SetEVValue", -3, 0, 10);
+		thread LerpFunction(g_Game, "SetEVValue", -1, 0, m_EndPhaseLength);
 		
 		thread EndBlowoutClient();
 	}
@@ -293,7 +293,7 @@ class EVRStorm: EventBase
 				// If player is within the "Danger Zone".... fuck em up
 				if (DistanceFromCenter() < 200 && !(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 					float intensity = Math.Clamp(factor, 0.3, 1);
-					m_Player.AddHealth("", "Health", -5);
+					m_Player.AddHealth("", "Health", -2.5);
 					m_MatBlur.LerpParam("Intensity", 0.2 * intensity, 0, Math.RandomFloat01());
 					m_MatGlow.LerpParam("Vignette", 0.2 * intensity, 0, Math.RandomFloat01());
 					m_MatChroma.LerpParam("PowerX", 0.25 * intensity, 0, Math.RandomFloat01());

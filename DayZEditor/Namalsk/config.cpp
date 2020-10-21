@@ -145,6 +145,7 @@ class CfgSoundShaders
 		};
 
 		radius = 2000;
+		range = 2000;
 	};
 
 	class Blowout_Wind_SoundShader: Namalsk_Environment_SoundShader

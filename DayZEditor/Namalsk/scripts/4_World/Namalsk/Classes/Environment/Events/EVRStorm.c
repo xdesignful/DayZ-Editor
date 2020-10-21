@@ -40,6 +40,7 @@ class EVRStorm: EventBase
 	void EVRStorm(vector position)
 	{
 		m_Position = position;
+		m_Position[1] = GetGame().SurfaceY(m_Position[0], m_Position[2]);
 		
 		m_MissionWeatherState = m_wObject.GetMissionWeather();
 		m_wObject.MissionWeather(false);
@@ -135,7 +136,7 @@ class EVRStorm: EventBase
 			//m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
-		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position, 5);
 		thread HandleBlowoutLight(m_BlowoutLight);
 		
 		float timepassed;
@@ -152,7 +153,7 @@ class EVRStorm: EventBase
 		}
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
-		LerpPosition(m_BlowoutLight, m_Position - Vector(0, 50, 0), m_Position, 10);
+		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 50, 0), 10);
 /*
 		// omfg floating objects
 		foreach (Object zero_g_object: m_ZeroGravityBuildings) {
@@ -173,7 +174,7 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
 		// Delay for sound effect
 		Sleep(1000);
-		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 1500, 0), 2);
+		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 50, 0), m_Position + Vector(0, 1500, 0), 2);
 	}
 	
 	override void InitPhaseServer()

@@ -33,7 +33,8 @@ class EVRStorm: EventBase
 	protected int m_BlowoutCount = 3;	
 	
 	protected BlowoutLight m_BlowoutLight;	
-		
+	protected ref array<Object> m_ZeroGravityBuildings = {};
+	
 	private bool m_Rumble = true;
 	
 	void EVRStorm(vector position)
@@ -42,6 +43,9 @@ class EVRStorm: EventBase
 		
 		m_MissionWeatherState = m_wObject.GetMissionWeather();
 		m_wObject.MissionWeather(false);
+		
+		ref array<CargoBase> proxy_data = {};
+		GetGame().GetObjectsAtPosition(m_Position, 25, m_ZeroGravityBuildings, proxy_data);
 	}
 	
 	void ~EVRStorm()
@@ -56,7 +60,6 @@ class EVRStorm: EventBase
 		m_EventID = 4;
 		
 		m_Player = GetGame().GetPlayer();
-
 		if (GetGame().IsServer())
 		{
 			m_InitPhaseLength = 60.0;
@@ -70,7 +73,7 @@ class EVRStorm: EventBase
 		/*if (GetGame().IsClient())
 		{
 
-		}*/
+		}*/		
 	}
 	
 	void DebugInit()
@@ -80,9 +83,8 @@ class EVRStorm: EventBase
 	
 	private void _DebugInit()
 	{	
-		StartBlowoutClient();
+		EventInit();
 		
-		return;
 		InitPhaseClient();		
 		if (GetGame().IsServer()) {
 			InitPhaseServer();
@@ -168,7 +170,7 @@ class EVRStorm: EventBase
 			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
-		/*float timepassed;
+		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
 			float dt = 10000;
@@ -179,23 +181,22 @@ class EVRStorm: EventBase
 			PlayEnvironmentSound(BlowoutSound.Blowout_Drone, m_Position, pregame_phase * 0.1);
 			PlayEnvironmentSound(BlowoutSound.Blowout_Voices, RandomizeVector(GetGame().GetPlayer().GetPosition(), inverse_phase, inverse_phase + 50), pregame_phase * 0.2);
 			Sleep(dt);
-		}*/
+		}
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
-		//thread LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 10);
-		
-		ref array<Object> m_ZeroGravityBuildings = {};
-		ref array<CargoBase> proxy_data = {};
-		GetGame().GetObjectsAtPosition(m_Position, 10, m_ZeroGravityBuildings, proxy_data);
-		
+		thread LerpFunction(m_BlowoutLight, "SetPosition", m_BlowoutLight.GetPosition(), m_Position, 10);
+
 		// omfg floating objects
 		foreach (Object zero_g_object: m_ZeroGravityBuildings) {
 			Print(zero_g_object);
 			if (zero_g_object && zero_g_object != m_BlowoutLight) {	
-				thread LerpPosition(zero_g_object, zero_g_object.GetPosition(), zero_g_object.GetPosition() + Vector(0, 5, 0), 10);
+				thread LerpPosition(zero_g_object, zero_g_object.GetPosition(), RandomizeVector(zero_g_object.GetPosition(), 10), 10);
+				//Sleep(3);
 				//thread LerpOrientation(zero_g_object, zero_g_object.GetOrientation(), Math3D.GetRandomDir(), 10);
 			}
+			
+			Sleep(10);
 		}
 		
 		

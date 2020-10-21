@@ -88,7 +88,7 @@ class EVRStorm: EventBase
 	}
 	
 	private void _DebugInit()
-	{	
+	{			
 		EventInit();
 		
 		thread InitPhaseClient();		
@@ -136,7 +136,7 @@ class EVRStorm: EventBase
 		}	
 		
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
-		//thread HandleBlowoutLight(m_BlowoutLight);
+		thread HandleBlowoutLight(m_BlowoutLight);
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
@@ -167,11 +167,13 @@ class EVRStorm: EventBase
 		}
 		
 		*/
-		// Delay for sound effect
+		
+		// ominously sit there*
+		Sleep(10000);
 		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
+		// Delay for sound effect
 		Sleep(1000);
 		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 1500, 0), 2);
-		//Sleep(25000);
 	}
 	
 	override void InitPhaseServer()
@@ -187,8 +189,6 @@ class EVRStorm: EventBase
 	override void MidPhaseClient()
 	{
 		Print("EVRStorm MidPhaseClient");
-		
-		
 		thread StartHitPhase(m_MidPhaseLength / 2);
 		Sleep(m_MidPhaseLength * 1000);
 	
@@ -197,9 +197,9 @@ class EVRStorm: EventBase
 		thread CreateBlowout(0.5);
 		
 		// Final BlowoutLight
-		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 1000, 0), 2);
+		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 3000, 0), m_Position + Vector(0, 1000, 0), 2);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 2);
-		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 1000, 0), m_Position, 1.5);
+		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 1000, 0), m_Position, 1.40);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
@@ -299,8 +299,8 @@ class EVRStorm: EventBase
 		CreateCameraShake(intensity * 2);
 		
 		if (!(GetAPSI() && GetAPSI().IsSwitchedOn())) {
-			m_MatBlur.LerpParam("Intensity", 0.8 * intensity, m_MatBlur.GetParamValue("Intensity") + 0.04, 0.75);
-			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatGlow.GetParamValue("Vignette") + 0.25, 0.75);
+			m_MatBlur.LerpParam("Intensity", 1 * intensity, 0, 0.75);
+			m_MatGlow.LerpParam("Vignette", 0.75 * intensity, 0, 0.75);
 			m_MatChroma.LerpParam("PowerX", 0.3 * intensity, 0, 2.5);
 			m_MatGlow.LerpParam("Saturation", 0.2, 1, 1);
 		}
@@ -312,10 +312,15 @@ class EVRStorm: EventBase
 			vector position = blowout_light.GetPosition();
 			if (position[1] < GetGame().SurfaceY(position[0], position[2])) {
 				blowout_light.SetBrightnessTo(0);
+				blowout_light.SetRadiusTo(0);
+				blowout_light.SetDiffuseColor(0, 0, 0);		
 			} else {
 				blowout_light.SetBrightnessTo(1);
+				blowout_light.SetRadiusTo(1000);
+				blowout_light.SetDiffuseColor(0.5, 1.0, 0.5);
 			}
 			
+			Sleep(10);
 		}
 	}
 	

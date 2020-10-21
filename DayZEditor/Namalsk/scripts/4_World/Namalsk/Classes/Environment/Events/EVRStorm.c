@@ -141,15 +141,7 @@ class EVRStorm: EventBase
 	override void EndPhaseClient()
 	{
 		Print("EVRStorm EndPhaseClient");
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			m_APSI.SwitchOff();
-		}
-		
-		foreach (AbstractWave alarm: m_AlarmSounds) {
-			if (alarm) {
-				alarm.Stop();
-			}
-		}
+		thread EndBlowoutClient();
 	}
 	
 	private void StartBlowoutClient()
@@ -190,9 +182,7 @@ class EVRStorm: EventBase
 	
 		if (Class.CastTo(m_APSI, GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR))) {
 			m_APSI.SwitchOn();
-		}
-		
-		
+		}		
 	}
 		
 	private void MidBlowoutClient()
@@ -232,6 +222,20 @@ class EVRStorm: EventBase
 		
 		m_Rumble = false;
 		//thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
+	}
+	
+	private void EndBlowoutClient()
+	{
+		Sleep(m_EndPhaseLength * 1000);
+		if (m_APSI && m_APSI.IsSwitchedOn()) {
+			m_APSI.SwitchOff();
+		}
+		
+		foreach (AbstractWave alarm: m_AlarmSounds) {
+			if (alarm) {
+				alarm.Stop();
+			}
+		}
 	}
 		
 	private void AnimateLight(BlowoutLight blowout_light, float time)
@@ -284,6 +288,14 @@ class EVRStorm: EventBase
 			
 			if (factor == rand) {
 				CreateLightning(m_Position, factor);
+				
+				// If player is within the "Danger Zone".... fuck em up
+				if (vector.Distance(GetGame().GetPlayer().GetPosition(), m_Position) < 200 && !(m_APSI && m_APSI.IsSwitchedOn())) {
+					float intensity = Math.Clamp(factor, 0.3, 1);
+					m_MatBlur.LerpParam("Intensity", 0.4 * intensity, 0.1, 0.75);
+					m_MatGlow.LerpParam("Vignette", 0.4 * intensity, 0, 0.75);
+					m_MatChroma.LerpParam("PowerX", 0.5 * intensity, 0, 1);
+				}
 			}
 			
 			time -= 10;
@@ -314,24 +326,14 @@ class EVRStorm: EventBase
 		//m_Player.GetStaminaHandler().DepleteStamina(EStaminaModifiers.JUMP);
 		//CreateCameraShake(intensity);
 		CreateLightning(m_Position, intensity * 3);
-		
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			
-		} else {
-			//m_MatBlur.LerpParam("Intensity", 0.4 * intensity, 0.1, 0.75);
-			//m_MatGlow.LerpParam("Vignette", 0.4 * intensity, 0, 0.75);
-			//m_MatChroma.LerpParam("PowerX", 0.5 * intensity, 0, 1);
-		}
 	}
 	
 	private void CreateBlowout(float intensity)
 	{	
 		m_Player.GetStaminaHandler().DepleteStamina(EStaminaModifiers.JUMP);		
 		CreateCameraShake(intensity * 2);
-		if (m_APSI && m_APSI.IsSwitchedOn()) {
-			
-		} else {
-			
+		
+		if (!(m_APSI && m_APSI.IsSwitchedOn())) {
 			m_MatBlur.LerpParam("Intensity", 0.8 * intensity, m_MatBlur.GetParamValue("Intensity") + 0.04, 0.75);
 			m_MatGlow.LerpParam("Vignette", 1 * intensity, m_MatBlur.GetParamValue("Vignette") + 0.25, 0.75);
 			m_MatChroma.LerpParam("PowerX", 0.3 * intensity, 0, 2.5);

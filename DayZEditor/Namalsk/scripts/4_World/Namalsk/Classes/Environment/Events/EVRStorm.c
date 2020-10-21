@@ -86,10 +86,31 @@ class EVRStorm: EventBase
 			InitPhaseClient();
 		}
 		
+		if (GetGame().IsServer()) {
+			InitPhaseServer();
+		}
+		
 		Sleep(m_InitPhaseLength * 1000);
-		MidPhaseClient();
+		
+		if (GetGame().IsClient()) {
+			MidPhaseClient();
+		}
+		
+		if (GetGame().IsServer()) {
+			MidPhaseServer();
+		}
+		
 		Sleep(m_MidPhaseLength * 1000);
-		EndPhaseClient();
+		
+		if (GetGame().IsClient()) {
+			EndPhaseClient();
+		}
+		
+		if (GetGame().IsServer()) {
+			EndPhaseServer();
+		}
+		
+		
 		Sleep(m_EndPhaseLength * 1000);
 		Print("Debug Client Done!");
 	}
@@ -99,6 +120,17 @@ class EVRStorm: EventBase
 		Print("EVRStorm InitPhaseClient");
 		thread StartBlowoutClient();
 	}
+	
+	override void InitPhaseServer()
+	{
+		Print("EVRStorm InitPhaseServer");
+		m_wObject.SetStorm(0, 1, 3000);
+		m_wObject.GetFog().SetLimits(0, 1);
+		m_wObject.GetOvercast().SetLimits(0, 1);
+		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
+		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
+	}	
+	
 	
 	override void MidPhaseClient()
 	{
@@ -127,13 +159,7 @@ class EVRStorm: EventBase
 		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
 		m_MatChroma = new MaterialEffect("graphics/materials/postprocess/chromaber");
 		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
-		
-		m_wObject.SetStorm(0, 1, 3000);
-		m_wObject.GetFog().SetLimits(0, 1);
-		m_wObject.GetOvercast().SetLimits(0, 1);
-		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
-		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
-		
+				
 		// Starts Lighting at site
 		thread StartAmbientRumble();
 		

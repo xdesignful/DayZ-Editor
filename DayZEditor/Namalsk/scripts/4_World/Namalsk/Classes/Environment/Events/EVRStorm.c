@@ -32,8 +32,7 @@ class EVRStorm: EventBase
 	protected float m_BlowoutSize = 10000; // Radius in which players can be affected
 	protected int m_BlowoutCount = 3;	
 	
-	protected BlowoutLight m_BlowoutLight;
-	
+	protected BlowoutLight m_BlowoutLight;	
 	private bool m_Rumble = true;
 	
 	void EVRStorm(vector position)
@@ -79,7 +78,8 @@ class EVRStorm: EventBase
 	}
 	
 	private void _DebugInit()
-	{		
+	{	
+		
 		InitPhaseClient();		
 		if (GetGame().IsServer()) {
 			InitPhaseServer();
@@ -155,7 +155,16 @@ class EVRStorm: EventBase
 	}
 	
 	private void StartBlowoutClient()
-	{		
+	{
+		if (GetAPSI()) {
+			GetAPSI().SwitchOn();
+		}
+		
+		ref array<vector> alarm_positions = GetAlarmPositions();
+		foreach (vector pos: alarm_positions) {
+			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
+		}	
+		
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
@@ -171,16 +180,14 @@ class EVRStorm: EventBase
 		}
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
 		
-		Sleep(5000);
-		ref array<vector> alarm_positions = GetAlarmPositions();
-		foreach (vector pos: alarm_positions) {
-			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
-		}
-	
-		if (GetAPSI()) {
-			GetAPSI().SwitchOn();
-		}
+		LerpFunction(m_BlowoutLight, "SetPosition", m_BlowoutLight.GetPosition(), m_Position, 15);
+		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
+		// Delay for sound effect
+		Sleep(2000);
+		
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position, m_Position + Vector(0, 1500, 0), 1);
 	}
 		
 	private void MidBlowoutClient()
@@ -192,9 +199,13 @@ class EVRStorm: EventBase
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
 		thread CreateBlowout(0.5);
 		
-		// Final Blowout
-		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1500, 0));		
-		AnimateLight(m_BlowoutLight, 3000);
+		// Final BlowoutLight
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 500, 0), 2);
+		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
+		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 500, 0), m_Position, 1);
+		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
+		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
+		m_BlowoutLight.Destroy();
 			
 		// Delay for distance from camera
 		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
@@ -215,11 +226,11 @@ class EVRStorm: EventBase
 		
 		PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.25);
 		m_Player.StartCommand_Unconscious(0);
-		PPEffects.SetUnconsciousnessVignette(true);
+		//PPEffects.SetUnconsciousnessVignette(true);
 		
 		// Welp son. you fucked up
 		if (DistanceFromCenter() < 200) {
-			m_Player.SetHealth("", "Health", 0);
+			//m_Player.SetHealth("", "Health", 0);
 		}
 		
 		m_Rumble = false;
@@ -238,36 +249,7 @@ class EVRStorm: EventBase
 			}
 		}
 	}
-		
-	private void AnimateLight(BlowoutLight blowout_light, float time)
-	{
-		vector position = blowout_light.GetPosition();
-		float distance = vector.Distance(m_Position, position);		
-		float factor = distance / time;
-		float surface_y = GetGame().SurfaceY(position[0], position[2]);
-		
-		bool near_impact_played;
-		while (time >= 0) {
-	
-			blowout_light.SetPosition(Vector(position[0], surface_y + (time * factor), position[2]));
-			blowout_light.Update();
-			Sleep(10);
-			time -= 10;
 			
-			if (!near_impact_played && time < 1000) {
-				near_impact_played = true;
-				PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
-			}
-		}
-		
-		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, blowout_light.GetPosition(), 1);
-		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, blowout_light.GetPosition());
-		
-		blowout_light.Destroy();
-		
-		CreateCameraShake(1);
-	}
-	
 	private void StartAmbientRumble()
 	{
 		while (m_Rumble) {
@@ -327,13 +309,24 @@ class EVRStorm: EventBase
 	private void CreateCameraShake(float intensity)
 	{
 		GetGame().GetPlayer().GetCurrentCamera().SpawnCameraShake(Math.Clamp(intensity, 0.2, 1), 2, 5, 3.5);
-	}	
+	}
 	
 	void LerpFunction(Class inst, string function, float start, float finish, float duration)
 	{		
 		int i = 0;
 		while (i < duration * 1000) {
 			g_Script.CallFunction(inst, function, null, Math.Lerp(start, finish, (1 / duration) * i / 1000));
+			Sleep(10);
+			i += 10;
+		}
+	}
+	
+	void LerpFunction(Class inst, string function, vector start, vector finish, float duration)
+	{
+		int i = 0;
+		while (i < duration * 1000) {
+			g_Script.CallFunction(inst, function, null, Vector(Math.Lerp(start[0], finish[0], (1 / duration) * i / 1000), Math.Lerp(start[1], finish[1], (1 / duration) * i / 1000), Math.Lerp(start[2], finish[2], (1 / duration) * i / 1000)));
+			g_Script.Call(inst, "Update", null);
 			Sleep(10);
 			i += 10;
 		}

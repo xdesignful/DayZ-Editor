@@ -106,6 +106,8 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_begin_01", 1},
 			{"DayZEditor\namalsk\blowout\blowout_begin_02", 1}
 		};
+
+		radius = 10000;
 	};
 
 	class Blowout_FullWave_SoundShader: Namalsk_Environment_SoundShader
@@ -131,6 +133,7 @@ class CfgSoundShaders
 		};
 
         volume = 0.1;
+		radius = 150;
 	};
 
 	class Blowout_Hit_SoundShader: Namalsk_Environment_SoundShader
@@ -140,6 +143,8 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_hit_2", 1}, 
 			{"DayZEditor\namalsk\blowout\blowout_hit_3", 1}
 		};
+
+		radius = 2000;
 	};
 
 	class Blowout_Wind_SoundShader: Namalsk_Environment_SoundShader
@@ -216,6 +221,8 @@ class CfgSoundShaders
 	class Blowout_NearImpact_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {{"DayZEditor\namalsk\blowout\pux_blast", 1}};
+
+		radius = 800;
 	};
 };
 

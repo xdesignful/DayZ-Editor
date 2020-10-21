@@ -301,13 +301,6 @@ class EVRStorm: EventBase
 			time -= 10;
 			Sleep(10);
 		}
-		
-		return;
-		
-		for (int i = 0; i < m_WaveCount; i++) {
-			
-			Sleep(m_TimeBetweenWaves * 1000 * Math.RandomFloat(0.7, 1.2));
-		}
 	}
 	
 	private void CreateHit(float intensity)

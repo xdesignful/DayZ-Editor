@@ -138,6 +138,7 @@ class EVRStorm: EventBase
 		
 		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - "0 5 0", 5);
 		thread HandleBlowoutLight(m_BlowoutLight);
+		thread StartGraviRumble(m_BlowoutLight);
 		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
@@ -273,6 +274,14 @@ class EVRStorm: EventBase
 		}
 	}
 	
+	private void StartGraviRumble(BlowoutLight blowout_light)
+	{
+		while (blowout_light) {
+			PlayEnvironmentSound(BlowoutSound.Blowout_GraviIdle, blowout_light.GetPosition(), 1);
+			Sleep(24000);
+		}
+	}
+	
 	private void StartHitPhase(float time)
 	{
 		Print("Starting hit phase " + time);
@@ -325,9 +334,7 @@ class EVRStorm: EventBase
 			} else {
 				blowout_light.SetBrightnessTo(1);
 				blowout_light.SetRadiusTo(1000);
-				blowout_light.SetDiffuseColor(0.5, 1.0, 0.5);
-				return;
-				
+				blowout_light.SetDiffuseColor(0.5, 1.0, 0.5);				
 			}
 			
 			Sleep(10);

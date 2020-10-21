@@ -15,5 +15,6 @@ enum BlowoutSound
 	Blowout_Bass,
 	Blowout_Wind,
 	Blowout_Ambient,
-	Blowout_Reentry
+	Blowout_Reentry,
+	Blowout_GraviIdle
 };

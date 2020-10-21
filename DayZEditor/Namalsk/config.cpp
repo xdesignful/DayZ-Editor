@@ -231,9 +231,17 @@ class CfgSoundShaders
 	class Blowout_Reentry_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {{"DayZEditor\namalsk\blowout\blowout_reentry", 1}};
-
+		
 		radius = 800;
 		range = 1000;
+	};
+
+	class Blowout_GraviIdle_SoundShader: Namalsk_Environment_SoundShader
+	{
+		samples[] = {{"DayZEditor\namalsk\blowout\blowout_gravi_idle", 1}};
+
+		radius = 10;
+		range = 50;
 	};
 };
 
@@ -327,5 +335,10 @@ class CfgSoundSets
 	class Blowout_Reentry: Namalsk_Soundset
 	{
 		soundShaders[] = {"Blowout_Reentry_SoundShader"};
+	};
+	
+	class Blowout_GraviIdle: Namalsk_Soundset
+	{
+		soundShaders[] = {"Blowout_GraviIdle_SoundShader"};
 	};
 };

@@ -136,7 +136,7 @@ class EVRStorm: EventBase
 			//m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
-		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position, 5);
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - "0 5 0", 5);
 		thread HandleBlowoutLight(m_BlowoutLight);
 		
 		float timepassed;

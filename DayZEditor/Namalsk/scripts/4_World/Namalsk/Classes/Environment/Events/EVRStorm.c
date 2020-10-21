@@ -170,6 +170,8 @@ class EVRStorm: EventBase
 			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
+		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
@@ -184,9 +186,8 @@ class EVRStorm: EventBase
 		}
 		
 		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
-		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position - Vector(0, 50, 0), 5);
-		thread LerpFunction(m_BlowoutLight, "SetPosition", m_BlowoutLight.GetPosition(), m_Position, 10);
-
+		LerpPosition(m_BlowoutLight, m_Position - Vector(0, 50, 0), m_Position, 10);
+/*
 		// omfg floating objects
 		foreach (Object zero_g_object: m_ZeroGravityBuildings) {
 			Print(zero_g_object);
@@ -199,11 +200,11 @@ class EVRStorm: EventBase
 			Sleep(10);
 		}
 		
-		
+		*/
 		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
 		// Delay for sound effect
-		Sleep(2000);
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position, m_Position + Vector(0, 1500, 0), 2);
+		Sleep(11000);
+		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 1500, 0), 2);
 		//Sleep(25000);
 	}
 		
@@ -293,7 +294,7 @@ class EVRStorm: EventBase
 				if (DistanceFromCenter() < 200 && !(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 					float intensity = Math.Clamp(factor, 0.3, 1);
 					m_Player.AddHealth("", "Health", -5);
-					m_MatBlur.LerpParam("Intensity", 0.2 * intensity, 0.1, Math.RandomFloat01());
+					m_MatBlur.LerpParam("Intensity", 0.2 * intensity, 0, Math.RandomFloat01());
 					m_MatGlow.LerpParam("Vignette", 0.2 * intensity, 0, Math.RandomFloat01());
 					m_MatChroma.LerpParam("PowerX", 0.25 * intensity, 0, Math.RandomFloat01());
 				}

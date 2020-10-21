@@ -167,7 +167,6 @@ class EVRStorm: EventBase
 			m_AlarmSounds.Insert(PlayEnvironmentSound(BlowoutSound.Blowout_Alarm, pos, 1, 0));
 		}	
 		
-		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			

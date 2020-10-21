@@ -36,7 +36,6 @@ class MaterialEffect
 		thread _LerpParam(param, start, finish, duration);
 	}
 	
-	
 	void LerpParamTo(string param, float finish, float duration)
 	{
 		float start;

@@ -108,6 +108,19 @@ class EVRStorm: EventBase
 	override void InitPhaseClient() 
 	{
 		Print("EVRStorm InitPhaseClient");
+		
+		// Init stuff
+		m_MatBlur = new MaterialEffect("graphics/materials/postprocess/gauss");
+		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
+		m_MatChroma = new MaterialEffect("graphics/materials/postprocess/chromaber");
+		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
+				
+		// Starts Lighting at site
+		thread StartAmbientRumble();
+		
+		// Makes shit darker :)
+		thread LerpFunction(g_Game, "SetEVValue", 0, -1, m_InitPhaseLength);	
+		
 		thread StartBlowoutClient();
 	}
 	
@@ -121,7 +134,6 @@ class EVRStorm: EventBase
 		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
 	}	
 	
-	
 	override void MidPhaseClient()
 	{
 		Print("EVRStorm MidPhaseClient");
@@ -131,24 +143,20 @@ class EVRStorm: EventBase
 	override void EndPhaseClient()
 	{
 		Print("EVRStorm EndPhaseClient");
+		
+		// Cleaning up Mat Effects
+		m_MatBlur.LerpParamTo("Intensity", m_EndPhaseLength, 0);
+		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
+		
+		// Makes shit brighter
+		thread LerpFunction(g_Game, "SetEVValue", -3, 0, 10);
+		
 		thread EndBlowoutClient();
 	}
 	
 	private void StartBlowoutClient()
-	{
-		// Init stuff
-		m_MatBlur = new MaterialEffect("graphics/materials/postprocess/gauss");
-		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
-		m_MatChroma = new MaterialEffect("graphics/materials/postprocess/chromaber");
-		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
-				
-		// Starts Lighting at site
-		thread StartAmbientRumble();
-		
-		//thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
-		
-		g_Game.SetEVValue(-3);
-		
+	{		
+		thread StartHitPhase(m_MidPhaseLength);
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
@@ -177,7 +185,6 @@ class EVRStorm: EventBase
 		
 	private void MidBlowoutClient()
 	{
-		thread StartHitPhase(m_MidPhaseLength);
 		Sleep(m_MidPhaseLength * 1000);
 	
 		// Actual Blowout Event			
@@ -190,7 +197,7 @@ class EVRStorm: EventBase
 			
 		// Delay for distance from camera
 		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
-		m_Player.AddHealth("", "Shock", -15); // 15 shock damage
+		m_Player.AddHealth("", "Shock", -15);
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
 		CreateCameraShake(0.8);
 		Sleep(100);
@@ -211,22 +218,14 @@ class EVRStorm: EventBase
 		
 		// Welp son. you fucked up
 		if (DistanceFromCenter() < 200) {
-			m_Player.SetHealth("", "", 0);
+			m_Player.SetHealth("", "Health", 0);
 		}
 		
-		
-		
 		m_Rumble = false;
-		//thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
 	}
 	
 	private void EndBlowoutClient()
-	{
-		
-		// Cleaning up Mat Effects
-		m_MatBlur.LerpParamTo("Intensity", m_EndPhaseLength, 0);
-		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
-		
+	{		
 		Sleep(m_EndPhaseLength * 1000);
 		if (GetAPSI() && GetAPSI().IsSwitchedOn()) {
 			GetAPSI().SwitchOff();
@@ -293,9 +292,10 @@ class EVRStorm: EventBase
 				// If player is within the "Danger Zone".... fuck em up
 				if (DistanceFromCenter() < 200 && !(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 					float intensity = Math.Clamp(factor, 0.3, 1);
-					m_MatBlur.LerpParam("Intensity", 0.4 * intensity, 0.1, 0.75);
-					m_MatGlow.LerpParam("Vignette", 0.4 * intensity, 0, 0.75);
-					m_MatChroma.LerpParam("PowerX", 0.5 * intensity, 0, 1);
+					m_Player.AddHealth("", "Health", -5);
+					m_MatBlur.LerpParam("Intensity", 0.2 * intensity, 0.1, 0.75);
+					m_MatGlow.LerpParam("Vignette", 0.2 * intensity, 0, 0.75);
+					m_MatChroma.LerpParam("PowerX", 0.25 * intensity, 0, 1);
 				}
 			}
 			
@@ -350,7 +350,7 @@ class EVRStorm: EventBase
 	{		
 		int i = 0;
 		while (i < duration * 1000) {
-			g_Script.CallFunctionParams(inst, function, null, new Param1<float>(Math.Lerp(start, finish, (1 / duration) * i / 1000)));
+			g_Script.CallFunction(inst, function, null, Math.Lerp(start, finish, (1 / duration) * i / 1000));
 			Sleep(10);
 			i += 10;
 		}

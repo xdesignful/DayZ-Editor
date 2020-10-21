@@ -106,17 +106,17 @@ class EventBase
 				{
 					case 0:
 					{
-						InitPhaseServer();
+						thread InitPhaseServer();
 						break;
 					}
 					case 1:
 					{
-						MidPhaseServer();
+						thread MidPhaseServer();
 						break;
 					}
 					case 2:
 					{
-						EndPhaseServer();
+						thread EndPhaseServer();
 						break;
 					}
 				}
@@ -127,17 +127,17 @@ class EventBase
 				{
 					case 0:
 					{
-						InitPhaseClient();
+						thread InitPhaseClient();
 						break;
 					}
 					case 1:
 					{
-						MidPhaseClient();
+						thread MidPhaseClient();
 						break;
 					}
 					case 2:
 					{
-						EndPhaseClient();
+						thread EndPhaseClient();
 						break;
 					}
 				}
@@ -151,17 +151,17 @@ class EventBase
 		{
 			case 0:
 			{
-				InitPhaseClient();
+				thread InitPhaseClient();
 				break;
 			}
 			case 1:
 			{
-				MidPhaseClient();
+				thread MidPhaseClient();
 				break;
 			}
 			case 2:
 			{
-				EndPhaseClient();
+				thread EndPhaseClient();
 				break;
 			}
 		}
@@ -173,17 +173,17 @@ class EventBase
 		{
 			case 0:
 			{
-				InitPhaseServerLate();
+				thread InitPhaseServerLate();
 				break;
 			}
 			case 1:
 			{
-				MidPhaseServerLate();
+				thread MidPhaseServerLate();
 				break;
 			}
 			case 2:
 			{
-				EndPhaseServerLate();
+				thread EndPhaseServerLate();
 				break;
 			}
 		}

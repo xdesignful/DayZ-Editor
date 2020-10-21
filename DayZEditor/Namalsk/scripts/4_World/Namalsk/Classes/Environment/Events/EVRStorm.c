@@ -46,6 +46,12 @@ class EVRStorm: EventBase
 		
 		ref array<CargoBase> proxy_data = {};
 		GetGame().GetObjectsAtPosition(m_Position, 25, m_ZeroGravityBuildings, proxy_data);
+		
+		// Init stuff
+		m_MatBlur = new MaterialEffect("graphics/materials/postprocess/gauss");
+		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
+		m_MatChroma = new MaterialEffect("graphics/materials/postprocess/chromaber");
+		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
 	}
 	
 	void ~EVRStorm()
@@ -85,24 +91,24 @@ class EVRStorm: EventBase
 	{	
 		EventInit();
 		
-		InitPhaseClient();		
+		thread InitPhaseClient();		
 		if (GetGame().IsServer()) {
-			InitPhaseServer();
+			thread InitPhaseServer();
 		}
 		
 		Sleep(m_InitPhaseLength * 1000);
 		
-		MidPhaseClient();		
+		thread MidPhaseClient();		
 		if (GetGame().IsServer()) {
-			MidPhaseServer();
+			thread MidPhaseServer();
 		}
 		
 		Sleep(m_MidPhaseLength * 1000);
 		
-		EndPhaseClient();	
+		thread EndPhaseClient();	
 		
 		if (GetGame().IsServer()) {
-			EndPhaseServer();
+			thread EndPhaseServer();
 		}
 		
 		
@@ -113,55 +119,13 @@ class EVRStorm: EventBase
 	override void InitPhaseClient() 
 	{
 		Print("EVRStorm InitPhaseClient");
-		
-		// Init stuff
-		m_MatBlur = new MaterialEffect("graphics/materials/postprocess/gauss");
-		m_MatGlow = new MaterialEffect("graphics/materials/postprocess/glow");
-		m_MatChroma = new MaterialEffect("graphics/materials/postprocess/chromaber");
-		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
-				
+					
 		// Starts Lighting at site
 		thread StartAmbientRumble();
 		
 		// Makes shit darker :)
 		thread LerpFunction(g_Game, "SetEVValue", 0, -1, m_InitPhaseLength);	
 		
-		thread StartBlowoutClient();
-	}
-	
-	override void InitPhaseServer()
-	{
-		Print("EVRStorm InitPhaseServer");
-		m_wObject.SetStorm(0, 1, 3000);
-		m_wObject.GetFog().SetLimits(0, 1);
-		m_wObject.GetOvercast().SetLimits(0, 1);
-		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
-		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
-	}	
-	
-	override void MidPhaseClient()
-	{
-		Print("EVRStorm MidPhaseClient");
-		thread MidBlowoutClient();
-	}
-	
-	override void EndPhaseClient()
-	{
-		Print("EVRStorm EndPhaseClient");
-		
-		// Cleaning up Mat Effects
-		m_MatBlur.LerpParamTo("Intensity", m_EndPhaseLength, 0);
-		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
-		
-		// Makes shit brighter
-		thread LerpFunction(g_Game, "SetEVValue", -1, 0, m_EndPhaseLength);
-		
-		thread EndBlowoutClient();
-	}
-	
-	private void StartBlowoutClient()
-	{
-		Print("EVRStorm StartBlowoutClient");
 		if (GetAPSI()) {
 			GetAPSI().SwitchOn();
 		}
@@ -209,9 +173,22 @@ class EVRStorm: EventBase
 		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 1500, 0), 2);
 		//Sleep(25000);
 	}
-		
-	private void MidBlowoutClient()
+	
+	override void InitPhaseServer()
 	{
+		Print("EVRStorm InitPhaseServer");
+		m_wObject.SetStorm(0, 1, 3000);
+		m_wObject.GetFog().SetLimits(0, 1);
+		m_wObject.GetOvercast().SetLimits(0, 1);
+		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
+		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
+	}	
+	
+	override void MidPhaseClient()
+	{
+		Print("EVRStorm MidPhaseClient");
+		
+		
 		thread StartHitPhase(m_MidPhaseLength / 2);
 		Sleep(m_MidPhaseLength * 1000);
 	
@@ -220,9 +197,9 @@ class EVRStorm: EventBase
 		thread CreateBlowout(0.5);
 		
 		// Final BlowoutLight
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 1000, 0), 2);
+		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 1500, 0), m_Position + Vector(0, 1000, 0), 2);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 2);
-		LerpFunction(m_BlowoutLight, "SetPosition", m_Position + Vector(0, 1000, 0), m_Position, 1.5);
+		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 1000, 0), m_Position, 1.5);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
@@ -256,9 +233,19 @@ class EVRStorm: EventBase
 		m_Rumble = false;
 	}
 	
-	private void EndBlowoutClient()
-	{		
+	override void EndPhaseClient()
+	{
+		Print("EVRStorm EndPhaseClient");
+		
+		// Cleaning up Mat Effects
+		m_MatBlur.LerpParamTo("Intensity", m_EndPhaseLength, 0);
+		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
+		
+		// Makes shit brighter
+		thread LerpFunction(g_Game, "SetEVValue", -1, 0, m_EndPhaseLength);
+		
 		Sleep(m_EndPhaseLength * 1000);
+		
 		if (GetAPSI() && GetAPSI().IsSwitchedOn()) {
 			GetAPSI().SwitchOff();
 		}
@@ -269,7 +256,7 @@ class EVRStorm: EventBase
 			}
 		}
 	}
-			
+				
 	private void StartAmbientRumble()
 	{
 		while (m_Rumble) {
@@ -394,10 +381,10 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_Hit, position, 1);
 		//position[1] = GetGame().SurfaceY(position[0], position[2]);
 		Object bolt = GetGame().CreateObject(BOLT_TYPES[Math.RandomInt(0, 1)], position);
-		bolt.SetOrientation(Vector(0, Math.RandomFloat(180, 360), 0));
-		
-		position[1] = position[1] + 50;
 		InclementDabLightning m_Light = InclementDabLightning.Cast(ScriptedLightBase.CreateLight(InclementDabLightning, position));
+		bolt.AddChild(m_Light, -1);
+		bolt.SetOrientation(Vector(0, Math.RandomFloat(180, 360), 0));
+		position[1] = position[1] + 50;
 		
 		Sleep(Math.RandomInt(15, 150));
 		m_Light.Destroy();

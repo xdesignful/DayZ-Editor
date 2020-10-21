@@ -156,7 +156,7 @@ class EVRStorm: EventBase
 	
 	private void StartBlowoutClient()
 	{		
-		thread StartHitPhase(m_MidPhaseLength);
+		
 		float timepassed;
 		while (timepassed < m_InitPhaseLength * 1000) {
 			float pregame_phase = 1 / (m_InitPhaseLength * 1000) * timepassed;			
@@ -185,6 +185,7 @@ class EVRStorm: EventBase
 		
 	private void MidBlowoutClient()
 	{
+		thread StartHitPhase(m_MidPhaseLength / 2);
 		Sleep(m_MidPhaseLength * 1000);
 	
 		// Actual Blowout Event			
@@ -286,16 +287,16 @@ class EVRStorm: EventBase
 			int factor = Math.Clamp(start_time / time, 0, 100);
 			int rand = Math.RandomInt(0, 200);
 			
-			if (factor == rand) {
-				CreateLightning(m_Position, factor);
+			if (factor == rand) {				
+				thread CreateBolt(m_Position);
 				
 				// If player is within the "Danger Zone".... fuck em up
 				if (DistanceFromCenter() < 200 && !(GetAPSI() && GetAPSI().IsSwitchedOn())) {
 					float intensity = Math.Clamp(factor, 0.3, 1);
 					m_Player.AddHealth("", "Health", -5);
-					m_MatBlur.LerpParam("Intensity", 0.2 * intensity, 0.1, 0.75);
-					m_MatGlow.LerpParam("Vignette", 0.2 * intensity, 0, 0.75);
-					m_MatChroma.LerpParam("PowerX", 0.25 * intensity, 0, 1);
+					m_MatBlur.LerpParam("Intensity", 0.2 * intensity, 0.1, Math.RandomFloat01());
+					m_MatGlow.LerpParam("Vignette", 0.2 * intensity, 0, Math.RandomFloat01());
+					m_MatChroma.LerpParam("PowerX", 0.25 * intensity, 0, Math.RandomFloat01());
 				}
 			}
 			
@@ -303,25 +304,7 @@ class EVRStorm: EventBase
 			Sleep(10);
 		}
 	}
-	
-	private void CreateHit(float intensity)
-	{	
-		Print("CreateHit " + intensity);
-		intensity = Math.Clamp(intensity, 0.3, 1);
-		//intensity *= CalculateIntensity(vector.Distance(m_Player.GetPosition(), m_Position));
 		
-		
-		float phase = intensity;
-		phase *= 100;
-		vector pos = RandomizeVector(m_Player.GetPosition(), phase, phase + 25);
-		Sleep(vector.Distance(pos, m_Player.GetPosition()) * 0.343);
-		
-		
-		//m_Player.GetStaminaHandler().DepleteStamina(EStaminaModifiers.JUMP);
-		//CreateCameraShake(intensity);
-		CreateLightning(m_Position, intensity * 3);
-	}
-	
 	private void CreateBlowout(float intensity)
 	{	
 		m_Player.GetStaminaHandler().DepleteStamina(EStaminaModifiers.JUMP);		
@@ -355,15 +338,7 @@ class EVRStorm: EventBase
 			i += 10;
 		}
 	}
-
-	void CreateLightning(vector position, int intensity)
-	{
-		for (int i = 0; i < Math.RandomFloat(1, 3) * intensity; i++) {
-			thread CreateBolt(position);
-			Sleep(Math.RandomInt(0, 100));
-		}
-	}
-	
+		
 	void CreateBolt(vector position)
 	{
 		position = RandomizeVector(position, 10, 50);

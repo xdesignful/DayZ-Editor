@@ -36,6 +36,7 @@ class EVRStorm: EventBase
 	protected ref array<Object> m_ZeroGravityBuildings = {};
 	
 	private bool m_Rumble = true;
+	private bool m_Lightning = true;
 	
 	void EVRStorm(vector position)
 	{
@@ -180,7 +181,7 @@ class EVRStorm: EventBase
 		// Blowout in sky
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
 		thread CreateBlowout(0.5);
-		m_BlowoutLight.SetRadiusTo(10000);
+		m_Lightning = false;
 	}
 	
 	override void InitPhaseServer()
@@ -202,21 +203,20 @@ class EVRStorm: EventBase
 		
 		// Final BlowoutLight
 		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 3000, 0), m_Position + Vector(0, 1000, 0), 2);
-		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 2);
+		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 1);
 		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 1000, 0), m_Position, 1.40);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
-			
-		// Delay for distance from camera
-		Sleep(DistanceFromCenter() * 0.343);
 		
 		// Actual Blowout Event			
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
 		thread CreateBlowout(0.65);
 		
+		// Delay for distance from camera
+		Sleep(DistanceFromCenter() * 0.343);
+		
 		m_Player.AddHealth("", "Shock", -15);
-		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
 		CreateCameraShake(0.8);
 		Sleep(100);
 		
@@ -288,7 +288,7 @@ class EVRStorm: EventBase
 		// Need milliseconds
 		time *= 1000;
 		float start_time = time;
-		while (time > 0) {
+		while (time > 0 && m_Lightning) {
 			int factor = Math.Clamp(start_time / time, 0, 100);
 			int rand = Math.RandomInt(0, 100);
 			

@@ -189,7 +189,7 @@ class EVRStorm: EventBase
 	override void MidPhaseClient()
 	{
 		Print("EVRStorm MidPhaseClient");
-		thread StartHitPhase(m_MidPhaseLength / 2);
+		thread StartHitPhase(m_MidPhaseLength);
 		Sleep(m_MidPhaseLength * 1000);
 	
 		// Actual Blowout Event			
@@ -273,7 +273,7 @@ class EVRStorm: EventBase
 		float start_time = time;
 		while (time > 0) {
 			int factor = Math.Clamp(start_time / time, 0, 100);
-			int rand = Math.RandomInt(0, 200);
+			int rand = Math.RandomInt(0, 100);
 			
 			if (factor == rand) {				
 				thread CreateBolt(m_Position);

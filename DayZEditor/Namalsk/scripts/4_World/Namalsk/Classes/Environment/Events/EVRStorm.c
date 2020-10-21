@@ -326,6 +326,8 @@ class EVRStorm: EventBase
 				blowout_light.SetBrightnessTo(1);
 				blowout_light.SetRadiusTo(1000);
 				blowout_light.SetDiffuseColor(0.5, 1.0, 0.5);
+				return;
+				
 			}
 			
 			Sleep(10);

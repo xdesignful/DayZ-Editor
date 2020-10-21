@@ -6,7 +6,7 @@ class BlowoutLight: ScriptedLightBase
 		SetVisibleDuringDaylight(true);
 		SetRadiusTo(1000);
 		SetBrightnessTo(1);
-		SetCastShadow(false);
+		SetCastShadow(true);
 		SetDiffuseColor(0.5, 1.0, 0.5);		
 		SetFlickerSpeed(0.5);
 		SetFlickerAmplitude(0.5);
@@ -175,6 +175,11 @@ class EVRStorm: EventBase
 		// Delay for sound effect
 		Sleep(1000);
 		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 50, 0), m_Position + Vector(0, 1500, 0), 2);
+		
+		// Blowout in sky
+		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
+		thread CreateBlowout(0.5);
+		m_BlowoutLight.SetRadiusTo(10000);
 	}
 	
 	override void InitPhaseServer()
@@ -193,9 +198,6 @@ class EVRStorm: EventBase
 		thread StartHitPhase(m_MidPhaseLength);
 		Sleep(m_MidPhaseLength * 1000);
 	
-		// Actual Blowout Event			
-		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
-		thread CreateBlowout(0.5);
 		
 		// Final BlowoutLight
 		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 3000, 0), m_Position + Vector(0, 1000, 0), 2);
@@ -206,7 +208,12 @@ class EVRStorm: EventBase
 		m_BlowoutLight.Destroy();
 			
 		// Delay for distance from camera
-		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
+		Sleep(DistanceFromCenter() * 0.343);
+		
+		// Actual Blowout Event			
+		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
+		thread CreateBlowout(0.65);
+		
 		m_Player.AddHealth("", "Shock", -15);
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
 		CreateCameraShake(0.8);
@@ -222,7 +229,7 @@ class EVRStorm: EventBase
 			return;
 		}
 		
-		PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.25);
+		PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.5);
 		m_Player.StartCommand_Unconscious(0);
 		//PPEffects.SetUnconsciousnessVignette(true);
 		
@@ -384,7 +391,7 @@ class EVRStorm: EventBase
 	void CreateBolt(vector position)
 	{
 		position = RandomizeVector(position, 10, 50);
-		PlayEnvironmentSound(BlowoutSound.Blowout_Hit, position, 1);
+		PlayEnvironmentSound(BlowoutSound.Blowout_Hit, position, 0.6);
 		//position[1] = GetGame().SurfaceY(position[0], position[2]);
 		Object bolt = GetGame().CreateObject(BOLT_TYPES[Math.RandomInt(0, 1)], position);
 		InclementDabLightning m_Light = InclementDabLightning.Cast(ScriptedLightBase.CreateLight(InclementDabLightning, position));

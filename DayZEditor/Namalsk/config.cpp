@@ -114,6 +114,12 @@ class CfgSoundShaders
         volume = 0.2;
 	};
 
+	class Blowout_Ambient_SoundShader: Namalsk_Environment_SoundShader
+	{
+		samples[] = {{"DayZEditor\namalsk\blowout\blowout_ambient_rumble_01", 1}};
+		range = 10000;
+	};
+
 	class Blowout_Voices_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = 
@@ -292,5 +298,10 @@ class CfgSoundSets
 	class Blowout_Wind: Namalsk_Soundset
 	{
 		soundShaders[] = {"Blowout_Wind_SoundShader"};
+	};
+
+	class Blowout_Ambient: Namalsk_Soundset
+	{
+		soundShaders[] = {"Blowout_Ambient_SoundShader"};
 	};
 };

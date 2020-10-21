@@ -36,6 +36,8 @@ class EVRStorm: EventBase
 	
 	protected BlowoutLight m_BlowoutLight;
 	
+	private bool m_Rumble = true;
+	
 	void EVRStorm(vector position)
 	{
 		m_Position = position;
@@ -80,7 +82,10 @@ class EVRStorm: EventBase
 	
 	private void _DebugInit()
 	{
-		InitPhaseClient();
+		if (GetGame().IsClient()) {
+			InitPhaseClient();
+		}
+		
 		Sleep(m_InitPhaseLength * 1000);
 		MidPhaseClient();
 		Sleep(m_MidPhaseLength * 1000);
@@ -91,16 +96,19 @@ class EVRStorm: EventBase
 	
 	override void InitPhaseClient() 
 	{
+		Print("EVRStorm InitPhaseClient");
 		thread StartBlowoutClient();
 	}
 	
 	override void MidPhaseClient()
 	{
+		Print("EVRStorm MidPhaseClient");
 		thread MidBlowoutClient();
 	}
 	
 	override void EndPhaseClient()
 	{
+		Print("EVRStorm EndPhaseClient");
 		if (m_APSI && m_APSI.IsSwitchedOn()) {
 			m_APSI.SwitchOff();
 		}
@@ -121,13 +129,13 @@ class EVRStorm: EventBase
 		m_MatColors = new MaterialEffect("graphics/materials/postprocess/colors");
 		
 		m_wObject.SetStorm(0, 1, 3000);
-		m_wObject.GetFog().SetLimits(0, 100);
-		m_wObject.GetOvercast().SetLimits(0, 100);
+		m_wObject.GetFog().SetLimits(0, 1);
+		m_wObject.GetOvercast().SetLimits(0, 1);
 		m_wObject.GetFog().Set(0.5, m_InitPhaseLength, m_InitPhaseLength);
 		m_wObject.GetOvercast().Set(1, m_InitPhaseLength, m_InitPhaseLength);
 		
 		// Starts Lighting at site
-		thread StartHitPhase(m_InitPhaseLength + m_MidPhaseLength);
+		thread StartAmbientRumble();
 		
 		//thread LerpFunction(g_Game, "SetEVValue", 0, -3, m_InitPhaseLength);				
 		
@@ -157,28 +165,28 @@ class EVRStorm: EventBase
 		if (Class.CastTo(m_APSI, GetGame().GetPlayer().GetInventory().FindAttachment(InventorySlots.HEADGEAR))) {
 			m_APSI.SwitchOn();
 		}
+		
+		
 	}
 		
 	private void MidBlowoutClient()
-	{					
+	{
+		thread StartHitPhase(m_MidPhaseLength);
 		Sleep(m_MidPhaseLength * 1000);
-		
+	
 		// Actual Blowout Event			
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
 		thread CreateBlowout(0.5);
 		
 		// Final Blowout
-		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1000, 0));		
+		m_BlowoutLight = ScriptedLightBase.CreateLight(BlowoutLight, m_Position + Vector(0, 1500, 0));		
 		AnimateLight(m_BlowoutLight, 3000);
-		
-	
+			
 		// Delay for distance from camera
 		Sleep(vector.Distance(m_Position, m_Player.GetPosition()) * 0.343);
-		CreateCameraShake(0.8);
-		
-		Sleep(1700);
 		m_Player.AddHealth("", "Shock", -15); // 15 shock damage
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact);
+		CreateCameraShake(0.8);
 		Sleep(100);
 		
 		thread CreateBlowout(1);
@@ -195,6 +203,8 @@ class EVRStorm: EventBase
 			PPEffects.SetUnconsciousnessVignette(true);
 		}
 		
+		
+		m_Rumble = false;
 		//thread LerpFunction(g_Game, "SetEVValue", -3, 0, m_BlowoutDelay);
 	}
 		
@@ -227,14 +237,28 @@ class EVRStorm: EventBase
 		CreateCameraShake(1);
 	}
 	
+	private void StartAmbientRumble()
+	{
+		while (m_Rumble) {
+			PlayEnvironmentSound(BlowoutSound.Blowout_Ambient, m_Position, 0.6);
+			Sleep(20000);
+		}
+	}
+	
 	private void StartHitPhase(float time)
 	{
+		Print("Starting hit phase " + time);
 		// Need milliseconds
 		time *= 1000;
-		
-		while (time >= 0) {
+		float start_time = time;
+		while (time > 0) {
+			Print(time);
+			int factor = Math.Clamp(start_time / time, 0, 100);
+			int rand = Math.RandomInt(0, 200);
 			
-			//Print(time);
+			if (factor == rand) {
+				CreateLightning(m_Position, factor);
+			}
 			
 			time -= 10;
 			Sleep(10);
@@ -243,7 +267,7 @@ class EVRStorm: EventBase
 		return;
 		
 		for (int i = 0; i < m_WaveCount; i++) {
-			thread CreateHit(1 / m_WaveCount * i);
+			
 			Sleep(m_TimeBetweenWaves * 1000 * Math.RandomFloat(0.7, 1.2));
 		}
 	}
@@ -321,10 +345,10 @@ class EVRStorm: EventBase
 	void CreateBolt(vector position)
 	{
 		position = RandomizeVector(position, 10, 50);
-		PlayEnvironmentSound(BlowoutSound.Blowout_Hit, position, 0.35);
+		PlayEnvironmentSound(BlowoutSound.Blowout_Hit, position, 1);
 		//position[1] = GetGame().SurfaceY(position[0], position[2]);
 		Object bolt = GetGame().CreateObject(BOLT_TYPES[Math.RandomInt(0, 1)], position);
-		bolt.SetOrientation(Vector(0, Math.RandomFloat(0, 180), 0));
+		bolt.SetOrientation(Vector(0, Math.RandomFloat(180, 360), 0));
 		
 		position[1] = position[1] + 50;
 		InclementDabLightning m_Light = InclementDabLightning.Cast(ScriptedLightBase.CreateLight(InclementDabLightning, position));

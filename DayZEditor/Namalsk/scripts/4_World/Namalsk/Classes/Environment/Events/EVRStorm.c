@@ -13,6 +13,9 @@ class BlowoutLight: ScriptedLightBase
 	}
 }
 
+// add some methods to BlowoutLight to create sound on the object
+// right now all sounds are based on the ground
+
 class EVRStorm: EventBase
 {	
 	private bool m_MissionWeatherState;
@@ -202,6 +205,7 @@ class EVRStorm: EventBase
 
 		// Final BlowoutLight
 		thread LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 3.4);
+		Sleep(1400);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 1);
 		///LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 1.40);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);

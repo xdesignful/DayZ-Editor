@@ -197,16 +197,15 @@ class EVRStorm: EventBase
 	override void MidPhaseClient()
 	{
 		Print("EVRStorm MidPhaseClient");
-		//thread StartHitPhase(m_MidPhaseLength);
+		thread StartHitPhase(m_MidPhaseLength);
 		Sleep(m_MidPhaseLength * 1000);
-	
-		
+
 		// Final BlowoutLight
-		LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position + Vector(1000, 1000, 1000), 2);
+		thread LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 3.4);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 1);
-		LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 1.40);
+		///LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 1.40);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
-		//Particle particle = Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
+		Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
 		
 		// Actual Blowout Event			

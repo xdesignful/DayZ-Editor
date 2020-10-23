@@ -38,7 +38,7 @@ class APSI: Clothing
 	
 	private void PlayStartupEffect()
 	{
-		PPEffects.SetVignette(0.25, 0, 0, 0);
+		PPEffects.SetVignette(0.25, 0, 0, 0, 1);
 		PlaySoundOnPlayer(BlowoutSound.APSI_Detect);
 		Sleep(200);
 		PlaySoundOnPlayer(BlowoutSound.APSI_Detect);
@@ -54,7 +54,7 @@ class APSI: Clothing
 	
 	private void PlayShutdownEffect()
 	{	
-		PPEffects.SetVignette(0, 0, 0, 0);
+		PPEffects.SetVignette(0, 0, 0, 0, 0);
 		PlaySoundOnPlayer(BlowoutSound.APSI_Detect);
 		Sleep(200);
 		PlaySoundOnPlayer(BlowoutSound.APSI_Detect);

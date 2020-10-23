@@ -8,8 +8,12 @@ class BlowoutLight: ScriptedLightBase
 		SetBrightnessTo(1);
 		SetCastShadow(true);
 		SetDiffuseColor(0.5, 1.0, 0.5);		
-		SetFlickerSpeed(0.5);
+		SetFlickerSpeed(5);
 		SetFlickerAmplitude(0.5);
+		
+		EnableHeatHaze(true);
+		SetHeatHazePower(0.8);
+		SetHeatHazeRadius(5);
 	}
 }
 
@@ -179,7 +183,7 @@ class EVRStorm: EventBase
 		PlayEnvironmentSound(BlowoutSound.Blowout_NearImpact, m_Position);
 		// Delay for sound effect
 		Sleep(1000);
-		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 50, 0), m_Position + Vector(1500, 1500, 1500), 2);
+		LerpPosition(m_BlowoutLight, m_Position + Vector(0, 50, 0), m_Position + Vector(Math.RandomFloat(-500, 500), 1500, Math.RandomFloat(-500, 500)), 2);
 		
 		// Blowout in sky
 		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
@@ -207,7 +211,7 @@ class EVRStorm: EventBase
 		thread LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 3.4);
 		Sleep(1400);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 1);
-		///LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 1.40);
+		//LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 1.40);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
 		m_BlowoutLight.Destroy();
@@ -234,7 +238,7 @@ class EVRStorm: EventBase
 		}
 		
 		PlaySoundOnPlayer(BlowoutSound.Blowout_FullWave, 0.5);
-		m_Player.StartCommand_Unconscious(0);
+		//m_Player.StartCommand_Unconscious(0);
 		//PPEffects.SetUnconsciousnessVignette(true);
 		
 		// Welp son. you fucked up
@@ -250,8 +254,8 @@ class EVRStorm: EventBase
 		Print("EVRStorm EndPhaseClient");
 		
 		// Cleaning up Mat Effects
-		m_MatBlur.LerpParamTo("Intensity", m_EndPhaseLength, 0);
-		m_MatGlow.LerpParamTo("Vignette", m_EndPhaseLength, 0);
+		m_MatBlur.LerpParamTo("Intensity", 0, m_EndPhaseLength);
+		m_MatGlow.LerpParamTo("Vignette", 0, m_EndPhaseLength);
 		
 		// Makes shit brighter
 		thread LerpFunction(g_Game, "SetEVValue", -1, 0, m_EndPhaseLength);

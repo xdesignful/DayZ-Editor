@@ -120,7 +120,8 @@ class CfgSoundShaders
 	class Blowout_Ambient_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {{"DayZEditor\namalsk\blowout\blowout_ambient_rumble_01", 1}};
-		range = 10000;
+		range = 100;
+		range = 2500;
 	};
 
 	class Blowout_Voices_SoundShader: Namalsk_Environment_SoundShader
@@ -164,6 +165,9 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_wave_2", 1}, 
 			{"DayZEditor\namalsk\blowout\blowout_wave_3", 1}
 		};
+
+		radius = 100;
+		range = 20000;
 	};
 
     class Blowout_Drone_SoundShader: Namalsk_Environment_SoundShader
@@ -172,6 +176,9 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_drone1", 1}, 
 			{"DayZEditor\namalsk\blowout\blowout_drone2", 1}
 		};
+
+		radius = 100;
+		range = 20000;
     };
 
     class Blowout_DroneQ_SoundShader: Namalsk_Environment_SoundShader

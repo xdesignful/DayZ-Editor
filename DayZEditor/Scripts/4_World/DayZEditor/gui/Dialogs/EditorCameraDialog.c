@@ -68,7 +68,9 @@ class EditorCameraDialogController: DialogBaseController
 			
 			case "vignette": {
 				EditorCameraDialogControllerData.Vignette = vignette;
-				PPEffects.SetVignette(EditorCameraDialogControllerData.Vignette, 0, 0, 0);
+#ifdef DAYZ_1_10
+				PPEffects.SetVignette(EditorCameraDialogControllerData.Vignette, 0, 0, 0, 255);
+#endif
 				break;
 			}
 			

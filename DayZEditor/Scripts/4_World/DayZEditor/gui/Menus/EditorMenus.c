@@ -137,6 +137,7 @@ class EditorImportMenu: EditorMenu
 		AddMenuButton(m_Editor.CommandManager.ImportFromExpansionCommand);
 		AddMenuButton(m_Editor.CommandManager.ImportFromTerrainBuilderCommand);
 		AddMenuButton(m_Editor.CommandManager.ImportFromVPPCommand);
+		AddMenuButton(m_Editor.CommandManager.ImportFromCOM);
 	}
 }
 
@@ -175,6 +176,7 @@ class EditorEditorMenu: EditorMenu
 		AddMenuButton(m_Editor.CommandManager.PreferencesCommand);
 		AddMenuDivider();
 		AddMenuButton(m_Editor.CommandManager.DonateCommand);
+		AddMenuButton(m_Editor.CommandManager.HelpCommand);
 	}
 }
 

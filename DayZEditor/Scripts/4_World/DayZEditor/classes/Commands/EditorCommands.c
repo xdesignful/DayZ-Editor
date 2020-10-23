@@ -570,7 +570,6 @@ class EditorBrushRadiusCommand: EditorCommand
 {
 	override void CanExecuteChanged(bool state)
 	{
-		Print(m_Controller);
 		if (m_ViewBinding) {
 			Widget root = m_ViewBinding.GetLayoutRoot().GetParent();
 			Print(root.GetName());
@@ -755,5 +754,18 @@ class EditorDonateCommand: EditorCommand
 	
 	override string GetName() {
 		return "Donate";
+	}
+}
+
+class EditorHelpCommand: EditorCommand
+{
+	override void Call(Class sender, CommandArgs args)
+	{
+		EditorHelpDialog help_dialog("Help");
+		help_dialog.ShowDialog();
+	}
+	
+	override string GetName() {
+		return "Help";
 	}
 }

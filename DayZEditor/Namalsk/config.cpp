@@ -64,7 +64,7 @@ class CfgVehicles
         class EnergyManager
 		{
 			hasIcon = 1;
-			energyUsagePerSecond = 0.3;
+			energyUsagePerSecond = 0.1;
 			plugType = 1;
 			attachmentAction = 1;
 		};

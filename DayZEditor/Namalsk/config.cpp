@@ -131,7 +131,11 @@ class CfgSoundShaders
 			{"DayZEditor\namalsk\blowout\blowout_voices_01", 1},
 			{"DayZEditor\namalsk\blowout\blowout_voices_02", 1},
 			{"DayZEditor\namalsk\blowout\blowout_voices_03", 1},
-			{"DayZEditor\namalsk\blowout\blowout_voices_04", 1}
+			{"DayZEditor\namalsk\blowout\blowout_voices_04", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_05", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_06", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_07", 1},
+			{"DayZEditor\namalsk\blowout\blowout_voices_08", 1}
 		};
 
         volume = 0.1;

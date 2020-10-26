@@ -4,6 +4,8 @@ The DayZ Editor is a 3D Map editing tool. Designed for creating environments, pl
 
 **REUPLOAD / REPACKING WITHOUT EXPLICIT PERMISSION IS STRICTLY PROHIBITED. ALL VERSIONS FOUND ON THE WORKSHOP WILL BE ACTIONED AND YOUR STEAM ACCOUNT WILL BE BLACKLISTED FROM EDITOR USAGE**
 
+![Why are you reading this? GO USE IT!](https://i.imgur.com/UsYQXZz.jpg)
+
 # How to join
 
 [Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2250764298)
@@ -21,12 +23,12 @@ The DayZ Editor is a 3D Map editing tool. Designed for creating environments, pl
 
 
 # Links
-Discord: https://discord.com/invite/5g742yH
+[Discord](https://discord.com/invite/5g742yH)
 
-Twitter: https://twitter.com/InclementDab
+[Twitter](https://twitter.com/InclementDab)
 
-Patreon: https://www.patreon.com/inclementdab
+[Patreon](https://www.patreon.com/inclementdab)
 
-Paypal: https://www.paypal.me/InclementDab
+[Paypal](https://www.paypal.me/InclementDab)
 
-Twitch: https://www.twitch.tv/inclementdab
+[Twitch](https://www.twitch.tv/inclementdab)

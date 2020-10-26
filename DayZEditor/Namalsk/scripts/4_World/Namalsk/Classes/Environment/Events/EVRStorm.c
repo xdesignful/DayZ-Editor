@@ -161,12 +161,8 @@ class EVRStorm: EventBase
 			Sleep(dt);
 		}
 		
-		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
-		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 50, 0), 10);
-/*
 		// omfg floating objects
 		foreach (Object zero_g_object: m_ZeroGravityBuildings) {
-			Print(zero_g_object);
 			if (zero_g_object && zero_g_object != m_BlowoutLight) {	
 				thread LerpPosition(zero_g_object, zero_g_object.GetPosition(), RandomizeVector(zero_g_object.GetPosition(), 10), 10);
 				//Sleep(3);
@@ -176,7 +172,11 @@ class EVRStorm: EventBase
 			Sleep(10);
 		}
 		
-		*/
+		
+		PlayEnvironmentSound(BlowoutSound.Blowout_Bass, m_Position, 1);
+		LerpPosition(m_BlowoutLight, m_Position, m_Position + Vector(0, 50, 0), 10);
+		
+		
 		
 		// ominously sit there*
 		Sleep(10000);
@@ -207,18 +207,22 @@ class EVRStorm: EventBase
 		thread StartHitPhase(m_MidPhaseLength);
 		Sleep(m_MidPhaseLength * 1000);
 
+		// Actual Blowout Event			
+		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
+		thread CreateBlowout(0.65);
+		Sleep(3000);
+		thread CreateBlowout(0.85);
+		Sleep(3000);
+		
+		
 		// Final BlowoutLight
 		thread LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 3.4);
 		Sleep(1400);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Reentry, m_Position, 1);
+		Sleep(3000);
 		//LerpPosition(m_BlowoutLight, m_BlowoutLight.GetPosition(), m_Position, 1.40);
 		PlayEnvironmentSound(BlowoutSound.Blowout_Begin, m_Position, 1);
 		Particle.PlayInWorld(ParticleList.BLOWOUT_SHOCKWAVE, m_Position);
-		m_BlowoutLight.Destroy();
-		
-		// Actual Blowout Event			
-		PlaySoundOnPlayer(BlowoutSound.Blowout_Contact, 0.5);
-		thread CreateBlowout(0.65);
 		
 		// Delay for distance from camera
 		Sleep(DistanceFromCenter() * 0.343);
@@ -247,6 +251,8 @@ class EVRStorm: EventBase
 		}
 		
 		m_Rumble = false;
+		
+		m_BlowoutLight.Destroy();
 	}
 	
 	override void EndPhaseClient()

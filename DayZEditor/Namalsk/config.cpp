@@ -120,7 +120,7 @@ class CfgSoundShaders
 	class Blowout_Ambient_SoundShader: Namalsk_Environment_SoundShader
 	{
 		samples[] = {{"DayZEditor\namalsk\blowout\blowout_ambient_rumble_01", 1}};
-		range = 100;
+		radius = 100;
 		range = 2500;
 	};
 

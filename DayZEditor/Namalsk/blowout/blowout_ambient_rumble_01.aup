@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="blowout_ambient_rumble_01_data" version="1.3.0" audacityversion="2.1.3" sel0="13.9140816327" sel1="17.9694104308" vpos="0" h="6.9795412912" zoom="155.5976180520" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags/>
+	<wavetrack name="blowout_ambient_rumble_01" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="6.94097519">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="144263">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000ebd.au" len="144263" min="-0.925354" max="0.8573" rms="0.20769"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="blowout_ambient_rumble_02" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="360855">
+				<waveblock start="0">
+					<simpleblockfile filename="e00009ff.au" len="262144" min="-0.889954" max="0.941711" rms="0.280089"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000136.au" len="98711" min="-0.758331" max="0.835114" rms="0.212259"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="blowout_ambient_rumble_03" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="7.69290249">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="497408">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000dfb.au" len="262144" min="-0.777954" max="0.67514" rms="0.163056"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000052.au" len="235264" min="-0.643372" max="0.730286" rms="0.165229"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="blowout_ambient_rumble_04" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="17.63523810">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="279181">
+				<waveblock start="0">
+					<simpleblockfile filename="e00007ab.au" len="262144" min="-0.858978" max="0.774384" rms="0.13524"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e000059f.au" len="17037" min="-0.033905" max="0.039825" rms="0.008664"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="blowout_ambient_rumble_01" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="13.97834487">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="144263">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000ebd.au" len="144263" min="-0.925354" max="0.8573" rms="0.20769"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

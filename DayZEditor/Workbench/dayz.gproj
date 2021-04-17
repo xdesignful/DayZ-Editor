@@ -6,7 +6,10 @@ GameProjectClass {
 			platformHardware PC
 			skeletonDefinitions "DZ/Anims/cfg/skeletons.anim.xml"
 			FileSystem {
-
+				FileSystemPathClass {
+				Name "Game Root"
+				Directory "P:"
+				}
 			}
 			
 			imageSets {
@@ -29,12 +32,14 @@ GameProjectClass {
 			widgetStyles {
 				"gui/looknfeel/dayzwidgets.styles" 
 				"gui/looknfeel/widgets.styles"
+				"DayZEditor/gui/looknfeel/editorwidgets.styles"
 			}
 			ScriptModules {
 				ScriptModulePathClass {
 					Name "core"
 					Paths {
 						"scripts/1_Core"
+						"JM/CF/defines"
 						"JM/CF/scripts/1_Core"
 						"DayZEditor/scripts/1_Core"
 					}
@@ -51,7 +56,13 @@ GameProjectClass {
 					Name "game"
 					Paths {
 						"scripts/3_Game"
+						"JM/CF/defines"
 						"JM/CF/scripts/3_Game"
+						"JM/CF/XML/3_Game"
+						"JM/CF/ModStorage/3_Game"
+						"JM/CF/LayoutBindingManager/3_Game"
+						"JM/CF/Permissions/3_Game"
+						"JM/CF/Debugger/3_Game"
 						"DayZEditor/scripts/3_Game"
 						"DayZEditor/namalsk/scripts/3_Game"
 					}
@@ -61,7 +72,10 @@ GameProjectClass {
 					Name "world"
 					Paths {
 						"scripts/4_World"
+						"JM/CF/defines"
 						"JM/CF/scripts/4_World"
+						"JM/CF/ModStorage/4_World"
+						"JM/CF/Permissions/4_World"
 						"DayZEditor/scripts/4_World"
 						"DayZEditor/namalsk/scripts/4_World"
 					}
@@ -71,7 +85,10 @@ GameProjectClass {
 					Name "mission"
 					Paths {
 						"scripts/5_Mission"
+						"JM/CF/defines"
 						"JM/CF/scripts/5_Mission"
+						"JM/CF/LayoutBindingManager/5_Mission"
+						"JM/CF/Permissions/5_Mission"
 						"DayZEditor/scripts/5_Mission"
 						"DayZEditor/namalsk/scripts/5_Mission"
 					}

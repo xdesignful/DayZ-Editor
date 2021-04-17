@@ -3,7 +3,7 @@
 class EditorObjectPropertiesDialogState
 {
 	static bool GeneralGroup = true;
-	static bool ObjectGroup = true;
+	static bool Object_Group = true;
 	static bool FlagsGroup = true;
 }
 
@@ -61,7 +61,7 @@ class EditorObjectPropertiesDialog: EditorDialogBase
 		m_ObjectGroup = new GroupPrefab("Object Settings", m_EditorObject, string.Empty);
 		m_ObjectGroup.Insert(new CheckBoxPrefab("Lock", m_EditorObject, "Locked"));
 		m_ObjectGroup.Insert(new CheckBoxPrefab("Static Object", m_EditorObject, "StaticObject"));
-		m_ObjectGroup.Open(EditorObjectPropertiesDialogState.ObjectGroup);
+		m_ObjectGroup.Open(EditorObjectPropertiesDialogState.Object_Group);
 		
 		
 		AddContent(m_GeneralGroup);
@@ -77,7 +77,7 @@ class EditorObjectPropertiesDialog: EditorDialogBase
 	private void UpdateViewContext()
 	{
 		EditorObjectPropertiesDialogState.GeneralGroup = m_GeneralGroup.IsOpen();
-		EditorObjectPropertiesDialogState.ObjectGroup = m_ObjectGroup.IsOpen();
+		EditorObjectPropertiesDialogState.Object_Group = m_ObjectGroup.IsOpen();
 		EditorObjectPropertiesDialogState.FlagsGroup = m_FlagsGroup.IsOpen();
 		
 		delete m_GeneralGroup;

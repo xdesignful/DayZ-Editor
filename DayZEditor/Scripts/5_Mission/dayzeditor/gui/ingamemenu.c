@@ -12,7 +12,7 @@ modded class InGameMenu
 			return layoutRoot;
 		}
 		
-		m_RestartDeadButton.Show(false);
+		//m_RestartDeadButton.Show(false);
 		ButtonSetText(m_RestartButton, "CHANGE MAP");
 		//ButtonSetText(m_RestartDeadButton, "OPEN FILE");
 		ButtonSetText(m_ContinueButton, "CONTINUE");

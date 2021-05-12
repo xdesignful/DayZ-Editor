@@ -81,6 +81,15 @@ class EditorSaveData
 		
 		return save_data;
 	}
+	
+	void Serialize(Serializer serializer)
+	{
+		serializer.Write(MapName);
+		serializer.Write(CameraPosition);
+		foreach (EditorObjectData editor_object_data: EditorObjects) { 
+			editor_object_data.Serialize(serializer);
+		}
+	}
 }
 
 

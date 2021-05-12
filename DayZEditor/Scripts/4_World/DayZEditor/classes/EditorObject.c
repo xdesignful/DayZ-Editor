@@ -74,7 +74,7 @@ class EditorObject: EditorWorldObject
 		if (!m_WorldObject) {
 			//EditorLog.Error("World Object was null! ID: %1", GetID().ToString());
 			if (m_Data && !m_Data.WorldObject) {
-				m_WorldObject = CreateObject(m_Data.Type, m_Data.Position, m_Data.Orientation, m_Data.Scale);
+				m_WorldObject = CreateObject(m_Data.Type, m_Data.Position, m_Data.Orientation, m_Data.ScaleVector);
 				//m_Data.WorldObject = m_WorldObject;
 			}
 			
@@ -91,7 +91,7 @@ class EditorObject: EditorWorldObject
 		//EditorOnly = m_Data.EditorOnly;
 		
 		if (!m_Data.WorldObject) {
-			m_WorldObject = CreateObject(m_Data.Type, m_Data.Position, m_Data.Orientation, m_Data.Scale);			
+			m_WorldObject = CreateObject(m_Data.Type, m_Data.Position, m_Data.Orientation, m_Data.ScaleVector);			
 			m_Data.WorldObject = m_WorldObject;
 		}
 		
@@ -305,7 +305,7 @@ class EditorObject: EditorWorldObject
 		if (m_Data) {
 			m_Data.Position = GetPosition();
 			m_Data.Orientation = GetOrientation();
-			m_Data.Scale = GetScale();
+			m_Data.ScaleVector = GetScale();
 			m_Data.BottomCenter = GetBottomCenter();
 			
 			Name = GetDisplayName();

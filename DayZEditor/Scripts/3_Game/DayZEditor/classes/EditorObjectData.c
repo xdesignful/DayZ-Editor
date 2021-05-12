@@ -20,8 +20,10 @@ class EditorObjectData
 	string DisplayName;
 	vector Position;
 	vector Orientation;
-	vector Scale = "1 1 1";
 	
+	//[NonSerialized()]
+	float Scale;
+		
 	// Re-enable this once we get versioned serializing working :)
 	//bool EditorOnly = false;
 	
@@ -38,6 +40,8 @@ class EditorObjectData
 	
 	[NonSerialized()]
 	Object WorldObject;
+	
+	vector ScaleVector = "1 1 1";
 	
 	void EditorObjectData() 
 	{
@@ -66,7 +70,7 @@ class EditorObjectData
 		data.Type = type; 
 		data.Position = position; 
 		data.Orientation = orientation;
-		data.Scale = scale;
+		data.ScaleVector = scale;
 		data.Flags = flags;
 		data.DisplayName = data.Type;
 		//data.Mod = GetModFromObject(data.Type); todo refactor.
@@ -88,7 +92,7 @@ class EditorObjectData
 		data.Orientation = data.WorldObject.GetOrientation(); 
 		vector mat[4];
 		data.WorldObject.GetTransform(mat);
-		data.Scale = GetScaleFromTransform(mat);
+		data.ScaleVector = GetScaleFromTransform(mat);
 		data.Flags = flags;
 		data.DisplayName = data.Type;
 		
@@ -97,7 +101,7 @@ class EditorObjectData
 		return data;
 	}
 	
-	void OnSend(Serializer serializer)
+	void Serialize(Serializer serializer)
 	{
 		serializer.Write(Type);
 		serializer.Write(Position);
@@ -105,7 +109,7 @@ class EditorObjectData
 		serializer.Write(Flags);
 	}
 	
-	void OnRead(Serializer serializer)
+	void Deserialize(Serializer serializer)
 	{
 		serializer.Read(Type);
 		serializer.Read(Position);

@@ -20,7 +20,7 @@ class EditorObjectData
 	string DisplayName;
 	vector Position;
 	vector Orientation;
-	float Scale = 1;
+	vector Scale = "1 1 1";
 	
 	// Re-enable this once we get versioned serializing working :)
 	//bool EditorOnly = false;
@@ -50,10 +50,10 @@ class EditorObjectData
 	
 	static EditorObjectData Create(string type, vector transform[4], EditorObjectFlags flags = EditorObjectFlags.ALL)
 	{	
-		return Create(type, transform[3], Math3D.MatrixToAngles(transform), 1, flags);
+		return Create(type, transform[3], Math3D.MatrixToAngles(transform), Vector(1, 1, 1), flags);
 	}
 	
-	static EditorObjectData Create(string type, vector position, vector orientation, float scale, EditorObjectFlags flags)
+	static EditorObjectData Create(string type, vector position, vector orientation, vector scale, EditorObjectFlags flags)
 	{
 		EditorLog.Trace("EditorObjectData::Create");
 				
@@ -86,7 +86,9 @@ class EditorObjectData
 		data.WorldObject = target;
 		data.Position = data.WorldObject.GetPosition(); 
 		data.Orientation = data.WorldObject.GetOrientation(); 
-		data.Scale = data.WorldObject.GetScale();
+		vector mat[4];
+		data.WorldObject.GetTransform(mat);
+		data.Scale = GetScaleFromTransform(mat);
 		data.Flags = flags;
 		data.DisplayName = data.Type;
 		

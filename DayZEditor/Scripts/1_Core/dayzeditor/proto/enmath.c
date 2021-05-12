@@ -31,6 +31,16 @@ vector DivideVector(vector v1, vector v2)
 	return result;
 }
 
+vector GetScaleFromTransform(vector mat[3]) 
+{
+	vector scale;	
+	for (int i = 0; i < 3; i++) {
+		scale[i] = mat[i].Normalize();
+	}	
+	
+	return scale;
+}
+
 modded class Math3D 
 {
 	static vector CrossProduct(vector a, vector b)

@@ -19,7 +19,7 @@ class EditorObject: EditorWorldObject
 	string Name;
 	vector Position;
 	vector Orientation;
-	float Scale;
+	vector Scale;
 	bool EditorOnly;
 	
 	// Object Properties
@@ -258,15 +258,37 @@ class EditorObject: EditorWorldObject
 	}
 	
 	void SetScale(float scale)
-	{		
+	{
 		if (Locked) return;
 		GetWorldObject().SetScale(scale);
 		Update();
 	}
 	
-	float GetScale()
+	void SetScale(vector scale)
+	{		
+		if (Locked) return;
+		
+		vector transform[4];
+		GetTransform(transform);
+		for (int i = 0; i < 3; i++) {
+			transform[i] = transform[i].Normalized() * scale[i];
+		}		
+		
+		GetWorldObject().SetTransform(transform);
+		Update();
+	}
+	
+	vector GetScale()
 	{
-		return GetWorldObject().GetScale();
+		vector scale;
+		vector transform[4];
+		GetTransform(transform);
+		
+		for (int i = 0; i < 3; i++) {
+			scale[i] = transform[i].Normalize();
+		}	
+		
+		return scale;
 	}
 	
 	void Update() 
@@ -336,9 +358,12 @@ class EditorObject: EditorWorldObject
 			}
 			
 			case "Scale": {
-				if (Scale < 0.001) {
-					Scale = 0.001;
+				for (int i = 0; i < 3; i++) {
+					if (Scale[i] < 0.001) {
+						Scale[i] = 0.001;
+					}
 				}
+				
 				SetScale(Scale);
 				break;
 			}

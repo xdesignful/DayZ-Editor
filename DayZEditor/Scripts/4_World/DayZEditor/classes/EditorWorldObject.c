@@ -12,17 +12,18 @@ class EditorWorldObject
 		}
 	}
 	
-	static Object CreateObject(string type, vector position = "0 0 0", vector orientation = "0 0 0", float scale = 1)
+	static Object CreateObject(string type, vector position = "0 0 0", vector orientation = "0 0 0", vector scale = "1 1 1", bool discard = false)
 	{
 		// Set to ECE_SETUP for AI compat. DONT ADD ECE_LOCAL
 		type = type.Trim();
 		if (type == string.Empty) return null;
 		
-		Object obj;	
-		if (!Class.CastTo(obj, GetGame().CreateObjectEx(type, position, ECE_SETUP | ECE_CREATEPHYSICS))) {
+		Object obj = GetGame().CreateObjectEx(type, position, ECE_SETUP | ECE_CREATEPHYSICS);
+		if (!obj) {
 			EditorLog.Error("EditorWorldObject: Invalid Object %1", type);
 			return null;
 		}
+		
 /*
 		if (obj.IsInherited(DayZCreatureAI)) {
 			DayZCreatureAI creature;
@@ -40,9 +41,19 @@ class EditorWorldObject
 		if (EntityAI.Cast(obj)) {
 			EntityAI.Cast(obj).DisableSimulation(true);
 		}
+		
 		obj.SetOrientation(orientation);
-		obj.SetScale(scale);
 		obj.Update();
+		
+		vector mat[4];
+		obj.GetTransform(mat);
+		for (int i = 0; i < 3; i++) {
+			mat[i] = mat[i] * scale[i];
+		}
+		
+		obj.SetTransform(mat);
+		obj.Update();
+		
 		//obj.SetFlags(EntityFlags.STATIC, true);
 		return obj;
 	}

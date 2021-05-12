@@ -527,7 +527,9 @@ class Editor
 			return null;
 		}
 		
-		EditorObjectData editor_object_data = EditorObjectData.Create(entity.GetType(), entity.GetPosition(), entity.GetOrientation(), entity.GetScale(), EditorObjectFlags.ALL);
+		vector transform[4];
+		entity.GetTransform(transform);
+		EditorObjectData editor_object_data = EditorObjectData.Create(entity.GetType(), transform, EditorObjectFlags.ALL);
 		if (!editor_object_data) {
 			return null;
 		}

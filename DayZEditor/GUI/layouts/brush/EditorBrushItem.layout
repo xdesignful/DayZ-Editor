@@ -1,0 +1,55 @@
+WrapSpacerWidgetClass rootFrame {
+ size 1 0
+ hexactpos 1
+ vexactpos 1
+ hexactsize 0
+ vexactsize 0
+ Padding 0
+ Margin 0
+ "Size To Content V" 1
+ {
+  EditBoxWidgetClass EditBoxWidget0 {
+   size 1 20
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 1
+   scriptclass "ViewBinding"
+   text "Brush Name"
+   {
+    ButtonWidgetClass ButtonWidget0 {
+     size 0.3 1
+     halign right_ref
+     valign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 0
+     text "Add Object to Brush"
+    }
+   }
+   {
+    ScriptParamsClass {
+     Binding_Name "EditorBrushName"
+    }
+   }
+  }
+  WrapSpacerWidgetClass WrapSpacerWidget0 {
+   ignorepointer 1
+   size 1 0
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 0
+   scriptclass "ViewBinding"
+   Padding 0
+   Margin 0
+   "Size To Content V" 1
+   {
+    ScriptParamsClass {
+     Binding_Name "EditorBrushListChildren"
+    }
+   }
+  }
+ }
+}

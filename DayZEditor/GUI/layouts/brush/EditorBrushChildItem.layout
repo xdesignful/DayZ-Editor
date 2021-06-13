@@ -1,0 +1,102 @@
+WrapSpacerWidgetClass rootFrame {
+ size 1 20
+ hexactpos 1
+ vexactpos 1
+ hexactsize 0
+ vexactsize 1
+ Padding 0
+ Margin 0
+ {
+  TextWidgetClass TextWidget0 {
+   ignorepointer 1
+   size 0.5 1
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 0
+   text "Object Type"
+   "text offset" 5 0
+   "text valign" center
+   {
+    EditBoxWidgetClass EditBoxWidget0 {
+     size 0.84 1
+     halign right_ref
+     valign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "BrushObjectcontainsatypeafrequencyandanoffset"
+     "limit visible" 0
+     "Use default text" 0
+     "exact text" 0
+    }
+   }
+  }
+  TextWidgetClass TextWidget1 {
+   ignorepointer 1
+   size 0.1 1
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 0
+   text "Frequency"
+   "text offset" 5 0
+   "text valign" center
+   {
+    EditBoxWidgetClass EditBoxWidget1 {
+     size 0.4 1
+     halign right_ref
+     valign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "0.1"
+     "limit visible" 0
+     "Use default text" 0
+     "exact text" 0
+    }
+   }
+  }
+  TextWidgetClass TextWidget2 {
+   ignorepointer 1
+   size 0.1 1
+   halign right_ref
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 0
+   text "Offset"
+   "text offset" 5 0
+   "text valign" center
+   {
+    EditBoxWidgetClass EditBoxWidget2 {
+     size 0.4 1
+     halign right_ref
+     valign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "-2"
+     "limit visible" 0
+     "Use default text" 0
+     "exact text" 0
+    }
+   }
+  }
+  ButtonWidgetClass ButtonWidget0 {
+   size 0.3 20
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 1
+   text "Remove Object from Brush"
+  }
+ }
+}

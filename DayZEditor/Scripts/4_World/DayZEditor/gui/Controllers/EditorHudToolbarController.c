@@ -31,6 +31,7 @@ class EditorHudToolbarController: EditorControllerBase
 	void ~EditorHudToolbarController()
 	{
 		delete BrushTypeBoxData;
+		delete BrushEditObjects;
 	}
 	
 	override void OnWidgetScriptInit(Widget w)

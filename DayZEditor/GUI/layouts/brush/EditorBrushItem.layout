@@ -27,7 +27,8 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
    scriptclass "ViewBinding"
    {
     ScriptParamsClass {
-     Binding_Name "EditorBrushName"
+     Binding_Name "Name"
+     Two_Way_Binding 1
     }
    }
   }
@@ -59,7 +60,7 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
    Margin 0
    {
     ScriptParamsClass {
-     Binding_Name "EditorBrushListChildren"
+     Binding_Name "BrushObjects"
     }
    }
   }

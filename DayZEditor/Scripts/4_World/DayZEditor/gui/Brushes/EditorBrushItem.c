@@ -19,6 +19,11 @@ class EditorBrushListItemObject: ScriptViewTemplate<EditorBrushListItemObjectCon
 		GetTemplateController().NotifyPropertyChanged();
 	}
 	
+	void BrushDeleteChildObject(ButtonCommandArgs args)
+	{
+		delete this;
+	}
+	
 	override string GetLayoutFile()
 	{
 		return "DayZEditor/GUI/layouts/brush/EditorBrushChildItem.layout";
@@ -56,6 +61,11 @@ class EditorBrushListItem: ScriptViewTemplate<EditorBrushListItemController>
 		}
 		
 		GetTemplateController().NotifyPropertyChanged();
+	}
+	
+	void BrushAddChildObject(ButtonCommandArgs args)
+	{
+		GetTemplateController().BrushObjects.Insert(new EditorBrushListItemObject(new EditorBrushObject("type_goes_here", 1.0, 0.0)));
 	}
 	
 	override string GetLayoutFile()

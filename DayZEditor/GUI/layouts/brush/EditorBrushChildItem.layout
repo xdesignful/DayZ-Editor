@@ -34,7 +34,8 @@ WrapSpacerWidgetClass EditorBrushChildItemWrapper {
      "exact text" 0
      {
       ScriptParamsClass {
-       Binding_Name "BrushObjectClassName"
+       Binding_Name "Type"
+       Two_Way_Binding 1
       }
      }
     }
@@ -67,7 +68,8 @@ WrapSpacerWidgetClass EditorBrushChildItemWrapper {
      "exact text" 0
      {
       ScriptParamsClass {
-       Binding_Name "BrushEditFrequency"
+       Binding_Name "Frequency"
+       Two_Way_Binding 1
       }
      }
     }
@@ -102,7 +104,8 @@ WrapSpacerWidgetClass EditorBrushChildItemWrapper {
      "exact text" 0
      {
       ScriptParamsClass {
-       Binding_Name "BrushEditOffset"
+       Binding_Name "Offset"
+       Two_Way_Binding 1
       }
      }
     }

@@ -13,10 +13,10 @@ class EditorBrushListItemObject: ScriptViewTemplate<EditorBrushListItemObjectCon
 	{
 		m_Data = data;
 		
-		GetTemplateController().Type = m_Data.Name;
-		GetTemplateController().Frequency = m_Data.Frequency;
-		GetTemplateController().ZOffset = m_Data.ZOffset;
-		GetTemplateController().NotifyPropertyChanged();
+		m_TemplateController.Type = m_Data.Name;
+		m_TemplateController.Frequency = m_Data.Frequency;
+		m_TemplateController.ZOffset = m_Data.ZOffset;
+		m_TemplateController.NotifyPropertyChanged();
 	}
 	
 	void BrushDeleteChildObject(ButtonCommandArgs args)
@@ -49,23 +49,34 @@ class EditorBrushListItem: ScriptViewTemplate<EditorBrushListItemController>
 	{
 		m_Data = data;
 	
-		GetTemplateController().Name = m_Data.Name;
+		m_TemplateController.Name = m_Data.Name;
 		
 		if (m_Data.BrushClassName) {
-			GetTemplateController().IsClassType = true;
-			GetTemplateController().ClassType = m_Data.BrushClassName.ToString();
+			m_TemplateController.IsClassType = true;
+			m_TemplateController.ClassType = m_Data.BrushClassName.ToString();
 		}
 		
 		foreach (EditorBrushObject brush_object: m_Data.PlaceableObjectTypes) {
-			GetTemplateController().BrushObjects.Insert(new EditorBrushListItemObject(brush_object));
+			m_TemplateController.BrushObjects.Insert(new EditorBrushListItemObject(brush_object));
 		}
 		
-		GetTemplateController().NotifyPropertyChanged();
+		m_TemplateController.NotifyPropertyChanged();
 	}
 	
 	void BrushAddChildObject(ButtonCommandArgs args)
 	{
-		GetTemplateController().BrushObjects.Insert(new EditorBrushListItemObject(new EditorBrushObject("type_goes_here", 1.0, 0.0)));
+		m_TemplateController.BrushObjects.Insert(new EditorBrushListItemObject(new EditorBrushObject("type_goes_here", 1.0, 0.0)));
+	}
+	
+	void SetName(string name)
+	{
+		m_TemplateController.Name = name;
+		m_TemplateController.NotifyPropertyChanged("Name");
+	}
+	
+	string GetName()
+	{
+		return m_TemplateController.Name;
 	}
 	
 	override string GetLayoutFile()

@@ -76,7 +76,6 @@ class EditorHudToolbarController: EditorControllerBase
 				}
 								
 				m_Editor.CommandManager[EditorBrushToggleCommand].Execute(this, new ButtonCommandArgs(BrushToggleButton, 0));
-
 				break;
 			}
 			
@@ -144,6 +143,14 @@ class EditorHudToolbarController: EditorControllerBase
 					BrushToggleButtonText = BrushTypeBoxData[BrushTypeSelection].Name;
 					NotifyPropertyChanged("BrushToggleButtonText", false);
 				}
+				
+				// there has to be a better way to do all of this stuff
+				// !TYPE CONVERTERS!
+				BrushEditObjects.Clear();
+				for (int i = 0; i < BrushTypeBoxData.Count(); i++) {
+					BrushEditObjects.Insert(new EditorBrushListItem(BrushTypeBoxData[i]));
+				}
+				
 				break;
 			}
 		}

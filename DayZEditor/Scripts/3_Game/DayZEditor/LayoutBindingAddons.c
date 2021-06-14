@@ -46,7 +46,6 @@ class TypeConversionEditorWidget: TypeConversionTemplate<EditorWidget>
 	}	
 }
 
-
 class TypeConversionBrush: TypeConversionTemplate<EditorBrushData>
 {	
 	override void SetString(string value) 

@@ -1,5 +1,6 @@
 class EditorHudToolbarController: EditorControllerBase
 {
+	// We can get rid of one of these arrays by leveraging Templates and whatnot. this wasnt really designed for this yet
 	ref ObservableCollection<ref EditorBrushData> BrushTypeBoxData = new ObservableCollection<ref EditorBrushData>(this);
 	ref ObservableCollection<ref EditorBrushListItem> BrushEditObjects = new ObservableCollection<ref EditorBrushListItem>(this);
 	

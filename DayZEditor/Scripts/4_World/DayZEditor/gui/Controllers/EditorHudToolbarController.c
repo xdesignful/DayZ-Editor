@@ -1,7 +1,8 @@
 class EditorHudToolbarController: EditorControllerBase
 {
-	ref ObservableCollection<ref EditorBrushData> BrushTypeBoxData;
-
+	ref ObservableCollection<ref EditorBrushData> BrushTypeBoxData = new ObservableCollection<ref EditorBrushData>(this);
+	ref ObservableCollection<ref EditorBrushListItem> BrushEditObjects = new ObservableCollection<ref EditorBrushListItem>(this);
+	
 	float BrushRadius = 65;
 	float BrushDensity = 0.25;
 	
@@ -23,6 +24,8 @@ class EditorHudToolbarController: EditorControllerBase
 	protected ImageWidget CollisionButton_Icon;
 	
 	protected ButtonWidget BrushToggleButton;
+	
+	protected Widget BrushEditorPanel;
 			
 	void ~EditorHudToolbarController()
 	{
@@ -32,8 +35,6 @@ class EditorHudToolbarController: EditorControllerBase
 	override void OnWidgetScriptInit(Widget w)
 	{
 		super.OnWidgetScriptInit(w);
-		
-		BrushTypeBoxData = new ObservableCollection<ref EditorBrushData>(this);
 
 		if (!m_Editor) {
 			m_Editor = GetEditor();
@@ -148,7 +149,6 @@ class EditorHudToolbarController: EditorControllerBase
 		}
 	}	
 	
-	
 	override bool OnMouseWheel(Widget w, int x, int y, int wheel)
 	{
 		EditorLog.Trace("EditorHudToolbarController::OnMouseWheel");
@@ -249,6 +249,16 @@ class EditorHudToolbarController: EditorControllerBase
 		return super.OnMouseLeave(w, enterW, x, y);
 	}
 		
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		if (w == BrushToggleButton) {
+			Print(button);
+			BrushEditorPanel.Show(!BrushEditorPanel.IsVisible());
+			return true;
+		}
+		
+		return super.OnClick(w, x, y, button);
+	}
 
 	// Relay Commands
 	void MenuBarExecute(ButtonCommandArgs args) 

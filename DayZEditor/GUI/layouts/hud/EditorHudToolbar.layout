@@ -1283,6 +1283,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
      }
     }
     WrapSpacerWidgetClass BrushEditorPanel {
+     visible 0
      ignorepointer 1
      color 0.1961 0.1961 0.1961 0.9412
      position 838 33
@@ -1342,7 +1343,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
          "Size To Content V" 1
          {
           ScriptParamsClass {
-           Binding_Name "BrushParent"
+           Binding_Name "BrushEditObjects"
           }
          }
         }

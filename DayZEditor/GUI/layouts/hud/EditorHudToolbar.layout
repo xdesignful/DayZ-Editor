@@ -1286,9 +1286,10 @@ WrapSpacerWidgetClass ToolbarWrapper {
      visible 1
      ignorepointer 1
      color 0.1961 0.1961 0.1961 0.9412
-     position 838 33
-     size 570 450
-     halign right_ref
+     position 0 -990
+     size 650 450
+     halign center_ref
+     valign bottom_ref
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -1372,23 +1373,6 @@ WrapSpacerWidgetClass ToolbarWrapper {
          {
           ScriptParamsClass {
            Relay_Command "BrushEditAddObjects"
-          }
-         }
-        }
-        ButtonWidgetClass BrushEditorDeleteBrushButton {
-         position 3 0
-         size 110 20
-         halign right_ref
-         valign center_ref
-         hexactpos 1
-         vexactpos 1
-         hexactsize 1
-         vexactsize 1
-         scriptclass "ViewBinding"
-         text "Delete Brush"
-         {
-          ScriptParamsClass {
-           Relay_Command "BrushEditDeleteObjects"
           }
          }
         }

@@ -1,4 +1,4 @@
-WrapSpacerWidgetClass rootFrame {
+WrapSpacerWidgetClass EditorBrushChildItemWrapper {
  size 1 20
  hexactpos 1
  vexactpos 1
@@ -7,7 +7,7 @@ WrapSpacerWidgetClass rootFrame {
  Padding 0
  Margin 0
  {
-  TextWidgetClass TextWidget0 {
+  TextWidgetClass EditorBrushChildNameCaption {
    ignorepointer 1
    size 0.5 1
    hexactpos 1
@@ -18,7 +18,7 @@ WrapSpacerWidgetClass rootFrame {
    "text offset" 5 0
    "text valign" center
    {
-    EditBoxWidgetClass EditBoxWidget0 {
+    EditBoxWidgetClass EditorBrushChildNameEditbox {
      size 0.84 1
      halign right_ref
      valign center_ref
@@ -26,15 +26,21 @@ WrapSpacerWidgetClass rootFrame {
      vexactpos 1
      hexactsize 0
      vexactsize 0
+     scriptclass "ViewBinding"
      style Default
      text "BrushObjectcontainsatypeafrequencyandanoffset"
      "limit visible" 0
      "Use default text" 0
      "exact text" 0
+     {
+      ScriptParamsClass {
+       Binding_Name "BrushObjectClassName"
+      }
+     }
     }
    }
   }
-  TextWidgetClass TextWidget1 {
+  TextWidgetClass EditorBrushChildFrequencyCaption {
    ignorepointer 1
    size 0.1 1
    hexactpos 1
@@ -45,7 +51,7 @@ WrapSpacerWidgetClass rootFrame {
    "text offset" 5 0
    "text valign" center
    {
-    EditBoxWidgetClass EditBoxWidget1 {
+    EditBoxWidgetClass EditorBrushChildFrequencyEditbox {
      size 0.4 1
      halign right_ref
      valign center_ref
@@ -53,15 +59,21 @@ WrapSpacerWidgetClass rootFrame {
      vexactpos 1
      hexactsize 0
      vexactsize 0
+     scriptclass "ViewBinding"
      style Default
      text "0.1"
      "limit visible" 0
      "Use default text" 0
      "exact text" 0
+     {
+      ScriptParamsClass {
+       Binding_Name "BrushEditFrequency"
+      }
+     }
     }
    }
   }
-  TextWidgetClass TextWidget2 {
+  TextWidgetClass EditorBrushChildOffsetCaption {
    ignorepointer 1
    size 0.1 1
    halign right_ref
@@ -74,7 +86,7 @@ WrapSpacerWidgetClass rootFrame {
    "text offset" 5 0
    "text valign" center
    {
-    EditBoxWidgetClass EditBoxWidget2 {
+    EditBoxWidgetClass EditorBrushChildOffsetEditbox {
      size 0.4 1
      halign right_ref
      valign center_ref
@@ -82,21 +94,33 @@ WrapSpacerWidgetClass rootFrame {
      vexactpos 1
      hexactsize 0
      vexactsize 0
+     scriptclass "ViewBinding"
      style Default
      text "-2"
      "limit visible" 0
      "Use default text" 0
      "exact text" 0
+     {
+      ScriptParamsClass {
+       Binding_Name "BrushEditOffset"
+      }
+     }
     }
    }
   }
-  ButtonWidgetClass ButtonWidget0 {
+  ButtonWidgetClass EditorBrushDeleteChildObjectButton {
    size 0.3 20
    hexactpos 1
    vexactpos 1
    hexactsize 0
    vexactsize 1
+   scriptclass "ViewBinding"
    text "Remove Object from Brush"
+   {
+    ScriptParamsClass {
+     Relay_Command "BrushDeleteChildObject"
+    }
+   }
   }
  }
 }

@@ -1283,21 +1283,21 @@ WrapSpacerWidgetClass ToolbarWrapper {
      }
     }
     WrapSpacerWidgetClass BrushEditorPanel {
-     visible 0
+     visible 1
      ignorepointer 1
      color 0.1961 0.1961 0.1961 0.9412
      position 838 33
-     size 0.297 550
+     size 570 450
      halign right_ref
      hexactpos 1
      vexactpos 1
-     hexactsize 0
+     hexactsize 1
      vexactsize 1
      style Colorable
      Padding 0
      Margin 0
      {
-      PanelWidgetClass PanelWidget0 {
+      PanelWidgetClass BrushEditorHeaderPanel {
        ignorepointer 1
        color 0.1176 0.1176 0.1176 1
        size 1 20
@@ -1307,7 +1307,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
        vexactsize 1
        style rover_sim_colorable
        {
-        TextWidgetClass TextWidget0 {
+        TextWidgetClass BrushEditorHeaderText {
          ignorepointer 1
          size 1 1
          hexactpos 1
@@ -1320,17 +1320,17 @@ WrapSpacerWidgetClass ToolbarWrapper {
         }
        }
       }
-      ScrollWidgetClass ScrollWidget0 {
+      ScrollWidgetClass BrushEditorScroll {
        ignorepointer 1
        color 0.3529 0.3529 0.3529 1
-       size 1 0.92
+       size 1 0.9
        hexactpos 1
        vexactpos 1
        hexactsize 0
        vexactsize 0
        "Scrollbar V" 1
        {
-        WrapSpacerWidgetClass WrapSpacerWidget0 {
+        WrapSpacerWidgetClass BrushEditorParentListItem {
          ignorepointer 1
          size 1 0
          hexactpos 1
@@ -1349,7 +1349,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
         }
        }
       }
-      PanelWidgetClass PanelWidget1 {
+      PanelWidgetClass BrushEditorMainButtonPanel {
        ignorepointer 1
        color 0.1176 0.1176 0.1176 1
        size 1 24
@@ -1359,7 +1359,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
        vexactsize 1
        style rover_sim_colorable
        {
-        ButtonWidgetClass ButtonWidget0 {
+        ButtonWidgetClass BrushEditorAddBrushButton {
          position 3 0
          size 110 20
          valign center_ref
@@ -1367,9 +1367,15 @@ WrapSpacerWidgetClass ToolbarWrapper {
          vexactpos 1
          hexactsize 1
          vexactsize 1
+         scriptclass "ViewBinding"
          text "Add Brush"
+         {
+          ScriptParamsClass {
+           Relay_Command "BrushEditAddObjects"
+          }
+         }
         }
-        ButtonWidgetClass ButtonWidget1 {
+        ButtonWidgetClass BrushEditorDeleteBrushButton {
          position 3 0
          size 110 20
          halign right_ref
@@ -1378,7 +1384,13 @@ WrapSpacerWidgetClass ToolbarWrapper {
          vexactpos 1
          hexactsize 1
          vexactsize 1
+         scriptclass "ViewBinding"
          text "Delete Brush"
+         {
+          ScriptParamsClass {
+           Relay_Command "BrushEditDeleteObjects"
+          }
+         }
         }
        }
       }

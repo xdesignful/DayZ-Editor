@@ -7,7 +7,10 @@ class EditorBrushListItemObjectController: Controller
 
 class EditorBrushListItemObject: ScriptViewTemplate<EditorBrushListItemObjectController>
 {
-	
+	override string GetLayoutFile()
+	{
+		return "DayZEditor/GUI/layouts/brush/EditorBrushChildItem.layout";
+	}
 }
 
 class EditorBrushListItemController: Controller
@@ -17,5 +20,8 @@ class EditorBrushListItemController: Controller
 
 class EditorBrushListItem: ScriptViewTemplate<EditorBrushListItemController>
 {
-	
+	override string GetLayoutFile()
+	{
+		return "DayZEditor/GUI/layouts/brush/EditorBrushItem.layout";
+	}
 }

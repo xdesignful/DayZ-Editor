@@ -258,8 +258,8 @@ class EditorHudToolbarController: EditorControllerBase
 		
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
-		if (w == BrushToggleButton) {
-			Print(button);
+		// Right click functionality... should probably switch to RelayCommand since all of this stuff is really old
+		if (w == BrushToggleButton && button == 1) {
 			BrushEditorPanel.Show(!BrushEditorPanel.IsVisible());
 			return true;
 		}

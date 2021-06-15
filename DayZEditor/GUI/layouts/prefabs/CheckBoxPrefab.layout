@@ -48,7 +48,7 @@ FrameWidgetClass CheckBoxPrefab {
    vexactsize 1
    scaled 1
    scriptclass "ViewBinding"
-   style dze_checkbox_white
+   style dayz_editor_Checkbox
    checked 0
    {
     ScriptParamsClass {

@@ -1,6 +1,6 @@
 WrapSpacerWidgetClass EditorBrushItemWrapper {
  visible 1
- size 640 0
+ size 695 0
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -11,7 +11,8 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
   WrapSpacerWidgetClass MainBrushEditorWrapper {
    visible 1
    ignorepointer 1
-   color 0.1961 0.1961 0.1961 0.1961
+   color 0.1176 0.1176 0.1176 0.5882
+   position 0 0
    size 1 0
    hexactpos 1
    vexactpos 1
@@ -23,7 +24,7 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
    {
     FrameWidgetClass TextSpacer {
      ignorepointer 1
-     size 5 16
+     size 5 18
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -31,10 +32,10 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
     }
     TextWidgetClass EditorBrushNameText {
      ignorepointer 1
-     size 40 16
+     size 0.075 18
      hexactpos 1
      vexactpos 1
-     hexactsize 1
+     hexactsize 0
      vexactsize 1
      text "Brush : "
      "text offset" 1 0
@@ -42,10 +43,10 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
     }
     PanelWidgetClass PanelWidget2 {
      ignorepointer 1
-     size 185 16
+     size 0.36 18
      hexactpos 1
      vexactpos 1
-     hexactsize 1
+     hexactsize 0
      vexactsize 1
      {
       EditBoxWidgetClass EditorBrushNameEditbox {
@@ -53,11 +54,11 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
        ignorepointer 0
        keepsafezone 0
        position 0 0
-       size 185 12
+       size 1 12
        valign center_ref
        hexactpos 1
        vexactpos 1
-       hexactsize 1
+       hexactsize 0
        vexactsize 1
        scriptclass "ViewBinding"
        style ServerBrowser
@@ -78,25 +79,27 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
     }
     FrameWidgetClass CodeDefinedFrame {
      ignorepointer 1
-     size 150 16
+     position 0 0
+     size 0.2 18
      halign right_ref
      valign center_ref
      hexactpos 1
      vexactpos 1
-     hexactsize 1
+     hexactsize 0
      vexactsize 1
      {
       CheckBoxWidgetClass CodeDefinedCheckBox {
-       position 5 0
-       size 16 16
+       color 1 1 1 0.9961
+       position -0.06 0
+       size 0.22 16
        halign right_ref
        valign center_ref
-       hexactpos 1
+       hexactpos 0
        vexactpos 1
-       hexactsize 1
+       hexactsize 0
        vexactsize 1
        scriptclass "ViewBinding"
-       style dze_checkbox_white
+       style dayz_editor_Checkbox
        checked 0
        {
         ScriptParamsClass {
@@ -107,12 +110,12 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
       }
       TextWidgetClass CodeDefinedText {
        ignorepointer 1
-       position 30 0
-       size 90 16
+       size 1 16
+       halign center_ref
        valign center_ref
        hexactpos 1
        vexactpos 1
-       hexactsize 1
+       hexactsize 0
        vexactsize 1
        text "Code Defined"
        "text halign" center
@@ -120,10 +123,19 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
       }
      }
     }
+    FrameWidgetClass Checkmark_AddButton_Spacer {
+     ignorepointer 1
+     position 0 0
+     size 0.035 18
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 1
+    }
     FrameWidgetClass EditorBrushCodeDefinedFrame {
      visible 0
      ignorepointer 1
-     size 175 16
+     size 110 18
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -132,6 +144,7 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
       TextWidgetClass EditorBrushCodeDefinedClassText0 {
        ignorepointer 1
        size 40 16
+       valign center_ref
        hexactpos 1
        vexactpos 1
        hexactsize 1
@@ -141,8 +154,9 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
        "text valign" center
       }
       EditBoxWidgetClass EditorBrushCodeDefinedClassEditbox0 {
-       position 40 0
-       size 135 16
+       visible 0
+       size 110 16
+       valign center_ref
        hexactpos 1
        vexactpos 1
        hexactsize 1
@@ -157,70 +171,61 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
       }
      }
     }
-    FrameWidgetClass FrameWidget0 {
-     ignorepointer 1
-     position 0 0
-     size 25 16
-     hexactpos 1
-     vexactpos 1
-     hexactsize 1
-     vexactsize 1
-    }
-    ButtonWidgetClass EditorBrushAddChildButton {
+    FrameWidgetClass EditorBrushAddChildButton {
      visible 1
-     color 0.1961 0.3137 1 1
-     position 0 0
-     size 135 16
-     halign right_ref
-     valign center_ref
+     ignorepointer 1
+     size 110 18
      hexactpos 1
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     scriptclass "ViewBinding"
-     text "Add Object to Brush"
      {
-      PanelWidgetClass PanelWidget1 {
-       ignorepointer 1
-       color 0.1176 0.1176 0.7843 0.2941
-       size 1 1
+      ButtonWidgetClass EditorBrushAddChildButtonButton {
+       visible 1
+       color 0.3137 0.3137 0.3137 0.9412
+       size 70 18
+       halign center_ref
+       valign center_ref
        hexactpos 1
        vexactpos 1
-       hexactsize 0
-       vexactsize 0
-       style Slim_Outline2
-      }
-     }
-     {
-      ScriptParamsClass {
-       Relay_Command "BrushAddChildObject"
+       hexactsize 1
+       vexactsize 1
+       scriptclass "ViewBinding"
+       style Default
+       text "Add"
+       {
+        ScriptParamsClass {
+         Relay_Command "BrushAddChildObject"
+        }
+       }
       }
      }
     }
-    FrameWidgetClass FrameWidget1 {
+    FrameWidgetClass Brush_Delete_Spacer {
      ignorepointer 1
      position 0 0
-     size 25 16
+     size 0.03 18
      hexactpos 1
      vexactpos 1
-     hexactsize 1
+     hexactsize 0
      vexactsize 1
     }
     ButtonWidgetClass EditorBrushDeleteChildButton {
-     color 1 0 0 1
-     size 60 16
+     color 0.3137 0.3137 0.3137 0.9412
+     size 0.1 18
      halign right_ref
      valign center_ref
      hexactpos 1
      vexactpos 1
-     hexactsize 1
+     hexactsize 0
      vexactsize 1
      scriptclass "ViewBinding"
      text "Delete"
      {
-      PanelWidgetClass PanelWidget0 {
+      PanelWidgetClass DeleteButtonOutline {
        ignorepointer 1
-       color 1 0 0 0.2941
+       color 1 1 1 0.9961
+       position 0 0
        size 1 1
        hexactpos 1
        vexactpos 1

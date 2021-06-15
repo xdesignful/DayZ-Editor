@@ -1,34 +1,37 @@
 WrapSpacerWidgetClass EditorBrushChildItemWrapper {
- size 1 20
+ color 0.1176 0.1176 0.1176 0.5882
+ size 695 16
  hexactpos 1
  vexactpos 1
- hexactsize 0
+ hexactsize 1
  vexactsize 1
  Padding 0
  Margin 0
  {
   TextWidgetClass EditorBrushChildNameCaption {
    ignorepointer 1
-   size 0.5 1
+   position 0 0
+   size 390 16
    hexactpos 1
    vexactpos 1
-   hexactsize 0
-   vexactsize 0
-   text "Object Type"
-   "text offset" 5 0
+   hexactsize 1
+   vexactsize 1
+   text "Object Type :"
+   "text offset" 2 0
    "text valign" center
    {
     EditBoxWidgetClass EditorBrushChildNameEditbox {
-     size 0.84 1
+     position -2 0
+     size 310 16
      halign right_ref
      valign center_ref
      hexactpos 1
      vexactpos 1
-     hexactsize 0
-     vexactsize 0
+     hexactsize 1
+     vexactsize 1
      scriptclass "ViewBinding"
      style Default
-     text "BrushObjectcontainsatypeafrequencyandanoffset"
+     text "bldr_streambed_sand_short_slanted_inv"
      "limit visible" 0
      "Use default text" 0
      "exact text" 0
@@ -43,23 +46,24 @@ WrapSpacerWidgetClass EditorBrushChildItemWrapper {
   }
   TextWidgetClass EditorBrushChildFrequencyCaption {
    ignorepointer 1
-   size 0.1 1
+   size 100 16
    hexactpos 1
    vexactpos 1
-   hexactsize 0
-   vexactsize 0
-   text "Frequency"
+   hexactsize 1
+   vexactsize 1
+   text "Frequency :"
    "text offset" 5 0
    "text valign" center
    {
     EditBoxWidgetClass EditorBrushChildFrequencyEditbox {
-     size 0.4 1
+     position -12 1
+     size 40 16
      halign right_ref
      valign center_ref
      hexactpos 1
      vexactpos 1
-     hexactsize 0
-     vexactsize 0
+     hexactsize 1
+     vexactsize 1
      scriptclass "ViewBinding"
      style Default
      text "0.1"
@@ -75,20 +79,30 @@ WrapSpacerWidgetClass EditorBrushChildItemWrapper {
     }
    }
   }
+  FrameWidgetClass FrameWidget1 {
+   ignorepointer 1
+   size 15 16
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+  }
   TextWidgetClass EditorBrushChildOffsetCaption {
    ignorepointer 1
-   size 0.1 1
+   position 0 0
+   size 70 16
    halign right_ref
    valign center_ref
    hexactpos 1
    vexactpos 1
-   hexactsize 0
-   vexactsize 0
-   text "Offset"
+   hexactsize 1
+   vexactsize 1
+   text "Offset :"
    "text offset" 5 0
    "text valign" center
    {
     EditBoxWidgetClass EditorBrushChildOffsetEditbox {
+     position -6 0
      size 0.4 1
      halign right_ref
      valign center_ref
@@ -111,14 +125,22 @@ WrapSpacerWidgetClass EditorBrushChildItemWrapper {
     }
    }
   }
-  ButtonWidgetClass EditorBrushDeleteChildObjectButton {
-   size 0.3 20
+  FrameWidgetClass FrameWidget0 {
+   ignorepointer 1
+   size 15 16
    hexactpos 1
    vexactpos 1
-   hexactsize 0
+   hexactsize 1
+   vexactsize 1
+  }
+  ButtonWidgetClass EditorBrushDeleteChildObjectButton {
+   size 95 16
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
    vexactsize 1
    scriptclass "ViewBinding"
-   text "Remove Object from Brush"
+   text "Remove Object"
    {
     ScriptParamsClass {
      Relay_Command "BrushDeleteChildObject"

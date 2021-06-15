@@ -176,93 +176,9 @@ ImageSetClass {
    Size 128 128
    Flags 0
   }
-  ImageSetDefClass dzecheckboxgreen {
-   Name "dzecheckboxgreen"
-   Pos 384 512
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dzecheckboxblue {
-   Name "dzecheckboxblue"
-   Pos 384 640
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dzecheckboxyellow {
-   Name "dzecheckboxyellow"
-   Pos 384 767
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_white {
-   Name "dze_checkbox_white"
-   Pos 512 512
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_lightgray {
-   Name "dze_checkbox_lightgray"
-   Pos 640 512
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_mediumgray {
-   Name "dze_checkbox_mediumgray"
-   Pos 768 512
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_darkgray {
-   Name "dze_checkbox_darkgray"
+  ImageSetDefClass dze_checkbox_white_128px {
+   Name "dze_checkbox_white_128px"
    Pos 896 512
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkmark_white {
-   Name "dze_checkmark_white"
-   Pos 512 639
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkmark_lightgray {
-   Name "dze_checkmark_lightgray"
-   Pos 640 639
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkmark_mediumgray {
-   Name "dze_checkmark_mediumgray"
-   Pos 768 639
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkmark_darkgray {
-   Name "dze_checkmark_darkgray"
-   Pos 896 639
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_mark_white {
-   Name "dze_checkbox_mark_white"
-   Pos 512 767
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_mark_lightgray {
-   Name "dze_checkbox_mark_lightgray"
-   Pos 640 767
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_mark_mediumgray {
-   Name "dze_checkbox_mark_mediumgray"
-   Pos 768 767
-   Size 128 128
-   Flags 0
-  }
-  ImageSetDefClass dze_checkbox_mark_darkgray {
-   Name "dze_checkbox_mark_darkgray"
-   Pos 896 767
    Size 128 128
    Flags 0
   }
@@ -312,18 +228,6 @@ ImageSetClass {
    Name "outline_bottom_right"
    Pos 624 496
    Size 3 3
-   Flags 0
-  }
-  ImageSetDefClass highlight_green {
-   Name "highlight_green"
-   Pos 529 401
-   Size 1 1
-   Flags 0
-  }
-  ImageSetDefClass highlight_blue {
-   Name "highlight_blue"
-   Pos 533 401
-   Size 1 1
    Flags 0
   }
   ImageSetDefClass outline_center {
@@ -380,27 +284,9 @@ ImageSetClass {
    Size 2 2
    Flags 0
   }
-  ImageSetDefClass highlight_green_3 {
-   Name "highlight_green_3"
-   Pos 529 404
-   Size 1 1
-   Flags 0
-  }
   ImageSetDefClass highlight_green_1 {
    Name "highlight_green_1"
    Pos 529 402
-   Size 1 1
-   Flags 0
-  }
-  ImageSetDefClass highlight_blue_3 {
-   Name "highlight_blue_3"
-   Pos 533 404
-   Size 1 1
-   Flags 0
-  }
-  ImageSetDefClass highlight_blue_2 {
-   Name "highlight_blue_2"
-   Pos 533 403
    Size 1 1
    Flags 0
   }
@@ -410,10 +296,112 @@ ImageSetClass {
    Size 1 1
    Flags 0
   }
-  ImageSetDefClass highlight_green_2 {
-   Name "highlight_green_2"
-   Pos 529 403
-   Size 1 1
+  ImageSetDefClass "New Image" {
+   Name "New Image"
+   Pos 900 515
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Top {
+   Name "Dialog_Outline_Top"
+   Pos 542 409
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Top_Right {
+   Name "Dialog_Outline_Top_Right"
+   Pos 544 409
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Right {
+   Name "Dialog_Outline_Right"
+   Pos 544 411
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Bottom_Right {
+   Name "Dialog_Outline_Bottom_Right"
+   Pos 544 413
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Bottom {
+   Name "Dialog_Outline_Bottom"
+   Pos 542 413
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Top_left {
+   Name "Dialog_Outline_Top_left"
+   Pos 540 409
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Left {
+   Name "Dialog_Outline_Left"
+   Pos 540 411
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Bottom_Left {
+   Name "Dialog_Outline_Bottom_Left"
+   Pos 540 413
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass Dialog_Outline_Center {
+   Name "Dialog_Outline_Center"
+   Pos 542 411
+   Size 2 2
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_Checkmark {
+   Name "DayZEditor_Checkmark"
+   Pos 603 399
+   Size 16 16
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_CheckBox {
+   Name "DayZEditor_CheckBox"
+   Pos 603 416
+   Size 16 16
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_CheckboxHighlight {
+   Name "DayZEditor_CheckboxHighlight"
+   Pos 603 433
+   Size 16 16
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_Checkmark_22px {
+   Name "DayZEditor_Checkmark_22px"
+   Pos 602 474
+   Size 22 22
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_CheckBox_22px {
+   Name "DayZEditor_CheckBox_22px"
+   Pos 577 474
+   Size 22 22
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_CheckBox_Green_22px {
+   Name "DayZEditor_CheckBox_Green_22px"
+   Pos 553 474
+   Size 22 22
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_CheckBox_Disabled_22px {
+   Name "DayZEditor_CheckBox_Disabled_22px"
+   Pos 529 474
+   Size 22 22
+   Flags 0
+  }
+  ImageSetDefClass DayZEditor_CheckBox_Disabled {
+   Name "DayZEditor_CheckBox_Disabled"
+   Pos 603 450
+   Size 16 16
    Flags 0
   }
  }

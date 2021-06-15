@@ -112,7 +112,7 @@ WrapSpacerWidgetClass ListItem {
          }
         }
         CheckBoxWidgetClass ListItemShow {
-         visible 1
+         visible 0
          clipchildren 1
          inheritalpha 0
          ignorepointer 0
@@ -125,7 +125,7 @@ WrapSpacerWidgetClass ListItem {
          hexactsize 1
          vexactsize 1
          scriptclass "ViewBinding"
-         style dze_checkbox_eye_icon
+         style Default
          "no focus" 0
          font "gui/fonts/metron-bold"
          checked 0

@@ -1,18 +1,18 @@
 WrapSpacerWidgetClass EditorDialog {
  clipchildren 0
  ignorepointer 1
- color 0.0588 0.0588 0.0588 0.9804
+ color 1 1 1 0.9961
  position 0 0
- size 0.25 0
+ size 480 0
  halign center_ref
  valign center_ref
  hexactpos 1
  vexactpos 1
- hexactsize 0
+ hexactsize 1
  vexactsize 0
  priority 998
  scriptclass ""
- style Colorable
+ style DayZ_Editor_Dialog_Outline
  "Ignore invisible" 0
  Padding 1
  Margin 0
@@ -26,11 +26,12 @@ WrapSpacerWidgetClass EditorDialog {
    ignorepointer 0
    color 1 1 1 0.3922
    position 0 0
-   size 1 26
+   size 478 26
    halign center_ref
+   valign bottom_ref
    hexactpos 1
    vexactpos 1
-   hexactsize 0
+   hexactsize 1
    vexactsize 1
    draggable 1
    scriptclass ""
@@ -38,6 +39,7 @@ WrapSpacerWidgetClass EditorDialog {
     PanelWidgetClass TitleBar {
      ignorepointer 1
      color 0.4196 0.6471 1 0.4706
+     position 0 1
      size 1 0.95
      halign center_ref
      hexactpos 1
@@ -78,7 +80,7 @@ WrapSpacerWidgetClass EditorDialog {
        ignorepointer 1
        color 0.7843 0.2941 0.2745 1
        position 0 0
-       size 26 26
+       size 26 24
        halign right_ref
        valign center_ref
        hexactpos 1

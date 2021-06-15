@@ -1,17 +1,17 @@
 WrapSpacerWidgetClass EditorBrushItemWrapper {
  visible 1
- size 1.1 0
+ size 640 0
  hexactpos 1
  vexactpos 1
- hexactsize 0
+ hexactsize 1
  vexactsize 0
  Padding 0
- Margin 0
  "Size To Content V" 1
  {
   WrapSpacerWidgetClass MainBrushEditorWrapper {
    visible 1
    ignorepointer 1
+   color 0.1961 0.1961 0.1961 0.1961
    size 1 0
    hexactpos 1
    vexactpos 1
@@ -31,32 +31,54 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
     }
     TextWidgetClass EditorBrushNameText {
      ignorepointer 1
-     size 80 16
+     size 40 16
      hexactpos 1
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     text "Brush Name : "
+     text "Brush : "
+     "text offset" 1 0
      "text valign" center
     }
-    EditBoxWidgetClass EditorBrushNameEditbox {
-     position 0 0
-     size 130 16
+    PanelWidgetClass PanelWidget2 {
+     ignorepointer 1
+     size 185 16
      hexactpos 1
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     scriptclass "ViewBinding"
      {
-      ScriptParamsClass {
-       Binding_Name "Name"
-       Two_Way_Binding 1
+      EditBoxWidgetClass EditorBrushNameEditbox {
+       inheritalpha 0
+       ignorepointer 0
+       keepsafezone 0
+       position 0 0
+       size 185 12
+       valign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       scriptclass "ViewBinding"
+       style ServerBrowser
+       "no focus" 0
+       text "ThisIsABrushsName"
+       "limit visible" 0
+       "Use default text" 0
+       "exact text" 0
+       font "gui/fonts/sdf_MetronLight72"
+       {
+        ScriptParamsClass {
+         Binding_Name "Name"
+         Two_Way_Binding 1
+        }
+       }
       }
      }
     }
     FrameWidgetClass CodeDefinedFrame {
      ignorepointer 1
-     size 100 16
+     size 150 16
      halign right_ref
      valign center_ref
      hexactpos 1
@@ -65,7 +87,7 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
      vexactsize 1
      {
       CheckBoxWidgetClass CodeDefinedCheckBox {
-       position 0 0
+       position 5 0
        size 16 16
        halign right_ref
        valign center_ref
@@ -85,9 +107,8 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
       }
       TextWidgetClass CodeDefinedText {
        ignorepointer 1
-       position 10 0
+       position 30 0
        size 90 16
-       halign right_ref
        valign center_ref
        hexactpos 1
        vexactpos 1
@@ -136,10 +157,20 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
       }
      }
     }
+    FrameWidgetClass FrameWidget0 {
+     ignorepointer 1
+     position 0 0
+     size 25 16
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+    }
     ButtonWidgetClass EditorBrushAddChildButton {
      visible 1
+     color 0.1961 0.3137 1 1
      position 0 0
-     size 115 16
+     size 135 16
      halign right_ref
      valign center_ref
      hexactpos 1
@@ -149,13 +180,35 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
      scriptclass "ViewBinding"
      text "Add Object to Brush"
      {
+      PanelWidgetClass PanelWidget1 {
+       ignorepointer 1
+       color 0.1176 0.1176 0.7843 0.2941
+       size 1 1
+       hexactpos 1
+       vexactpos 1
+       hexactsize 0
+       vexactsize 0
+       style Slim_Outline2
+      }
+     }
+     {
       ScriptParamsClass {
        Relay_Command "BrushAddChildObject"
       }
      }
     }
+    FrameWidgetClass FrameWidget1 {
+     ignorepointer 1
+     position 0 0
+     size 25 16
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+    }
     ButtonWidgetClass EditorBrushDeleteChildButton {
-     size 110 16
+     color 1 0 0 1
+     size 60 16
      halign right_ref
      valign center_ref
      hexactpos 1
@@ -163,7 +216,19 @@ WrapSpacerWidgetClass EditorBrushItemWrapper {
      hexactsize 1
      vexactsize 1
      scriptclass "ViewBinding"
-     text "Delete This Brush"
+     text "Delete"
+     {
+      PanelWidgetClass PanelWidget0 {
+       ignorepointer 1
+       color 1 0 0 0.2941
+       size 1 1
+       hexactpos 1
+       vexactpos 1
+       hexactsize 0
+       vexactsize 0
+       style Slim_Outline2
+      }
+     }
      {
       ScriptParamsClass {
        Relay_Command "BrushEditDeleteBrush"

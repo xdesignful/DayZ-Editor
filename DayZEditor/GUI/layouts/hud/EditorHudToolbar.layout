@@ -1285,7 +1285,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
     WrapSpacerWidgetClass BrushEditorPanel {
      visible 1
      ignorepointer 1
-     color 0.1961 0.1961 0.1961 0.9412
+     color 0.098 0.098 0.098 0.9608
      position 0 -990
      size 650 450
      halign center_ref

@@ -1,0 +1,144 @@
+WrapSpacerWidgetClass rootFrame {
+ size 1 18
+ hexactpos 1
+ vexactpos 1
+ hexactsize 0
+ vexactsize 1
+ Padding 0
+ Margin 0
+ "Size To Content V" 1
+ {
+  TextWidgetClass TextWidget0 {
+   ignorepointer 1
+   position 20 0
+   size 200 18
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   text "container start     lootmax"
+   "text valign" center
+   {
+    EditBoxWidgetClass EditBoxWidget0 {
+     size 21 18
+     halign right_ref
+     valign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "11"
+    }
+   }
+  }
+  WrapSpacerWidgetClass WrapSpacerWidget2 {
+   ignorepointer 1
+   size 48 48
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   scriptclass "ViewBinding"
+   Padding 0
+   Margin 0
+   "Size To Content V" 1
+   {
+    TextWidgetClass TextWidget4 {
+     ignorepointer 1
+     position 10 9
+     size 500 20
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "Delete this Text widget I am Usage names List"
+     "text offset" 30 0
+     "text valign" center
+    }
+   }
+   {
+    ScriptParamsClass {
+     Binding_Name "LootPointPositions"
+    }
+   }
+  }
+  WrapSpacerWidgetClass WrapSpacerWidget1 {
+   ignorepointer 1
+   size 48 48
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   scriptclass "ViewBinding"
+   Padding 0
+   Margin 0
+   "Size To Content V" 1
+   {
+    TextWidgetClass TextWidget3 {
+     ignorepointer 1
+     position 10 9
+     size 500 20
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "Delete this Text widget I am Tag"
+     "text offset" 30 0
+     "text valign" center
+    }
+   }
+   {
+    ScriptParamsClass {
+     Binding_Name "LootPointPositions"
+    }
+   }
+  }
+  WrapSpacerWidgetClass WrapSpacerWidget0 {
+   ignorepointer 1
+   size 48 48
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   scriptclass "ViewBinding"
+   Padding 0
+   Margin 0
+   "Size To Content V" 1
+   {
+    TextWidgetClass TextWidget1 {
+     ignorepointer 1
+     position 10 10
+     size 500 20
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "Delete this Text widget I am LootPoints List"
+     "text offset" 60 0
+     "text valign" center
+    }
+   }
+   {
+    ScriptParamsClass {
+     Binding_Name "LootPointPositions"
+    }
+   }
+  }
+  TextWidgetClass TextWidget2 {
+   ignorepointer 1
+   position 20 0
+   size 200 18
+   valign center_ref
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   text "container end"
+   "text valign" center
+  }
+ }
+}

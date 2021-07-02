@@ -66,7 +66,15 @@ class EditorClientModule: JMModuleBase
 			EditorLog.Info("Loading Offline Editor...");
 			g_Game.ReportProgress("Creating Mission");
 			vector center_pos = Editor.GetMapCenterPosition();
-			Editor.Create(Editor.CreateDefaultCharacter(Editor.GetSafeStartPosition(center_pos[0], center_pos[2], 500)));
+			PlayerBase player = Editor.CreateDefaultCharacter(Editor.GetSafeStartPosition(center_pos[0], center_pos[2], 500));
+			if (!player) {
+				g_Game.ReportProgress("Failed to create player, contact InclementDab");
+				Error("Player was not created, exiting");
+				return;
+			}
+			
+			GetGame().SelectPlayer(null, player);
+			Editor.Create(PlayerBase.Cast(GetGame().GetPlayer()));
 		} else {
 			EditorLog.Info("Loading Online Editor...");
 			Editor.Create(PlayerBase.Cast(GetGame().GetPlayer()));
@@ -93,12 +101,12 @@ class EditorClientModule: JMModuleBase
 	private bool ShouldProcessInput(UAInput input)
 	{
 		// Check if LocalPress, Check if LControl is pressed, Check if game is focused
-		return (input.LocalPress() && !KeyState(KeyCode.KC_LCONTROL) && GetGame().GetInput().HasGameFocus());
+		return (GetEditor() && input.LocalPress() && !KeyState(KeyCode.KC_LCONTROL) && GetGame().GetInput().HasGameFocus());
 	}
 	
 	private bool ShouldProcessQuickInput(UAInput input)
 	{
-		return (input.LocalValue() && !KeyState(KeyCode.KC_LCONTROL) && GetGame().GetInput().HasGameFocus());
+		return (GetEditor() && input.LocalValue() && !KeyState(KeyCode.KC_LCONTROL) && GetGame().GetInput().HasGameFocus());
 	}
 	
 	private bool m_IsActive;
@@ -208,7 +216,7 @@ class EditorClientModule: JMModuleBase
 	private void OnEditorMoveObjectForward(UAInput input)
 	{
 		// nothing is selected and we are actively placing
-		if (GetEditor().GetSelectedObjects().Count() == 0 && GetEditor().IsPlacing() && input.LocalPress()) {
+		if (GetEditor() && GetEditor().GetSelectedObjects().Count() == 0 && GetEditor().IsPlacing() && input.LocalPress()) {
 			ObservableCollection<ref EditorPlaceableListItem> placeables = GetEditor().GetEditorHud().GetTemplateController().LeftbarSpacerData;
 			for (int i = 0; i < placeables.Count(); i++) {
 				if (placeables[i].IsSelected()) {
@@ -238,7 +246,7 @@ class EditorClientModule: JMModuleBase
 	private void OnEditorMoveObjectBackward(UAInput input)
 	{
 		// nothing is selected and we are actively placing
-		if (GetEditor().GetSelectedObjects().Count() == 0 && GetEditor().IsPlacing() && input.LocalPress()) {
+		if (GetEditor() && GetEditor().GetSelectedObjects().Count() == 0 && GetEditor().IsPlacing() && input.LocalPress()) {
 			ObservableCollection<ref EditorPlaceableListItem> placeables = GetEditor().GetEditorHud().GetTemplateController().LeftbarSpacerData;
 			for (int i = 0; i < placeables.Count(); i++) {
 				if (placeables[i].IsSelected()) {

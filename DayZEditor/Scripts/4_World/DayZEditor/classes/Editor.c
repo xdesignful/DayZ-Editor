@@ -113,6 +113,11 @@ class Editor
 		
 		// Init Statistics
 		Statistics			= EditorStatistics.GetInstance();
+								
+		// Camera Init
+		EditorLog.Info("Initializing Camera");
+		g_Game.ReportProgress("Initializing Camera");
+		m_EditorCamera = EditorCamera.Cast(GetGame().CreateObjectEx("EditorCamera", m_Player.GetPosition() + Vector(0, 5, 0), ECE_LOCAL));
 		
 		// Object Manager
 		g_Game.ReportProgress("Initializing Object Manager");
@@ -139,6 +144,9 @@ class Editor
 		m_EditorHud 		= new EditorHud();
 		EditorLog.Info("Initializing Hud");
 		m_EditorHudController = m_EditorHud.GetTemplateController();		
+		// Add camera marker to newly created hud
+		m_EditorHud.CameraMapMarker = new EditorCameraMapMarker(m_EditorCamera);
+		m_EditorHud.GetTemplateController().InsertMapMarker(m_EditorHud.CameraMapMarker);
 		
 		m_Mission = GetGame().GetMission();
 		
@@ -235,7 +243,7 @@ class Editor
 		EditorLog.CurrentLogLevel = LogLevel.WARNING;
 		
 		if (ObjectUnderCursor) {
-			m_EditorHudController.ObjectReadoutName = ObjectUnderCursor.GetType();
+			m_EditorHudController.ObjectReadoutName = string.Format("%1 (%2)", ObjectUnderCursor.GetType(), ObjectUnderCursor.GetID());
 		} else {
 			m_EditorHudController.ObjectReadoutName = string.Empty;
 		}
@@ -491,25 +499,6 @@ class Editor
 		
 		m_Active = active;
 		
-		if (m_EditorCamera == null) {
-
-			EditorLog.Info("Initializing Camera");
-			
-			// Init Spawn Position
-			TIntArray center_pos = new TIntArray();		
-			string world_name;
-			GetGame().GetWorldName(world_name);
-			GetGame().ConfigGetIntArray(string.Format("CfgWorlds %1 centerPosition", world_name), center_pos);
-			
-			// Camera Init
-			m_EditorCamera = EditorCamera.Cast(GetGame().CreateObjectEx("EditorCamera", m_Player.GetPosition() + Vector(0, 5, 0), ECE_LOCAL));
-			m_EditorHud.CameraMapMarker = new EditorCameraMapMarker(m_EditorCamera);
-			m_EditorHud.GetTemplateController().InsertMapMarker(m_EditorHud.CameraMapMarker);
-			
-			// Registers character as EditorObject
-			//CreateObject(m_Player);
-		}
-		
 		m_EditorCamera.LookEnabled = m_Active;
 		m_EditorCamera.MoveEnabled = m_Active;
 		m_EditorCamera.SetActive(m_Active);
@@ -534,13 +523,13 @@ class Editor
 			}
 		}	
 		
-		if (!m_Active) {	
-			GetGame().SelectPlayer(m_Player.GetIdentity(), m_Player);
+		if (!m_Active) {
+			GetGame().SelectPlayer(null, m_Player);
 		}
 		
 		m_Player.DisableSimulation(m_Active);
 		m_Player.GetInputController().SetDisabled(m_Active);
-			
+		
 		EditorHud.SetCurrentTooltip(null);
 	}
 	
@@ -934,7 +923,7 @@ class Editor
 	
 	bool HideMapObject(EditorDeletedObject map_object, bool create_undo = true)
 	{
-		m_ObjectManager.WorldObjects[map_object.GetWorldObject().GetID()] = new OLinkT(map_object.GetWorldObject());
+		m_ObjectManager.WorldObjects[map_object.GetWorldObject().GetID()] = map_object.GetWorldObject();
 		
 		if (m_ObjectManager.IsObjectHidden(map_object)) { 
 			return false;
@@ -1116,11 +1105,13 @@ class Editor
 	{
 		EditorLog.Trace("Editor::CreateDefaultCharacter");
 		PlayerBase player;
-		if (GetWorkbenchGame().GetPlayer()) {
-			return PlayerBase.Cast(GetWorkbenchGame().GetPlayer());
+		if (GetGame().GetPlayer()) {
+			return PlayerBase.Cast(GetGame().GetPlayer());
 		} 
-		
-		if (Class.CastTo(player, GetWorkbenchGame().CreatePlayer(null, GetWorkbenchGame().CreateRandomPlayer(), position, 0, "NONE"))) {
+
+		Object player_object = GetGame().CreateObject(GetGame().CreateRandomPlayer(), position);
+		// GetGame().CreatePlayer(null, GetGame().CreateRandomPlayer(), position, 0, "NONE")
+		if (Class.CastTo(player, player_object)) {
 			player.GetInventory().CreateInInventory("AviatorGlasses");
 	    	player.GetInventory().CreateInInventory("Shirt_RedCheck");
 	    	player.GetInventory().CreateInInventory("Jeans_Blue");
@@ -1196,6 +1187,12 @@ class Editor
 		}
 		
 		RestContext rest = GetRestApi().GetRestContext("https:\/\/dayz-editor-default-rtdb.firebaseio.com\/");
+		if (!rest) {
+			// Boom!
+			BanReason = "null";
+			return;
+		}
+		
 		BanReason = rest.GET_now(string.Format("bans/%1.json", GetGame().GetUserManager().GetSelectedUser().GetUid()));
 		
 		// Temporary hotfix until we can re-implement the old system

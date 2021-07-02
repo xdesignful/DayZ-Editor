@@ -6,6 +6,22 @@ enum EditorClientModuleRPC
 
 class EditorClientModule: JMModuleBase
 {
+	protected int m_KonamiCodeProgress;
+	protected float m_KonamiCodeCooldown;
+	
+	static const ref array<int> KONAMI_CODE = {
+		KeyCode.KC_UP,
+		KeyCode.KC_UP,
+		KeyCode.KC_DOWN,
+		KeyCode.KC_DOWN,
+		KeyCode.KC_LEFT,
+		KeyCode.KC_RIGHT,
+		KeyCode.KC_LEFT,
+		KeyCode.KC_RIGHT,
+		KeyCode.KC_B,
+		KeyCode.KC_A
+	};
+	
 	void EditorClientModule() 
 	{
 		EditorLog.Info("EditorClientModule");
@@ -44,6 +60,24 @@ class EditorClientModule: JMModuleBase
 		if (GetEditor()) {
 			GetEditor().Update(timeslice);
 		}
+		
+		// Konami suck
+		if (m_KonamiCodeCooldown != 0) {
+			m_KonamiCodeCooldown -= timeslice;
+			m_KonamiCodeCooldown = Math.Clamp(m_KonamiCodeCooldown, 0, 100);
+		}
+		
+		if (m_KonamiCodeProgress != -1 && KeyState(KONAMI_CODE[m_KonamiCodeProgress]) && m_KonamiCodeCooldown == 0) {
+			m_KonamiCodeProgress++;
+			GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CheckKonamiCode, 1000, false, m_KonamiCodeProgress);
+			m_KonamiCodeCooldown = 0.15;
+		}
+		
+		if (m_KonamiCodeProgress >= KONAMI_CODE.Count()) {
+			GetEditor().GetEditorHud().CreateNotification("Konami Code Complete!", ARGB(255, 255, 0, 255));
+			m_KonamiCodeProgress = -1;
+		}
+		
 		/*
 		if (GetEditor() && GetEditor().GetCamera() && !IsMissionOffline()) {
 			ScriptRPC update_rpc = new ScriptRPC();
@@ -51,6 +85,14 @@ class EditorClientModule: JMModuleBase
 			update_rpc.Write(GetEditor().GetCamera().GetOrientation());
 			//update_rpc.Send(null, EditorServerModuleRPC.EDITOR_CLIENT_UPDATE, true);
 		}*/
+	}
+	
+	private void CheckKonamiCode(int progress)
+	{
+		if (m_KonamiCodeProgress == progress) {
+			Print("Clearing progress");
+			m_KonamiCodeProgress = 0;
+		}
 	}
 	
 	override bool IsServer() 
@@ -131,7 +173,7 @@ class EditorClientModule: JMModuleBase
 		EditorLog.Trace("Editor::OnEditorToggleCursor");
 		
 		// Dont want to toggle cursor on map
-		if (!GetEditor().IsActive() || GetEditor().GetEditorHud().EditorMapWidget.IsVisible() || EditorHud.CurrentDialog) {
+		if (!GetEditor().IsActive() || GetEditor().GetEditorHud().EditorMapWidget.IsVisible() || (EditorHud.CurrentDialog && GetEditor().Settings.LockCameraDuringDialogs)) {
 			return;
 		}
 		
@@ -233,7 +275,7 @@ class EditorClientModule: JMModuleBase
 		}
 		
 		if (!ShouldProcessQuickInput(input)) return;
-		EditorLog.Trace("Editor::OnEditorMoveObjectForward");
+		//EditorLog.Trace("Editor::OnEditorMoveObjectForward");
 		
 		float value = 0.1;
 		if (GetGame().GetInput().LocalValue("EditorCameraTurbo")) {
@@ -263,7 +305,7 @@ class EditorClientModule: JMModuleBase
 		}
 		
 		if (!ShouldProcessQuickInput(input)) return;
-		EditorLog.Trace("Editor::OnEditorMoveObjectBackward");
+		//EditorLog.Trace("Editor::OnEditorMoveObjectBackward");
 		
 		float value = 0.1;
 		if (GetGame().GetInput().LocalValue("EditorCameraTurbo")) {
@@ -276,7 +318,7 @@ class EditorClientModule: JMModuleBase
 	private void OnEditorMoveObjectLeft(UAInput input)
 	{
 		if (!ShouldProcessQuickInput(input)) return;
-		EditorLog.Trace("Editor::OnEditorMoveObjectLeft");
+		//EditorLog.Trace("Editor::OnEditorMoveObjectLeft");
 		
 		float value = 0.1;
 		if (GetGame().GetInput().LocalValue("EditorCameraTurbo")) {
@@ -289,7 +331,7 @@ class EditorClientModule: JMModuleBase
 	private void OnEditorMoveObjectRight(UAInput input)
 	{
 		if (!ShouldProcessQuickInput(input)) return;
-		EditorLog.Trace("Editor::OnEditorMoveObjectRight");
+		//EditorLog.Trace("Editor::OnEditorMoveObjectRight");
 		
 		float value = 0.1;
 		if (GetGame().GetInput().LocalValue("EditorCameraTurbo")) {
@@ -302,7 +344,7 @@ class EditorClientModule: JMModuleBase
 	private void OnEditorMoveObjectUp(UAInput input)
 	{
 		if (!ShouldProcessQuickInput(input)) return;
-		EditorLog.Trace("Editor::OnEditorMoveObjectUp");
+		//EditorLog.Trace("Editor::OnEditorMoveObjectUp");
 		
 		float value = 0.1;
 		if (GetGame().GetInput().LocalValue("EditorCameraTurbo")) {
@@ -315,7 +357,7 @@ class EditorClientModule: JMModuleBase
 	private void OnEditorMoveObjectDown(UAInput input)
 	{
 		if (!ShouldProcessQuickInput(input)) return;
-		EditorLog.Trace("Editor::OnEditorMoveObjectDown");
+		//EditorLog.Trace("Editor::OnEditorMoveObjectDown");
 		
 		float value = 0.1;
 		if (GetGame().GetInput().LocalValue("EditorCameraTurbo")) {

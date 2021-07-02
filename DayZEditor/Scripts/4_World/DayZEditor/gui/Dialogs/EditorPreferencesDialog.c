@@ -5,17 +5,21 @@ class EditorPreferencesDialog: EditorDialogCategoryBase
 		GroupPrefab general_group = new GroupPrefab("General", m_Editor.Settings, string.Empty);
 
 		DropdownListPrefab<LogLevel> log_level("Log Level", m_Editor.Settings, "SelectedLogLevel");
-		log_level.InsertItem("Trace", LogLevel.TRACE);
-		log_level.InsertItem("Debug", LogLevel.DEBUG);
-		log_level.InsertItem("Info", LogLevel.INFO);
-		log_level.InsertItem("Warning", LogLevel.WARNING);
-		log_level.InsertItem("Error", LogLevel.ERROR);
+		log_level["Trace"] = LogLevel.TRACE;
+		log_level["Debug"] = LogLevel.DEBUG;
+		log_level["Info"] = LogLevel.INFO;
+		log_level["Warning"] = LogLevel.WARNING;
+		log_level["Error"] = LogLevel.ERROR;
 		
 		general_group.Insert(log_level);
 		general_group.Insert(new EditBoxNumberPrefab("Auto Save", m_Editor.Settings, "AutoSaveTimer")); //m_Editor.Settings.AutoSaveTimer.ToString()
 		general_group.Insert(new SliderPrefab("View Distance", m_Editor.Settings, "ViewDistance", 0, 20000));
 		general_group.Insert(new SliderPrefab("Object View Distance", m_Editor.Settings, "ObjectViewDistance", 0, 8000));
-		general_group.Insert(new SliderPrefab("Marker View Distance", m_Editor.Settings, "MarkerViewDistance", 100, 5000));
+		
+		GroupPrefab marker_group = new GroupPrefab("Marker Settings", m_Editor.Settings, string.Empty);
+		marker_group.Insert(new CheckBoxPrefab("Show Tooltips", m_Editor.Settings, "MarkerTooltips"));
+		marker_group.Insert(new SliderPrefab("View Distance", m_Editor.Settings, "MarkerViewDistance", 100, 5000));
+		marker_group.Insert(new ColorPickerPrefab("Marker Color", m_Editor.Settings, "MarkerColor"));
 		
 		GroupPrefab brush_settings = new GroupPrefab("Brush Settings", m_Editor.Settings, string.Empty);
 		brush_settings.Insert(new EditBoxPrefab("Brush File", m_Editor.Settings, "EditorBrushFile"));
@@ -29,16 +33,20 @@ class EditorPreferencesDialog: EditorDialogCategoryBase
 		advanced_group.Insert(new CheckBoxPrefab("Show Bounding Boxes", m_Editor.Settings, "ShowBoundingBoxes"));
 		advanced_group.Insert(new CheckBoxPrefab("Preload Objects", m_Editor.Settings, "PreloadObjects"));
 		advanced_group.Insert(new CheckBoxPrefab("Disable World Cache", m_Editor.Settings, "DisableWorldCache"));
+		advanced_group.Insert(new CheckBoxPrefab("High Precision Collision", m_Editor.Settings, "HighPrecisionCollision"));
 		advanced_group.Insert(new CheckBoxPrefab("Debug Mode", m_Editor.Settings, "DebugMode"));
 		
 		GroupPrefab colors_group = new GroupPrefab("Colors", m_Editor.Settings, string.Empty);
-		colors_group.Insert(new ColorPickerPrefab("Marker Color", m_Editor.Settings, "MarkerColor"));
 		colors_group.Insert(new ColorPickerPrefab("Highlight Color", m_Editor.Settings, "HighlightColor"));
 		colors_group.Insert(new ColorPickerPrefab("Selected Color", m_Editor.Settings, "SelectionColor"));
 		
 		DialogCategoryListItem general_category("General");
 		general_category.AddContent(general_group);
 		AddContent(general_category);
+		
+		DialogCategoryListItem marker_category("Markers");
+		marker_category.AddContent(marker_group);
+		AddContent(marker_category);
 		
 		DialogCategoryListItem brush_category("Brushes");
 		brush_category.AddContent(brush_settings);
@@ -52,26 +60,11 @@ class EditorPreferencesDialog: EditorDialogCategoryBase
 		advanced_category.AddContent(advanced_group);
 		AddContent(advanced_category);
 		
-		// Assign Active Category
-		switch (default_group) {
-			case "General": {
-				SetActiveCategory(general_category);
-				break;
-			}
-			
-			case "Brushes": {
-				SetActiveCategory(brush_category);
-				break;
-			}
-			
-			case "Themes": {
-				SetActiveCategory(theme_category);
-				break;
-			}
-			
-			case "Advanced": {
-				SetActiveCategory(advanced_category);
-				break;
+		// Assign Default Category
+		for (int i = 0; i < m_DialogCategoryBaseController.DialogCategoryData.Count(); i++) {
+			DialogCategoryListItem list_item = m_DialogCategoryBaseController.DialogCategoryData[i];
+			if (list_item.GetTemplateController().Caption == default_group) {
+				SetActiveCategory(list_item);
 			}
 		}
 		

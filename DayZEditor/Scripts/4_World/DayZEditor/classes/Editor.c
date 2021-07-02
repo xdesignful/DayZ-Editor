@@ -212,8 +212,8 @@ class Editor
 			if (ObjectInHand) {
 				collision_ignore = ObjectInHand.GetWorldObject();
 			}
-			
-			CurrentMousePosition = MousePosToRay(obj, collision_ignore, Settings.ViewDistance, 0, !CollisionMode);
+																												// High precision is experimental, but we want it on for LootEditor since its only placing the cylinders!
+			CurrentMousePosition = MousePosToRay(obj, collision_ignore, Settings.ViewDistance, 0, !CollisionMode, Settings.HighPrecisionCollision || m_LootEditMode);
 		}
 		
 		if (Settings.DebugMode) {
@@ -1178,7 +1178,7 @@ class Editor
 	{
 		array<ref BiosUser> users = {};
 		// Weird bug
-		if (!GetGame() || !GetGame().GetUserManager()) return;
+		if (!GetGame() || !GetGame().GetUserManager() || !GetGame().GetUserManager().GetSelectedUser()) return;
 		
 		GetGame().GetUserManager().GetUserList(users);
 		foreach (BiosUser user: users) {
@@ -1224,11 +1224,12 @@ class Editor
 	static int GetBuildNumber()
 	{
 		static const int BUILD_LENGTH = 1;
-		if (!FileExist("DayZEditor\\Scripts\\Data\\build.txt")) {
+		if (!FileExist("DayZEditor\\Scripts\\Data\\build")) {
+			Print("File doesnt exist");
 			return 0;
 		}
 		
-		FileHandle handle = OpenFile("DayZEditor\\Scripts\\Data\\build.txt", FileMode.READ);
+		FileHandle handle = OpenFile("DayZEditor\\Scripts\\Data\\build", FileMode.READ);
 		
 		int values[1];
 		string build_number;

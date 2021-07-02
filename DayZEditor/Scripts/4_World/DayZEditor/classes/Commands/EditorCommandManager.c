@@ -67,12 +67,10 @@ class EditorCommandManager
 	
 		RegisterCommand(EditorDumpSceneCommand);
 		RegisterCommand(EditorEnvironmentControlCommand);
-		RegisterCommand(EditorPreferencesCommand);
-		RegisterCommand(EditorPreferencesGeneralCommand);
-		RegisterCommand(EditorPreferencesBrushesCommand);
-		RegisterCommand(EditorPreferencesThemesCommand);
-		RegisterCommand(EditorPreferencesAdvancedCommand);
 		RegisterCommand(EditorCameraControlsCommand);
+		
+		// All preferences
+		RegisterCommand(EditorPreferencesCommand);
 		
 		RegisterCommand(EditorReloadHudCommand);
 		RegisterCommand(EditorReloadBrushesCommand);

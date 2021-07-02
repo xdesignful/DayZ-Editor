@@ -147,11 +147,16 @@ modded class DayZIntroScene
 		        vector center = (mins + maxs) * 0.5;
 		        vector size = maxs - mins;
 		        
-				
 		        new_camera.CreateDynamicPhysics(PhxInteractionLayers.DYNAMICITEM);
 				new_camera.SetDynamicPhysicsLifeTime(-1);
 				dBodySetMass(new_camera, 100);
 				m_FunnyMemes.Insert(new_camera);
+			}
+		}
+		
+		if (KeyState(KeyCode.KC_BACK)) {
+			foreach (Object obj: m_FunnyMemes) {
+				GetGame().ObjectDelete(obj);
 			}
 		}
 	}

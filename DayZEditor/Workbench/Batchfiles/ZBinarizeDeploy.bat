@@ -4,6 +4,17 @@ cd /D "%~dp0"
 
 set batchDirectory=%cd%
 
+cd ../../../
+cd DayZEditor/Scripts/Data
+
+if not exist build >build echo 0
+for /f %%x in (build) do (
+set /a var=%%x+1
+)
+>build echo %var%
+
+cd %batchDirectory%
+
 set /a failed=0
 
 REM set /p enableCompression=Enable Compression?[Y/N]?

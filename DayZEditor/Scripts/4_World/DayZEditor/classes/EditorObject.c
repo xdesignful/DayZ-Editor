@@ -23,10 +23,12 @@ class EditorObject: EditorWorldObject
 	bool EditorOnly;
 	
 	// Object Properties
+	float Health = 100;
 	bool Show = true;
 	bool Locked;
 	bool Physics;
 	bool Simulate = true;
+	bool AllowDamage = false;
 	
 	// Human Properties
 	bool Control;
@@ -152,6 +154,8 @@ class EditorObject: EditorWorldObject
 		thread EnableListItem(IsListItemEnabled());
 
 		m_SnapPoints.Insert(new EditorSnapPoint(this, Vector(0, -GetYDistance(), 5)));
+		
+		Health = m_WorldObject.GetHealth("", "Health");
 
 		Update();
 	}
@@ -392,6 +396,17 @@ class EditorObject: EditorWorldObject
 				//m_Data.EditorOnly = EditorOnly;
 				break;
 			}
+			
+			case "AllowDamage": {
+				m_WorldObject.SetAllowDamage(AllowDamage);
+				break;
+			}
+			
+			case "Health": {
+				Health = Math.Clamp(Health, 0, 100);
+				m_WorldObject.SetHealth("", "Health", Health);
+				break;
+			}
 		}
 	}
 	
@@ -475,7 +490,9 @@ class EditorObject: EditorWorldObject
 	{
 		EditorLog.Trace("EditorObject::EnableBoundingBox");
 		DestroyBoundingBox();
-		if (!enable) {
+		
+		// Global Settings Check		
+		if (!enable || !GetEditor().Settings.ShowBoundingBoxes) {
 			return;
 		}
 		

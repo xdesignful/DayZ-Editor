@@ -133,6 +133,9 @@ class EditorObjectMarker: EditorMarker
 			}
 		}
 		
+		if (m_Editor.Settings.MarkerTooltips) {
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(DoTooltipCheck, 500);
+		}
 		return super.OnMouseEnter(w, x, y);
 	}
 	
@@ -145,7 +148,22 @@ class EditorObjectMarker: EditorMarker
 			}
 		}
 		
+		if (m_Editor.Settings.MarkerTooltips) {
+			EditorHud.SetCurrentTooltip(null);
+		}
+		
 		return super.OnMouseLeave(w, enterW, x, y);
+	}
+	
+	private void DoTooltipCheck()
+	{
+		int x, y;
+		GetMousePos(x, y);
+		if (!IsMouseInside(x, y)) {
+			return;
+		}
+		
+		EditorHud.SetCurrentTooltip(EditorTooltip.CreateOnButton(m_EditorObject.GetType(), GetLayoutRoot(), TooltipPositions.BOTTOM_LEFT));
 	}
 	
 	private const int DRAG_THRESHOLD = 5;
@@ -171,7 +189,6 @@ class EditorObjectMarker: EditorMarker
 	override bool OnDoubleClick(Widget w, int x, int y, int button)
 	{
 		m_Editor.CommandManager[EditorObjectPropertiesCommand].Execute(this, null);
-		
 		return true;
 	}
 	

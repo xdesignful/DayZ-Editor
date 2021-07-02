@@ -1,12 +1,12 @@
 WrapSpacerWidgetClass LootEditorHud {
- color 0.7059 0.7059 0.7059 1
+ color 0.098 0.098 0.098 0.7843
  size 480 1
  halign right_ref
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 0
- style Outline_1px
+ style Outline_1px_BlackBackground
  Padding 0
  Margin 0
  {
@@ -104,7 +104,7 @@ WrapSpacerWidgetClass LootEditorHud {
   ScrollWidgetClass LootEditorScrollbar {
    ignorepointer 1
    color 0.4706 0.4706 0.4706 0.5882
-   size 1 0.5
+   size 1 0.69
    halign center_ref
    valign bottom_ref
    hexactpos 1
@@ -129,14 +129,14 @@ WrapSpacerWidgetClass LootEditorHud {
   }
   PanelWidgetClass LootEditorObjectSettingsPanel {
    ignorepointer 1
-   color 0.7059 0.7059 0.7059 1
-   size 480 478
+   color 0.7059 0.7059 0.7059 0.7843
+   size 480 272
    halign center_ref
    hexactpos 1
    vexactpos 1
    hexactsize 1
    vexactsize 1
-   style Outline_1px
+   style blank
    {
     WrapSpacerWidgetClass LootEditorObjectSettingsWrapper {
      ignorepointer 1
@@ -152,7 +152,7 @@ WrapSpacerWidgetClass LootEditorHud {
      {
       PanelWidgetClass UsagesPanel {
        ignorepointer 1
-       position 10 10
+       position 0 0
        size 239 1
        hexactpos 1
        vexactpos 1
@@ -162,7 +162,8 @@ WrapSpacerWidgetClass LootEditorHud {
         PanelWidgetClass UsagesTitlePanel {
          ignorepointer 1
          color 0.1176 0.1176 0.1176 1
-         size 0.999 20
+         position 0 0
+         size 1 20
          halign center_ref
          hexactpos 1
          vexactpos 1
@@ -185,367 +186,29 @@ WrapSpacerWidgetClass LootEditorHud {
           }
          }
         }
-        GridSpacerWidgetClass UsagesGridSpacerWidget {
+        ScrollWidgetClass UsagesScrollbar {
          ignorepointer 1
          position 0 20
-         size 1 457
-         halign center_ref
+         size 245 251
          hexactpos 1
          vexactpos 1
-         hexactsize 0
+         hexactsize 1
          vexactsize 1
-         Padding 0
-         Margin 0
-         Columns 1
-         Rows 14
+         "Scrollbar V" 1
          {
-          ButtonWidgetClass ShelvesButton8 {
-           position 10 10
-           size 1 0.33
+          WrapSpacerWidgetClass UsagesContent {
+           ignorepointer 1
+           size 1 0
+           halign center_ref
            hexactpos 1
            vexactpos 1
            hexactsize 0
            vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
+           scriptclass "ViewBinding"
+           Padding 0
+           Margin 0
            {
-            TextWidgetClass TextWidget11 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Military"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton9 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget12 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Police"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton10 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget13 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Medic"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton11 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget14 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Firefighter"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton12 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget15 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Industrial"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton13 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget16 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Farm"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton14 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget17 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Coast"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton15 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget18 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Town"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton16 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget19 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Village"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton17 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget110 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Hunting"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton18 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget111 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Office"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton19 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget112 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "School"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton20 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget113 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Prison"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton21 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget114 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Lunapark"
-             "text halign" center
-             "text valign" center
+            ScriptParamsClass {
             }
            }
           }
@@ -576,6 +239,7 @@ WrapSpacerWidgetClass LootEditorHud {
         PanelWidgetClass CategoriesTitlePanel {
          ignorepointer 1
          color 0.1176 0.1176 0.1176 1
+         position 0 0
          size 1 20
          halign center_ref
          hexactpos 1
@@ -596,222 +260,6 @@ WrapSpacerWidgetClass LootEditorHud {
            text "Select Categories"
            "text halign" center
            "text valign" center
-          }
-         }
-        }
-        GridSpacerWidgetClass CategoriesGridSpacerWidget {
-         ignorepointer 1
-         position 0 20
-         size 239 0.66
-         halign center_ref
-         hexactpos 1
-         vexactpos 1
-         hexactsize 1
-         vexactsize 0
-         Padding 0
-         Margin 0
-         Columns 1
-         Rows 8
-         {
-          ButtonWidgetClass ShelvesButton0 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget3 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Tools"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton1 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass ContainersText {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Containers"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton2 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget5 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Clothes"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton3 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget6 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Vehicle Parts"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton4 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget7 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Food"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton5 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget8 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Weapons"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton6 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget9 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Explosives"
-             "text halign" center
-             "text valign" center
-            }
-           }
-          }
-          ButtonWidgetClass ShelvesButton7 {
-           position 10 10
-           size 1 0.33
-           hexactpos 1
-           vexactpos 1
-           hexactsize 0
-           vexactsize 0
-           style ButtonColorOnSelect
-           switch toggle
-           {
-            TextWidgetClass TextWidget10 {
-             ignorepointer 1
-             size 1 1
-             halign center_ref
-             valign center_ref
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             text "Books"
-             "text halign" center
-             "text valign" center
-            }
-           }
           }
          }
         }
@@ -851,93 +299,61 @@ WrapSpacerWidgetClass LootEditorHud {
             }
            }
           }
-          WrapSpacerWidgetClass TagsWrapSpacerWidget {
+          ScrollWidgetClass TagsScrollbar {
            ignorepointer 1
-           position -1 20
-           size 237 123
-           halign center_ref
+           position 0 20
+           size 245 61
            hexactpos 1
            vexactpos 1
            hexactsize 1
            vexactsize 1
-           Padding 4
-           Margin 0
+           "Scrollbar V" 1
            {
-            ButtonWidgetClass ShelvesButton {
-             position 10 10
-             size 1 0.33
+            WrapSpacerWidgetClass TagsContent {
+             ignorepointer 1
+             size 1 0
+             halign center_ref
              hexactpos 1
              vexactpos 1
              hexactsize 0
              vexactsize 0
-             style ButtonColorOnSelect
-             switch toggle
+             scriptclass "ViewBinding"
+             Padding 0
+             Margin 0
+             "Size To Content V" 1
              {
-              TextWidgetClass TextWidget0 {
-               ignorepointer 1
-               size 1 1
-               halign center_ref
-               valign center_ref
-               hexactpos 1
-               vexactpos 1
-               hexactsize 0
-               vexactsize 0
-               text "Shelves"
-               "text halign" center
-               "text valign" center
+              ScriptParamsClass {
               }
              }
             }
-            ButtonWidgetClass GroundButton {
-             position 10 10
-             size 1 0.33
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 0
-             style ButtonColorOnSelect
-             text "Ground"
-             switch toggle
-             {
-              TextWidgetClass TextWidget1 {
-               ignorepointer 1
-               size 1 1
-               halign center_ref
-               valign center_ref
-               hexactpos 1
-               vexactpos 1
-               hexactsize 0
-               vexactsize 0
-               text "Ground"
-               "text halign" center
-               "text valign" center
-              }
-             }
-            }
-            ButtonWidgetClass FloorButton {
-             position 10 10
-             size 1 33
-             hexactpos 1
-             vexactpos 1
-             hexactsize 0
-             vexactsize 1
-             style ButtonColorOnSelect
-             switch toggle
-             {
-              TextWidgetClass TextWidget2 {
-               ignorepointer 1
-               size 1 1
-               halign center_ref
-               valign center_ref
-               hexactpos 1
-               vexactpos 1
-               hexactsize 0
-               vexactsize 0
-               text "Floor"
-               "text halign" center
-               "text valign" center
-              }
-             }
+           }
+          }
+         }
+        }
+        ScrollWidgetClass CategoriesScrollbar {
+         ignorepointer 1
+         position 0 20
+         size 245 170
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         "Scrollbar V" 1
+         {
+          WrapSpacerWidgetClass CategoriesContent {
+           ignorepointer 1
+           size 1 0
+           halign center_ref
+           hexactpos 1
+           vexactpos 1
+           hexactsize 0
+           vexactsize 0
+           scriptclass "ViewBinding"
+           Padding 0
+           Margin 0
+           "Size To Content V" 1
+           {
+            ScriptParamsClass {
             }
            }
           }
@@ -962,6 +378,7 @@ WrapSpacerWidgetClass LootEditorHud {
    style rover_sim_colorable
    {
     ButtonWidgetClass LootEditorAddLootPoint {
+     position 0 0
      size 140 20
      valign center_ref
      hexactpos 1

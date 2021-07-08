@@ -31,6 +31,29 @@ class EditorExpansionFile: EditorFileType
 		return save_data;
 	}
 	
+	static bool GetTraderFromMissionFile(FileHandle file, out string name, out vector position, out vector rotation, out TStringArray gear)
+	{
+		string line;
+		int lineSize = FGets(file, line);
+
+		if (lineSize < 1)
+			return false;
+		
+		TStringArray tokens = new TStringArray;
+		line.Split( "|", tokens );
+
+		name = tokens.Get(0);
+		position = tokens.Get(1).ToVector();
+		rotation = tokens.Get(2).ToVector();
+
+		string gears_array = tokens.Get(3);
+		TStringArray geartokens = new TStringArray;
+		gears_array.Split(",", geartokens);
+		gear = geartokens;
+		
+		return true;
+	}
+	
 	override void Export(EditorSaveData data, string file, ExportSettings settings)
 	{
 		EditorLog.Trace("EditorExpansionFile::Export");

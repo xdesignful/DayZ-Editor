@@ -12,6 +12,9 @@ class EditorObjectData
 	vector Orientation;
 	float Scale = 1;
 	
+	// Wow this is cool if only our parser could manage it
+	array<ref EditorObjectData> Attachments = {};
+	
 	// Re-enable this once we get versioned serializing working :)
 	//bool EditorOnly = false;
 	

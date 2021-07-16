@@ -230,10 +230,10 @@ class Editor
 			
 			Object shoe = GetGame().CreateObject(arry.GetRandomElement(), GetGame().GetCurrentCameraPosition());
 			
-			//shoe.CreateDynamicPhysics(PhxInteractionLayers.DYNAMICITEM);
-			//shoe.SetDynamicPhysicsLifeTime(2);
-			//shoe.EnableDynamicCCD(true);
-			//dBodySetMass(shoe, 0.001);
+			shoe.CreateDynamicPhysics(PhxInteractionLayers.DYNAMICITEM);
+			shoe.SetDynamicPhysicsLifeTime(-1);
+			shoe.EnableDynamicCCD(true);
+			dBodySetMass(shoe, 0.001);
 		}
 		
 		ProcessInput(GetGame().GetInput());

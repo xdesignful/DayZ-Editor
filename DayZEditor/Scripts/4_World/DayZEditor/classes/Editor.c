@@ -215,7 +215,7 @@ class Editor
 		
 	void Update(float timeslice)
 	{		
-		if ((GetMouseState(MouseState.RIGHT) & MB_PRESSED_MASK) && KeyState(KeyCode.KC_LMENU)) {
+		if ((GetMouseState(MouseState.MIDDLE) & MB_PRESSED_MASK) && (GetMouseState(MouseState.RIGHT) & MB_PRESSED_MASK) && KeyState(KeyCode.KC_LMENU)) {
 			TStringArray arry = {
 				"AthleticShoes_Black",
 				"AthleticShoes_Blue",
@@ -231,7 +231,7 @@ class Editor
 			Object shoe = GetGame().CreateObject(arry.GetRandomElement(), GetGame().GetCurrentCameraPosition());
 			
 			shoe.CreateDynamicPhysics(PhxInteractionLayers.DYNAMICITEM);
-			shoe.SetDynamicPhysicsLifeTime(-1);
+			shoe.SetDynamicPhysicsLifeTime(5);
 			shoe.EnableDynamicCCD(true);
 			dBodySetMass(shoe, 0.001);
 		}

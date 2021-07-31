@@ -1615,12 +1615,12 @@ FrameWidgetClass EditorFrame {
       }
      }
     }
-    GridSpacerWidgetClass PanelWidget0 {
-     visible 0
+    GridSpacerWidgetClass EditorHintsGridSpacer {
+     visible 1
      ignorepointer 1
-     color 0.0588 0.0588 0.098 1
-     position 285 19
-     size 100 40
+     color 0.0588 0.0588 0.098 0
+     position 285 20
+     size 320 40
      halign right_ref
      valign bottom_ref
      hexactpos 1
@@ -1637,35 +1637,21 @@ FrameWidgetClass EditorFrame {
      Columns 1
      Rows 1
      {
-      TextWidgetClass TextWidget0 {
+      WrapSpacerWidgetClass EditorHintsContent {
        ignorepointer 1
-       size 150 16
+       size 320 0
        halign center_ref
-       valign bottom_ref
+       valign center_ref
        hexactpos 1
        vexactpos 1
        hexactsize 1
        vexactsize 1
-      }
-      TextWidgetClass TextWidget1 {
-       ignorepointer 1
-       size 150 16
-       halign center_ref
-       valign bottom_ref
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
-      }
-      TextWidgetClass TextWidget2 {
-       ignorepointer 1
-       size 150 16
-       halign center_ref
-       valign bottom_ref
-       hexactpos 1
-       vexactpos 1
-       hexactsize 1
-       vexactsize 1
+       Padding 1
+       Margin 0
+       "Size To Content H" 1
+       "Size To Content V" 1
+       content_halign right
+       content_valign bottom
       }
      }
     }

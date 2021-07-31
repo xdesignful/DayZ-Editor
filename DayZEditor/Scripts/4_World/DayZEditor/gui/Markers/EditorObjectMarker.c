@@ -64,7 +64,7 @@ class EditorObjectMarker: EditorMarker
 				EditorCamera camera = GetEditor().GetCamera();
 				vector pos = m_EditorObject.GetPosition();
 				pos[1] = camera.GetPosition()[1];
-				camera.SetPosition(pos);
+				camera.SendToPosition(pos);
 				return true;
 			}
 		}
@@ -108,6 +108,7 @@ class EditorObjectMarker: EditorMarker
 	void Highlight()
 	{
 		m_LayoutRoot.SetAlpha(MARKER_ALPHA_ON_SHOW);
+		SetColor(m_Editor.Settings.MarkerPrimaryColor);
 		SetOutlineColor(m_Editor.Settings.HighlightColor);
 	}
 	

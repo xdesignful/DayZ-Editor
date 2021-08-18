@@ -22,6 +22,7 @@ class EditorHudToolbarController: EditorControllerBase
 	protected ImageWidget SnapButton_Icon;
 	protected ImageWidget CollisionButton_Icon;
 	protected ImageWidget CameraLightButton_Icon;
+	protected ImageWidget RulerButton_Icon;
 	
 	protected ButtonWidget BrushToggleButton;
 			
@@ -135,6 +136,15 @@ class EditorHudToolbarController: EditorControllerBase
 					CameraLightButton_Icon.SetColor(COLOR_YELLOW);
 				} else {
 					CameraLightButton_Icon.SetColor(COLOR_WHITE);
+				}
+				break;
+			}
+			
+			case "m_Editor.Ruler": {
+				if (m_Editor.Ruler) {
+					RulerButton_Icon.SetColor(COLOR_BLUE_LIGHT);
+				} else {
+					RulerButton_Icon.SetColor(COLOR_WHITE);
 				}
 				break;
 			}

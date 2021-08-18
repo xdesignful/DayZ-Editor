@@ -11,6 +11,9 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 	// for camera drawing i.e. rule of 3rds
 	CanvasWidget EditorCameraCanvas;
 	
+	// ruler draws to this
+	CanvasWidget EditorRulerCanvas;
+	
 	ref EditorCameraMapMarker CameraMapMarker;
 	
 	// todo protect this and move all Map logic in here?

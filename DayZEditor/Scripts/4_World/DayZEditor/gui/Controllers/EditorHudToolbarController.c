@@ -142,6 +142,7 @@ class EditorHudToolbarController: EditorControllerBase
 			
 			case "m_Editor.Ruler": {
 				if (m_Editor.Ruler) {
+					GetEditor().GetEditorHud().RunRuler();
 					RulerButton_Icon.SetColor(COLOR_BLUE_LIGHT);
 				} else {
 					RulerButton_Icon.SetColor(COLOR_WHITE);

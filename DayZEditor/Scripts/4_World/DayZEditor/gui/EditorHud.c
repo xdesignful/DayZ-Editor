@@ -106,7 +106,7 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 		
 		//VScrollToWidget(list_item.GetLayoutRoot());
 	}
-	
+		
 	private void _DelayedDragBoxCheck(int start_x, int start_y)
 	{
 		int drag_box_color = GetEditor().Settings.SelectionColor;
@@ -157,6 +157,60 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 		
 		m_IsBoxSelectActive = false;
 		EditorCanvas.Clear();
+	}
+	
+	void RunRuler()
+	{
+		thread _RunRuler();
+	}
+	
+	private void _RunRuler()
+	{
+		Sleep(100);
+		
+		vector p1, p2;
+		while (GetEditor().Ruler) {
+			EditorRulerCanvas.Clear();
+			
+			set<Object> collisions = new set<Object>();
+			if (GetMouseState(MouseState.LEFT) & MB_PRESSED_MASK) {
+				p1 = Editor.CurrentMousePosition;
+			}
+			
+			if (GetMouseState(MouseState.RIGHT) & MB_PRESSED_MASK) {
+				p2 = Editor.CurrentMousePosition;
+			}
+						
+			if (!p1 && !p2) {
+				Sleep(10);
+				continue;
+			}
+			
+			vector s1 = GetGame().GetScreenPos(p1);
+			vector s2 = GetGame().GetScreenPos(p2);
+			vector s3 = GetGame().GetScreenPos(Editor.CurrentMousePosition);
+			
+			//if (p1_assigned ^ p2_assigned)
+			if (p1 != vector.Zero && p2 != vector.Zero) {
+				
+				// Draw static final line
+				EditorRulerCanvas.DrawLine(s1[0], s1[1], s2[0], s2[1], 2, COLOR_RED);
+			}
+			
+			else if (p1 != vector.Zero || p2 != vector.Zero && !(p1 != vector.Zero && p2 != vector.Zero)) {
+				if (p1) {
+					EditorRulerCanvas.DrawLine(s3[0], s3[1], s1[0], s1[1], 2, COLOR_RED);
+				} 
+				
+				if (p2) {
+					EditorRulerCanvas.DrawLine(s3[0], s3[1], s2[0], s2[1], 2, COLOR_RED);
+				}
+			} 
+			
+			Sleep(10);
+		}
+		
+		EditorRulerCanvas.Clear();
 	}
 	
 	void ShowRuleOfThirds(bool state)

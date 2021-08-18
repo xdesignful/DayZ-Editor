@@ -29,6 +29,7 @@ class EditorCommandManager
 	EditorCommand CameraTrackAddNode;
 	EditorCommand CameraTrackRun;
 	EditorCommand CameraToggleLight;
+	EditorCommand ToggleRuler;
 	
 	void ~EditorCommandManager()
 	{		
@@ -85,6 +86,7 @@ class EditorCommandManager
 		BrushRadiusCommand = RegisterCommand(EditorBrushRadiusCommand);
 	
 		CameraToggleLight = RegisterCommand(EditorToggleLightCommand);
+		ToggleRuler = RegisterCommand(EditorToggleRulerCommand);
 		RegisterCommand(EditorResetAlignmentCommand);
 		RegisterCommand(EditorAlignToSurfaceCommand);
 		RegisterCommand(EditorControlPlayerCommand);

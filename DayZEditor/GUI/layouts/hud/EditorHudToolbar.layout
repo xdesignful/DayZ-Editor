@@ -1212,6 +1212,49 @@ WrapSpacerWidgetClass ToolbarWrapper {
           }
          }
         }
+        ButtonWidgetClass RulerButton {
+         clipchildren 0
+         color 0.7529 0.3686 0.3255 1
+         position 0 0
+         size 33 33
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         scriptclass "ViewBinding"
+         style Default
+         "no focus" 1
+         font "gui/fonts/metron-bold"
+         switch toggle
+         {
+          ImageWidgetClass RulerButton_Icon {
+           inheritalpha 1
+           ignorepointer 1
+           position 0 0
+           size 0.8 0.8
+           halign center_ref
+           valign center_ref
+           hexactpos 1
+           vexactpos 1
+           hexactsize 0
+           vexactsize 0
+           priority 1
+           image0 "set:dayz_gui image:icon_sun"
+           mode blend
+           "src alpha" 1
+           "no wrap" 1
+           stretch 0
+           filter 0
+          }
+         }
+         {
+          ScriptParamsClass {
+           Binding_Name "m_Editor.Ruler"
+           Two_Way_Binding 1
+           Relay_Command "m_Editor.CommandManager.ToggleRuler"
+          }
+         }
+        }
        }
       }
       PanelWidgetClass Divider10 {

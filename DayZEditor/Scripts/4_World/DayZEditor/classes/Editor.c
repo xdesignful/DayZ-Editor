@@ -81,6 +81,7 @@ class Editor
 	bool 										CollisionMode;
 	
 	bool 										CameraLight;
+	bool 										Ruler;
 
 	string 										BanReason = "null";
 	static const string 						Version = "1.23." + GetBuildNumber();

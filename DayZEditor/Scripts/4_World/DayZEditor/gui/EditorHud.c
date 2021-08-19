@@ -13,6 +13,7 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 	
 	// ruler draws to this
 	CanvasWidget EditorRulerCanvas;
+	TextWidget EditorRulerReadout;
 	
 	ref EditorCameraMapMarker CameraMapMarker;
 	
@@ -171,14 +172,16 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 		vector p1, p2;
 		while (GetEditor().Ruler) {
 			EditorRulerCanvas.Clear();
+			EditorRulerReadout.Show(false);
 			
 			set<Object> collisions = new set<Object>();
+			vector current_pos = MousePosToRay(collisions, null, 20000, 0, true);
 			if (GetMouseState(MouseState.LEFT) & MB_PRESSED_MASK) {
-				p1 = Editor.CurrentMousePosition;
+				p1 = current_pos;
 			}
 			
 			if (GetMouseState(MouseState.RIGHT) & MB_PRESSED_MASK) {
-				p2 = Editor.CurrentMousePosition;
+				p2 = current_pos;
 			}
 						
 			if (!p1 && !p2) {
@@ -188,13 +191,23 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 			
 			vector s1 = GetGame().GetScreenPos(p1);
 			vector s2 = GetGame().GetScreenPos(p2);
-			vector s3 = GetGame().GetScreenPos(Editor.CurrentMousePosition);
+			vector s3 = GetGame().GetScreenPos(current_pos);
 			
 			//if (p1_assigned ^ p2_assigned)
 			if (p1 != vector.Zero && p2 != vector.Zero) {
 				
 				// Draw static final line
 				EditorRulerCanvas.DrawLine(s1[0], s1[1], s2[0], s2[1], 2, COLOR_RED);
+				EditorRulerReadout.Show(true);
+				// fuck mvc this is patrick
+				EditorRulerReadout.SetText(vector.Distance(p1, p2).ToString());
+				
+				vector center_pos = AverageVectors(p1, p2);
+				// center_pos.Perpend(); or something
+				
+				center_pos = GetGame().GetScreenPos(center_pos);
+				
+				EditorRulerReadout.SetPos(center_pos[0], center_pos[1]);
 			}
 			
 			else if (p1 != vector.Zero || p2 != vector.Zero && !(p1 != vector.Zero && p2 != vector.Zero)) {
@@ -210,6 +223,7 @@ class EditorHud: ScriptViewTemplate<EditorHudController>
 			Sleep(10);
 		}
 		
+		EditorRulerReadout.Show(false);
 		EditorRulerCanvas.Clear();
 	}
 	

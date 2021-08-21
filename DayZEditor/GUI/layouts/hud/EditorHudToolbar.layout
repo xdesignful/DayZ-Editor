@@ -1166,7 +1166,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
        "Size To Content V" 1
        content_halign center
        content_valign center
-       Columns 4
+       Columns 2
        Rows 1
        {
         ButtonWidgetClass CameraLightButton {

@@ -902,7 +902,7 @@ FrameWidgetClass main_menu_root {
    visible 1
    inheritalpha 1
    color 0.1176 0.1176 0.1176 0.7843
-   position 138 75
+   position 75 30
    size 480 270
    hexactpos 1
    vexactpos 1
@@ -943,10 +943,10 @@ FrameWidgetClass main_menu_root {
   MultilineTextWidgetClass ModdedWarning {
    visible 0
    inheritalpha 1
-   position 100 350
-   size 540 30
-   hexactpos 1
-   vexactpos 1
+   position 0.05 0.282
+   size 450 30
+   hexactpos 0
+   vexactpos 0
    hexactsize 1
    vexactsize 1
    fixaspect outside
@@ -969,17 +969,74 @@ FrameWidgetClass main_menu_root {
    vexactsize 0
    priority 2
   }
-  FrameWidgetClass ModsDetailed {
+  WrapSpacerWidgetClass ModsDetailed {
    visible 1
-   clipchildren 0
+   clipchildren 1
    ignorepointer 1
-   position 100 340
-   size 540 620
-   hexactpos 1
+   color 0 0 0 0.549
+   position 0.05 360
+   size 0.2 0.56
+   hexactpos 0
    vexactpos 1
-   hexactsize 1
-   vexactsize 1
-   priority 5
+   hexactsize 0
+   vexactsize 0
+   style Colorable
+   Padding 0
+   Margin 0
+   {
+    PanelWidgetClass ModsHeader {
+     ignorepointer 1
+     color 0 0 0 0.8627
+     size 1 24
+     halign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass ModsText {
+       ignorepointer 1
+       size 1 14
+       halign center_ref
+       valign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 0
+       vexactsize 1
+       text "MODS"
+       font "gui/fonts/sdf_MetronLight42"
+       "text halign" center
+       "text valign" center
+      }
+     }
+    }
+    ScrollWidgetClass ModsScroll {
+     ignorepointer 1
+     color 0.1176 0.1176 0.1176 0.3922
+     position 0 0
+     size 1 0.97
+     halign center_ref
+     valign center_ref
+     hexactpos 1
+     vexactpos 1
+     hexactsize 0
+     vexactsize 0
+     "Scrollbar V" 1
+     {
+      WrapSpacerWidgetClass ModsContent {
+       ignorepointer 1
+       size 1 0
+       hexactpos 1
+       vexactpos 1
+       hexactsize 0
+       vexactsize 1
+       Margin 0
+       "Size To Content V" 1
+      }
+     }
+    }
+   }
   }
   PanelWidgetClass last_server_info {
    visible 1
@@ -1125,10 +1182,10 @@ FrameWidgetClass main_menu_root {
   }
   WrapSpacerWidgetClass Licensing {
    clipchildren 0
-   position 100 0.062
+   position 0.05 0.062
    size 0.45 30
    valign bottom_ref
-   hexactpos 1
+   hexactpos 0
    vexactpos 0
    hexactsize 0
    vexactsize 1
@@ -1178,6 +1235,7 @@ FrameWidgetClass main_menu_root {
    visible 1
    ignorepointer 0
    color 0 0 0 0.7843
+   position 0 0
    size 1 1
    halign center_ref
    valign center_ref
@@ -1195,7 +1253,7 @@ FrameWidgetClass main_menu_root {
    nocache 1
   }
   FrameWidgetClass ModsSimple {
-   visible 1
+   visible 0
    clipchildren 1
    ignorepointer 1
    position 80 10

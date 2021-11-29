@@ -13,8 +13,8 @@ class EditorObjectDragHandler: EditorDragHandler
 		};
 		
 		m_Editor.ObjectInHand = target;
-		vector cursor_pos = Editor.CurrentMousePosition;
 		
+		vector cursor_pos = Editor.CurrentMousePosition;
 		vector size, ground_position, surface_normal, local_dir, local_ori;
 		vector deltapos = m_EditorObject.GetPosition();
 		size = m_EditorObject.GetSize();
@@ -23,6 +23,46 @@ class EditorObjectDragHandler: EditorDragHandler
 		surface_normal = GetGame().SurfaceGetNormal(ground_position[0], ground_position[2]);
 		float angle;
 		int i;
+		
+		// handle plane lock
+		if (m_Editor.PlaneLockToggle) {
+			switch (m_Editor.PlaneLockMode) {
+				case EditorPlaneLockMode.AXIS_X: {
+					cursor_pos[1] = transform[3][1];
+					cursor_pos[2] = transform[3][2];
+					break;
+				}
+				
+				case EditorPlaneLockMode.AXIS_Y: {		
+					cursor_pos = GetGame().GetCurrentCameraPosition() + GetGame().GetPointerDirection() * vector.Distance(GetGame().GetCurrentCameraPosition(), m_EditorObject.GetBottomCenter());	
+					cursor_pos[1] = cursor_pos[1] + size[1] / 2;
+					transform[3][1] = cursor_pos[1];
+					break;
+				}
+				
+				case EditorPlaneLockMode.AXIS_Z: {
+					cursor_pos[0] = transform[3][0];
+					cursor_pos[1] = transform[3][1];
+					break;
+				}
+				
+				case EditorPlaneLockMode.PLANE_XY: {
+					transform[3][2] = original_position[3][2];
+					break;
+				}				
+				
+				case EditorPlaneLockMode.PLANE_XZ: {
+					transform[3][1] = original_position[3][1];
+					break;
+				}				
+				
+				case EditorPlaneLockMode.PLANE_YZ: {
+					transform[3][0] = original_position[3][0];
+					break;
+				}
+			}
+		}
+		
 		// Handle Z-Only motion
 		// Todo will people want this as a keybind?
 		if (KeyState(KeyCode.KC_LMENU)) {
@@ -115,44 +155,6 @@ class EditorObjectDragHandler: EditorDragHandler
 		}
 		
 		m_LastAngle = angle;
-		
-		// handle plane lock
-		if (m_Editor.PlaneLockToggle) {
-			switch (m_Editor.PlaneLockMode) {
-				case EditorPlaneLockMode.AXIS_X: {
-					transform[3][1] = original_position[3][1];
-					transform[3][2] = original_position[3][2];
-					break;
-				}
-				
-				case EditorPlaneLockMode.AXIS_Y: {			
-					transform[3][0] = original_position[3][0];
-					transform[3][2] = original_position[3][2];
-					break;
-				}
-				
-				case EditorPlaneLockMode.AXIS_Z: {
-					transform[3][0] = original_position[3][0];
-					transform[3][1] = original_position[3][1];
-					break;
-				}
-				
-				case EditorPlaneLockMode.PLANE_XY: {
-					transform[3][2] = original_position[3][2];
-					break;
-				}				
-				
-				case EditorPlaneLockMode.PLANE_XZ: {
-					transform[3][1] = original_position[3][1];
-					break;
-				}				
-				
-				case EditorPlaneLockMode.PLANE_YZ: {
-					transform[3][0] = original_position[3][0];
-					break;
-				}
-			}
-		}
 	}
 	
 	vector GetAveragePosition(EditorObjectMap objects)

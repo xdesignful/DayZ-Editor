@@ -1205,7 +1205,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
          }
          {
           ScriptParamsClass {
-           Binding_Name "m_Editor.PlaneLock"
+           Binding_Name "m_Editor.PlaneLockToggle"
            Two_Way_Binding 1
            Relay_Command "m_Editor.CommandManager.PlaneLockCommand"
           }

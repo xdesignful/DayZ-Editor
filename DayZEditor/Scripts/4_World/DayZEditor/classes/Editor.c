@@ -80,7 +80,8 @@ class Editor
 	bool 										GroundMode;
 	bool 										SnappingMode;
 	bool 										CollisionMode;
-	bool										PlaneLockMode;
+	bool										PlaneLockToggle;
+	EditorPlaneLockMode							PlaneLockMode = EditorPlaneLockMode.AXIS_Y;
 	
 	bool 										CameraLight;
 

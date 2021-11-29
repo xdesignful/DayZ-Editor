@@ -4,6 +4,14 @@ class EditorObjectDragHandler: EditorDragHandler
 	
 	override void OnDragging(out vector transform[4], notnull EditorObject target)
 	{
+		// Welcome to vector copying
+		vector original_position[4] = {
+			transform[0].ToString(false).ToVector(),
+			transform[1].ToString(false).ToVector(),
+			transform[2].ToString(false).ToVector(),
+			transform[3].ToString(false).ToVector(),
+		};
+		
 		m_Editor.ObjectInHand = target;
 		vector cursor_pos = Editor.CurrentMousePosition;
 		
@@ -107,6 +115,44 @@ class EditorObjectDragHandler: EditorDragHandler
 		}
 		
 		m_LastAngle = angle;
+		
+		// handle plane lock
+		if (m_Editor.PlaneLockToggle) {
+			switch (m_Editor.PlaneLockMode) {
+				case EditorPlaneLockMode.AXIS_X: {
+					transform[3][1] = original_position[3][1];
+					transform[3][2] = original_position[3][2];
+					break;
+				}
+				
+				case EditorPlaneLockMode.AXIS_Y: {			
+					transform[3][0] = original_position[3][0];
+					transform[3][2] = original_position[3][2];
+					break;
+				}
+				
+				case EditorPlaneLockMode.AXIS_Z: {
+					transform[3][0] = original_position[3][0];
+					transform[3][1] = original_position[3][1];
+					break;
+				}
+				
+				case EditorPlaneLockMode.PLANE_XY: {
+					transform[3][2] = original_position[3][2];
+					break;
+				}				
+				
+				case EditorPlaneLockMode.PLANE_XZ: {
+					transform[3][1] = original_position[3][1];
+					break;
+				}				
+				
+				case EditorPlaneLockMode.PLANE_YZ: {
+					transform[3][0] = original_position[3][0];
+					break;
+				}
+			}
+		}
 	}
 	
 	vector GetAveragePosition(EditorObjectMap objects)

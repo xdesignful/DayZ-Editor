@@ -1199,6 +1199,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
            "Size To Content V" 1
            {
             ScriptParamsClass {
+             Binding_Name "PlaneLockDropdown"
             }
            }
           }

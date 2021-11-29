@@ -11,6 +11,8 @@ class EditorHudToolbarController: EditorControllerBase
 	
 	bool ControlPlayerState;
 	
+	ref DropdownListPrefab<EditorPlaneLockMode> PlaneLockDropdown;
+	
 	// View Properties
 	protected ButtonWidget MenuBarFile;
 	protected ButtonWidget MenuBarEdit;
@@ -36,6 +38,14 @@ class EditorHudToolbarController: EditorControllerBase
 		
 		BrushTypeBoxData = new ObservableCollection<ref EditorBrushData>(this);
 
+		PlaneLockDropdown = new DropdownListPrefab<EditorPlaneLockMode>("", GetEditor(), "PlaneLockMode");
+		PlaneLockDropdown["X"] = EditorPlaneLockMode.AXIS_X;
+		PlaneLockDropdown["Y"] = EditorPlaneLockMode.AXIS_Y;
+		PlaneLockDropdown["Z"] = EditorPlaneLockMode.AXIS_Z;
+		PlaneLockDropdown["XY"] = EditorPlaneLockMode.PLANE_XY;
+		PlaneLockDropdown["XZ"] = EditorPlaneLockMode.PLANE_XZ;
+		PlaneLockDropdown["YZ"] = EditorPlaneLockMode.PLANE_YZ;
+		
 		if (!m_Editor) {
 			m_Editor = GetEditor();
 		}

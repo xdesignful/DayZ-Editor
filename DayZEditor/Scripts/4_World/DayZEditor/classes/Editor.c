@@ -81,7 +81,7 @@ class Editor
 	bool 										SnappingMode;
 	bool 										CollisionMode;
 	bool										PlaneLockToggle;
-	EditorPlaneLockMode							PlaneLockMode = EditorPlaneLockMode.AXIS_Y;
+	EditorPlaneLockMode							PlaneLockMode = EditorPlaneLockMode.AXIS_X;
 	
 	bool 										CameraLight;
 
@@ -91,9 +91,9 @@ class Editor
 	protected ref TStringArray					m_RecentlyOpenedFiles = {};
 	
 	// Loot Editing
-	protected Object 								m_LootEditTarget;
+	protected Object 							m_LootEditTarget;
 	protected bool 								m_LootEditMode;
-	protected vector 								m_PositionBeforeLootEditMode;
+	protected vector 							m_PositionBeforeLootEditMode;
 	protected ref EditorMapGroupProto 			m_EditorMapGroupProto;
 	static float 								LootYOffset;
 	

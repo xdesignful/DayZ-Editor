@@ -1301,8 +1301,8 @@ WrapSpacerWidgetClass ToolbarWrapper {
         ButtonWidgetClass RulerButton {
          clipchildren 0
          color 0.7529 0.3686 0.3255 1
-         position 0 0
-         size 33 33
+         position 0 -1
+         size 33 32
          hexactpos 1
          vexactpos 1
          hexactsize 1
@@ -1337,7 +1337,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
           ScriptParamsClass {
            Binding_Name "m_Editor.Ruler"
            Two_Way_Binding 1
-           Relay_Command "m_Editor.CommandManager.RulerToggle"
+           Relay_Command "m_Editor.CommandManager.ToggleRuler"
           }
          }
         }

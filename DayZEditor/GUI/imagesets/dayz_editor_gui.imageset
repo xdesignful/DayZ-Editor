@@ -188,6 +188,12 @@ ImageSetClass {
    Size 128 128
    Flags 0
   }
+  ImageSetDefClass ruler {
+   Name "ruler"
+   Pos 768 384
+   Size 128 128
+   Flags 0
+  }
  }
  Groups {
  }

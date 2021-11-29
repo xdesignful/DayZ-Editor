@@ -947,7 +947,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
        "Size To Content V" 1
        content_halign center
        content_valign center
-       Columns 4
+       Columns 5
        Rows 1
        {
         ButtonWidgetClass MagnetButton {
@@ -1125,6 +1125,92 @@ WrapSpacerWidgetClass ToolbarWrapper {
           }
          }
         }
+        ButtonWidgetClass YLockButton {
+         clipchildren 0
+         color 0.7529 0.3686 0.3255 1
+         position 0 0
+         size 33 33
+         halign center_ref
+         valign center_ref
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         scriptclass "ViewBinding"
+         style Default
+         "no focus" 1
+         font "gui/fonts/metron-bold"
+         switch toggle
+         {
+          ImageWidgetClass YLockButtonLockIcon {
+           visible 1
+           inheritalpha 1
+           ignorepointer 1
+           position 0 0
+           size 0.9 0.9
+           halign center_ref
+           valign center_ref
+           hexactpos 1
+           vexactpos 1
+           hexactsize 0
+           vexactsize 0
+           draggable 0
+           scriptclass ""
+           image0 "set:dayz_gui image:icon_locked_sb"
+           mode blend
+           "src alpha" 1
+           "no wrap" 1
+           stretch 0
+           filter 1
+          }
+          TextWidgetClass YLockButtonCoordIcon {
+           visible 0
+           inheritalpha 1
+           ignorepointer 1
+           position 0 -7
+           size 0.8 0.75
+           halign center_ref
+           valign center_ref
+           hexactpos 1
+           vexactpos 1
+           hexactsize 0
+           vexactsize 0
+           draggable 0
+           scriptclass "ViewBinding"
+           text "Y"
+           "text halign" center
+           "text valign" center
+           {
+            ScriptParamsClass {
+            }
+           }
+          }
+          WrapSpacerWidgetClass YLockWrapSpacer {
+           ignorepointer 1
+           size 1 1
+           halign center_ref
+           valign center_ref
+           hexactpos 1
+           vexactpos 1
+           hexactsize 0
+           vexactsize 0
+           scriptclass "ViewBinding"
+           Margin 0
+           "Size To Content V" 1
+           {
+            ScriptParamsClass {
+            }
+           }
+          }
+         }
+         {
+          ScriptParamsClass {
+           Binding_Name "m_Editor.CollisionMode"
+           Two_Way_Binding 1
+           Relay_Command "m_Editor.CommandManager.CollisionCommand"
+          }
+         }
+        }
        }
       }
       PanelWidgetClass Divider0 {
@@ -1166,7 +1252,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
        "Size To Content V" 1
        content_halign center
        content_valign center
-       Columns 4
+       Columns 2
        Rows 1
        {
         ButtonWidgetClass CameraLightButton {
@@ -1209,6 +1295,49 @@ WrapSpacerWidgetClass ToolbarWrapper {
            Binding_Name "m_Editor.CameraLight"
            Two_Way_Binding 1
            Relay_Command "m_Editor.CommandManager.CameraToggleLight"
+          }
+         }
+        }
+        ButtonWidgetClass RulerButton {
+         clipchildren 0
+         color 0.7529 0.3686 0.3255 1
+         position 0 0
+         size 33 33
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         scriptclass "ViewBinding"
+         style Default
+         "no focus" 1
+         font "gui/fonts/metron-bold"
+         switch toggle
+         {
+          ImageWidgetClass RulerButtonIcon {
+           inheritalpha 1
+           ignorepointer 1
+           position 0 0
+           size 29 29
+           halign center_ref
+           valign center_ref
+           hexactpos 1
+           vexactpos 1
+           hexactsize 1
+           vexactsize 1
+           priority 1
+           image0 "set:dayz_editor_gui image:ruler"
+           mode blend
+           "src alpha" 1
+           "no wrap" 1
+           stretch 0
+           filter 1
+          }
+         }
+         {
+          ScriptParamsClass {
+           Binding_Name "m_Editor.Ruler"
+           Two_Way_Binding 1
+           Relay_Command "m_Editor.CommandManager.RulerToggle"
           }
          }
         }

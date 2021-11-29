@@ -22,6 +22,7 @@ class EditorCommandManager
 	EditorCommand MagnetCommand;
 	EditorCommand GroundCommand;
 	EditorCommand SnapCommand;
+	EditorCommand PlaneLockCommand;
 	EditorCommand CollisionCommand;
 	EditorCommand BrushToggleCommand;
 	EditorCommand BrushDensityCommand;
@@ -65,6 +66,7 @@ class EditorCommandManager
 		GroundCommand = RegisterCommand(EditorGroundCommand);
 		SnapCommand = RegisterCommand(EditorSnapCommand);
 		CollisionCommand = RegisterCommand(EditorCollisionCommand);
+		PlaneLockCommand = RegisterCommand(EditorPlaneLockCommand);
 	
 		RegisterCommand(EditorDumpSceneCommand);
 		RegisterCommand(EditorEnvironmentControlCommand);

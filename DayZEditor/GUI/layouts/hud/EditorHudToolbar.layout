@@ -1205,9 +1205,9 @@ WrapSpacerWidgetClass ToolbarWrapper {
          }
          {
           ScriptParamsClass {
-           Binding_Name "m_Editor.CollisionMode"
+           Binding_Name "m_Editor.PlaneLock"
            Two_Way_Binding 1
-           Relay_Command "m_Editor.CommandManager.CollisionCommand"
+           Relay_Command "m_Editor.CommandManager.PlaneLockCommand"
           }
          }
         }

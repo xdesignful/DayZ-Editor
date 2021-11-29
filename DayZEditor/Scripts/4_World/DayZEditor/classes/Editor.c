@@ -80,6 +80,7 @@ class Editor
 	bool 										GroundMode;
 	bool 										SnappingMode;
 	bool 										CollisionMode;
+	bool										PlaneLockMode;
 	
 	bool 										CameraLight;
 

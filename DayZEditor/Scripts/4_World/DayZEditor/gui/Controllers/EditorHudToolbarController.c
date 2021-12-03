@@ -23,6 +23,7 @@ class EditorHudToolbarController: EditorControllerBase
 	protected ImageWidget GroundButton_Icon;
 	protected ImageWidget SnapButton_Icon;
 	protected ImageWidget CollisionButton_Icon;
+	protected ImageWidget PlaneLockButton_Icon;
 	protected ImageWidget CameraLightButton_Icon;
 	
 	protected ButtonWidget BrushToggleButton;
@@ -132,6 +133,15 @@ class EditorHudToolbarController: EditorControllerBase
 					CollisionButton_Icon.SetColor(COLOR_PALE_B);
 				} else {
 					CollisionButton_Icon.SetColor(COLOR_WHITE);
+				}
+					
+				break;
+			}
+			case "m_Editor.PlaneLockToggle": {
+				if (m_Editor.PlaneLockToggle) {
+					PlaneLockButton_Icon.SetColor(COLOR_APPLE);
+				} else {
+					PlaneLockButton_Icon.SetColor(COLOR_WHITE);
 				}
 					
 				break;

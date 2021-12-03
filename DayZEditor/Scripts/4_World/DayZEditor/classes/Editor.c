@@ -480,11 +480,22 @@ class Editor
 						}
 					}
 				} else {
-					vector pos = Vector(CurrentMousePosition[0], GetGame().SurfaceY(CurrentMousePosition[0], CurrentMousePosition[2]), CurrentMousePosition[2]);
-					vector current_pos = m_EditorCamera.GetPosition();
-					float distance_to_ground = GetGame().SurfaceY(current_pos[0], current_pos[2]);
-					pos[1] = pos[1] + distance_to_ground;
-					m_EditorCamera.SendToPosition(pos);
+					vector mouse_pos = Vector(CurrentMousePosition[0], GetGame().SurfaceY(CurrentMousePosition[0], CurrentMousePosition[2]), CurrentMousePosition[2]);
+					vector camera_current_pos = m_EditorCamera.GetPosition();
+					float camera_surface_y = GetGame().SurfaceY(camera_current_pos[0], camera_current_pos[2]);
+					float camera_y_offset = camera_current_pos[1] - camera_surface_y;										
+					vector new_camera_pos = Vector(mouse_pos[0],  mouse_pos[1] + camera_y_offset, mouse_pos[2]);
+					vector water_camera_pos = Vector(mouse_pos[0],  camera_current_pos[1], mouse_pos[2]);
+					
+					// check if water is under mouse, to stop from teleporting under water			
+					if (IsSurfaceWater(mouse_pos)) {
+						m_EditorCamera.SendToPosition(water_camera_pos);
+						//Print("Water");
+						
+					} else{
+						m_EditorCamera.SendToPosition(new_camera_pos);
+						//Print("Land");
+					}
 				}
 				
 				break;
@@ -509,7 +520,13 @@ class Editor
 		
 		return false;
 	}
-
+	
+	bool IsSurfaceWater( vector position )
+	{
+		CGame game = GetGame();
+		return game.SurfaceIsSea( position[0], position[2] ) || game.SurfaceIsPond( position[0], position[2] );
+	}
+	
 	bool OnMouseRelease(int button)
 	{
 		return false;

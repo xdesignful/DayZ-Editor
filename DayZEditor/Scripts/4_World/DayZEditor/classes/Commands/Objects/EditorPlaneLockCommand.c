@@ -4,7 +4,7 @@ class EditorPlaneLockCommand: EditorCommand
 	{
 		super.Execute(sender, args);
 		ButtonCommandArgs button_args = ButtonCommandArgs.Cast(args);
-		if (!button_args || button_args.Source.GetName() != "YLockButton") { // name needs to be changed from YLockButton
+		if (!button_args || button_args.Source.GetName() != "PlaneLockButton") {
 			m_Editor.PlaneLockToggle = !m_Editor.PlaneLockToggle;
 			m_Editor.GetEditorHud().GetTemplateController().GetToolbarController().NotifyPropertyChanged("m_Editor.PlaneLockToggle");
 		}

@@ -1125,7 +1125,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
           }
          }
         }
-        ButtonWidgetClass YLockButton {
+        ButtonWidgetClass PlaneLockButton {
          clipchildren 0
          color 0.7529 0.3686 0.3255 1
          position 0 0
@@ -1142,7 +1142,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
          font "gui/fonts/metron-bold"
          switch toggle
          {
-          ImageWidgetClass YLockButtonLockIcon {
+          ImageWidgetClass PlaneLockButton_Icon {
            visible 1
            inheritalpha 1
            ignorepointer 1
@@ -1185,7 +1185,7 @@ WrapSpacerWidgetClass ToolbarWrapper {
             }
            }
           }
-          WrapSpacerWidgetClass YLockWrapSpacer {
+          WrapSpacerWidgetClass PlaneLockWrapSpacer {
            ignorepointer 1
            size 1 1
            halign center_ref

@@ -767,7 +767,7 @@ FrameWidgetClass EditorFrame {
            style Default
            "no focus" 1
            {
-            ImageWidgetClass PlacedSearchBarIcon {
+            ImageWidgetClass PlaceDeleteSearchBarIcon {
              ignorepointer 1
              position 0 0
              size 1 1
@@ -786,7 +786,7 @@ FrameWidgetClass EditorFrame {
              filter 1
              {
               ScriptParamsClass {
-               Binding_Name "SearchBarIcon"
+               Binding_Name "PlacedSearchBarIcon"
               }
              }
             }
@@ -810,7 +810,7 @@ FrameWidgetClass EditorFrame {
            vexactsize 0
            scriptclass "ViewBinding"
            style Default
-           text "#STR_EDITOR_SEARCH_PLACEMENTS"
+           text "#STR_EDITOR_SEARCH"
            "limit visible" 0
            "Use default text" 1
            "exact text" 1
@@ -1517,13 +1517,12 @@ FrameWidgetClass EditorFrame {
        {
         WrapSpacerWidgetClass LoggerSpacer {
          ignorepointer 1
-         size 1 1
+         size 425 10
          halign center_ref
-         valign bottom_ref
          hexactpos 1
          vexactpos 1
-         hexactsize 0
-         vexactsize 0
+         hexactsize 1
+         vexactsize 1
          scriptclass "ViewBinding"
          Padding 0
          Margin 0

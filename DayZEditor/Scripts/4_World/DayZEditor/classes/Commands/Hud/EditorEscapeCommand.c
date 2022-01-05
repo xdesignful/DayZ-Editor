@@ -42,6 +42,11 @@ class EditorEscapeCommand: EditorCommand
 			m_Editor.FinishEditLootSpawns();
 			return true;
 		} 
+		
+		if (m_Editor.IsLocalEditActive()) {
+			m_Editor.StopEditLocal();
+			return true;
+		}
 
 		if (g_Game.GetMission().IsPaused()) {
 			g_Game.GetMission().Continue();

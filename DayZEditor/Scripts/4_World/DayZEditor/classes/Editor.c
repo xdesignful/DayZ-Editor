@@ -91,6 +91,7 @@ class Editor
 	// Loot Editing
 	protected Object 							m_LootEditTarget;
 	protected bool 								m_LootEditMode;
+	protected bool 								m_LocalEditMode;
 	protected vector 							m_PositionBeforeLootEditMode;
 	protected ref EditorMapGroupProto 			m_EditorMapGroupProto;
 	static float 								LootYOffset;
@@ -713,9 +714,58 @@ class Editor
 		EditorEvents.StopPlacing(this);
 	}
 		
-	void EditLootSpawns(EditorPlaceableItem placeable_item)
+	void EditLocally(EditorPlaceableItem placeable_item)
 	{
+		EditorLog.Trace("Editor::EditLocally %1", placeable_item.Type);
+		
+		if (m_LootEditTarget) {
+			return;
+		}
+		
+		GetCamera().Speed = 10;
+		m_PositionBeforeLootEditMode = m_EditorCamera.GetPosition();
+		m_EditorCamera.SetPosition(Vector(10, LootYOffset, 10));
+		m_EditorCamera.LookAt(Vector(0, LootYOffset, 0));	
+		
+		m_LootEditTarget = GetGame().CreateObjectEx(placeable_item.Type, Vector(0, 0, 0), ECE_CREATEPHYSICS | ECE_SETUP | ECE_UPDATEPATHGRAPH);
+		vector size = ObjectGetSize(m_LootEditTarget);
+		LootYOffset = size[1];
+		m_LootEditTarget.SetPosition(Vector(0, LootYOffset, 0));
+		
+		m_LocalEditMode = true;
+		CollisionMode = true;
+		GetEditorHud().GetTemplateController().GetToolbarController().NotifyPropertyChanged("CollisionMode");
+	}
+	
+	void StopEditLocal()
+	{
+		EditorObjectMap loot_spawns = GetPlacedObjects();
+		string loot_position_data;
+		
+		loot_position_data += "\/\/" + m_LootEditTarget.GetType() + "\n";
+		
+		foreach (int id, EditorObject local_spot: loot_spawns) {
+			loot_position_data += string.Format("SpawnObject(\"%1\", \"%2\", \"%3\");\n", local_spot.GetWorldObject().GetType(), local_spot.GetWorldObject().GetPosition().ToString(false), local_spot.GetWorldObject().GetOrientation().ToString(false));
+		}
+				
+		GetGame().CopyToClipboard(loot_position_data);
+		
+		DeleteObjects(loot_spawns);
+		
+		GetGame().ObjectDelete(m_LootEditTarget);
+		GetCamera().Speed = 60;
+		m_EditorCamera.SetPosition(m_PositionBeforeLootEditMode);
+		
+		m_LocalEditMode = false;
+	}
+	
+	void EditLootSpawns(EditorPlaceableItem placeable_item)
+	{		
 		EditorLog.Trace("Editor::EditLootSpawns %1", placeable_item.Type);
+		
+		if (m_LootEditTarget || m_LootEditMode) {
+			return;
+		}
 		 
 		EditorLog.Info("Launching Loot Editor...");
 		m_LootEditTarget = GetGame().CreateObjectEx(placeable_item.Type, Vector(0, 0, 0), ECE_CREATEPHYSICS | ECE_SETUP | ECE_UPDATEPATHGRAPH);
@@ -743,6 +793,51 @@ class Editor
 		
 		thread EditLootSpawnsDialog();
 	}
+	
+	void FinishEditLootSpawns()
+	{
+		EditorLog.Trace("Editor::FinishEditLootSpawns");
+		
+		EditorLog.Info("Closing Loot Editor");
+		array<EditorObject> loot_spawns = m_EditorMapGroupProto.GetLootSpawns();
+		Object building = m_EditorMapGroupProto.GetBuilding();
+		string loot_position_data;
+		
+		loot_position_data += string.Format("<group name=\"%1\" lootmax=\"4\">\n", building.GetType());
+		// this shits a mess
+		loot_position_data += "	<usage name=\"Industrial\" />\n";
+		loot_position_data += "	<usage name=\"Farm\" />\n";
+		loot_position_data += "	<usage name=\"Military\" />\n";
+		loot_position_data += "	<container name=\"lootFloor\" lootmax=\"4\">\n";
+		
+		foreach (EditorObject loot_spawn: loot_spawns) {
+			EditorLootPoint loot_point = EditorLootPoint.Cast(loot_spawn.GetWorldObject());
+			if (!loot_point) {
+				continue;
+			}
+			
+			vector loot_pos = loot_spawn.GetPosition();
+			loot_pos[1] = loot_pos[1] - LootYOffset;
+			loot_position_data += string.Format("		<point pos=\"%1\" range=\"%2\" height=\"%3\" /> \n", loot_pos.ToString(false), loot_point.Range, loot_point.Height);
+		}
+		
+		loot_position_data += "	</container>\n";
+		loot_position_data += "</group>\n";
+		
+		GetGame().CopyToClipboard(loot_position_data);
+		
+		delete m_EditorMapGroupProto;
+		
+		GetGame().ObjectDelete(m_LootEditTarget);
+		GetCamera().Speed = 60;
+		m_EditorCamera.SetPosition(m_PositionBeforeLootEditMode);
+
+		m_LootEditMode = false;
+		CollisionMode = false;
+		
+		thread EditLootSpawnFinishedDialog();
+	}
+	
 	
 	private void EditLootSpawnsDialog()
 	{
@@ -797,6 +892,11 @@ class Editor
 		return (m_EditorInventoryEditorHud != null);	
 	}
 	
+	bool IsLocalEditActive()
+	{
+		return m_LocalEditMode;
+	}
+	
 	void SetMissionHud(bool state)
 	{
 		Mission mission = GetGame().GetMission();
@@ -827,50 +927,6 @@ class Editor
 	void InsertLootPosition(vector position)
 	{
 		m_EditorMapGroupProto.InsertLootPoint(new EditorLootPointData(position, 1, 1, 32));
-	}
-	
-	void FinishEditLootSpawns()
-	{
-		EditorLog.Trace("Editor::FinishEditLootSpawns");
-		
-		EditorLog.Info("Closing Loot Editor");
-		array<EditorObject> loot_spawns = m_EditorMapGroupProto.GetLootSpawns();
-		Object building = m_EditorMapGroupProto.GetBuilding();
-		string loot_position_data;
-		
-		loot_position_data += string.Format("<group name=\"%1\" lootmax=\"4\">\n", building.GetType());
-		// this shits a mess
-		loot_position_data += "	<usage name=\"Industrial\" />\n";
-		loot_position_data += "	<usage name=\"Farm\" />\n";
-		loot_position_data += "	<usage name=\"Military\" />\n";
-		loot_position_data += "	<container name=\"lootFloor\" lootmax=\"4\">\n";
-		
-		foreach (EditorObject loot_spawn: loot_spawns) {
-			EditorLootPoint loot_point = EditorLootPoint.Cast(loot_spawn.GetWorldObject());
-			if (!loot_point) {
-				continue;
-			}
-			
-			vector loot_pos = loot_spawn.GetPosition();
-			loot_pos[1] = loot_pos[1] - LootYOffset;
-			loot_position_data += string.Format("		<point pos=\"%1\" range=\"%2\" height=\"%3\" /> \n", loot_pos.ToString(false), loot_point.Range, loot_point.Height);
-		}
-		
-		loot_position_data += "	</container>\n";
-		loot_position_data += "</group>\n";
-		
-		GetGame().CopyToClipboard(loot_position_data);
-		
-		delete m_EditorMapGroupProto;
-		
-		GetGame().ObjectDelete(m_LootEditTarget);
-		GetCamera().Speed = 60;
-		m_EditorCamera.SetPosition(m_PositionBeforeLootEditMode);
-
-		m_LootEditMode = false;
-		CollisionMode = false;
-		
-		thread EditLootSpawnFinishedDialog();
 	}
 	
 	bool IsLootEditActive() 

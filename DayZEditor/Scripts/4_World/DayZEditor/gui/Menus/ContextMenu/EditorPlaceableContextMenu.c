@@ -13,5 +13,6 @@ class EditorPlaceableContextMenu: EditorContextMenu
 		}
 		
 		AddMenuButton(m_Editor.CommandManager[EditorLootEditorCommand]);
+		AddMenuButton(m_Editor.CommandManager[EditorLocalEditorCommand]);
 	}
 }

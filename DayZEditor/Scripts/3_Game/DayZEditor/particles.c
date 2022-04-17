@@ -1,4 +1,4 @@
-modded class ParticleList 
+/* modded class ParticleList 
 {
 	static const int EDITOR_SNOW = RegisterParticle("DayZEditor/Editor/particles/", "editor_snow");
 	static const int EDITOR_SNOWFOG_THIN = RegisterParticle("DayZEditor/Editor/particles/", "editor_snow_fog_thin");
@@ -109,3 +109,4 @@ class Editor_FireWorkYellow : EffectParticle
 		SetParticleID(ParticleList.EDITOR_FIREWORK_YELLOW);
 	}
 }
+*/

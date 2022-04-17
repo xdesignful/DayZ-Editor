@@ -25,7 +25,7 @@ modded class DayZIntroScene
 		"XmasGiftGreen1",
 		"XmasGiftGreen2"
 	};	
-	
+	/*
 	static const ref array<int> FireworkTypes = {
 		ParticleList.EDITOR_FIREWORK_RED,
 		ParticleList.EDITOR_FIREWORK_ORANGE,
@@ -36,7 +36,7 @@ modded class DayZIntroScene
 		ParticleList.EDITOR_FIREWORK_BLUE,
 		ParticleList.EDITOR_FIREWORK_CYAN,
 		ParticleList.EDITOR_FIREWORK_RED
-	};
+	};	*/
 
 	void DayZIntroScene()
 	{
@@ -97,11 +97,11 @@ modded class DayZIntroScene
 
 		Print("timer started");
 	}
-	
+	/*
 	void PlayFireworks()
 	{				
 		Particle.PlayInWorld(FireworkTypes.GetRandomElement(), FireworkRandomDistance());
-	}	
+	} */	
 	
 	void OnUpdate(float timeslice)
 	{
@@ -133,9 +133,10 @@ modded class DayZIntroScene
 					GetGame().GetWorld().SetDate(1, 1, 1, 0, 0);
 					StartTimer();
 				}
-				
+				/*
 				Particle.PlayOnObject(ParticleList.EDITOR_SNOW, m_DSLRCamera, Vector(0, 0, 0));
 				Particle.PlayOnObject(ParticleList.EDITOR_SNOWFOG_THIN, m_DSLRCamera, Vector(0, 0, 0));
+				*/
 			}
 			
 			m_ParticleSetup = true;

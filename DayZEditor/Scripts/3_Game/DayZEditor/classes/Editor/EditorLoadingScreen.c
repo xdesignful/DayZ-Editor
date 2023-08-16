@@ -7,7 +7,7 @@ class EditorLoadingScreen: LoadingScreen
 		new EditorLoadingScreenEntry("3.edds", "DanceOfJesus"),
 		new EditorLoadingScreenEntry("4.edds", "Suvi"), 
 		new EditorLoadingScreenEntry("5.edds", "Lavo"),
-		new EditorLoadingScreenEntry("6.edds", "Lavo"),
+		//new EditorLoadingScreenEntry("6.edds", "Lavo"),
 		new EditorLoadingScreenEntry("7.edds", "Kornflakes"),
 		new EditorLoadingScreenEntry("8.edds", "Boba Fetish"),
 		new EditorLoadingScreenEntry("9.edds", "Jonas"),
@@ -32,6 +32,7 @@ class EditorLoadingScreen: LoadingScreen
 		new EditorLoadingScreenEntry("28.edds", "JanceOfDesus"),	
 		new EditorLoadingScreenEntry("29.edds", "InclementDab"),	
 		new EditorLoadingScreenEntry("30.edds", "Welliton"),	
+		new EditorLoadingScreenEntry("31.edds", "Laro"),	
 	};
 	
 	protected TextWidget m_ImageCredit;
